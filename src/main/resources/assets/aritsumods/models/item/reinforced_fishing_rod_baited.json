@@ -1,0 +1,6 @@
+{
+    "parent": "item/fishing_rod",
+    "textures": {
+        "layer0": "aritsumods:item/reinforced_fishing_rod_baited"
+    }
+}

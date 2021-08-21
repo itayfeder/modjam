@@ -1,4 +1,6 @@
 {
+  "itemGroup.camping_mod_tab": "Modjam Camping Mod",
+
   "block.aritsumods.oak_log_seat": "Oak Log Seat",
   "block.aritsumods.spruce_log_seat": "Spruce Log Seat",
   "block.aritsumods.birch_log_seat": "Birch Log Seat",
@@ -21,5 +23,9 @@
   "block.aritsumods.brown_sleeping_bag": "Brown Sleeping Bag",
   "block.aritsumods.green_sleeping_bag": "Green Sleeping Bag",
   "block.aritsumods.red_sleeping_bag": "Red Sleeping Bag",
-  "block.aritsumods.black_sleeping_bag": "Black Sleeping Bag"
+  "block.aritsumods.black_sleeping_bag": "Black Sleeping Bag",
+
+  "item.aritsumods.hiker_boots": "Hiker's Boots",
+  "item.aritsumods.bait": "Bait",
+  "item.aritsumods.reinforced_fishing_rod": "Reinforced Fishing Rod"
 }

@@ -1,0 +1,21 @@
+{
+    "parent": "item/handheld_rod",
+    "textures": {
+        "layer0": "aritsumods:item/reinforced_fishing_rod"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "cast": 1
+            },
+            "model": "aritsumods:item/reinforced_fishing_rod_cast"
+        },
+		{
+            "predicate": {
+                "baited": 0.0000001,
+				"cast": 0
+            },
+            "model": "aritsumods:item/reinforced_fishing_rod_baited"
+        }
+    ]
+}

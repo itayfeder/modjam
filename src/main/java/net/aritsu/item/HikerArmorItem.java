@@ -1,6 +1,7 @@
 package net.aritsu.item;
 
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
 
 public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
 
-    private static final Properties armorProps = new Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200);
+    private static final Properties armorProps = new Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200).tab(ModTab.INSTANCE);
 
     public HikerArmorItem(EquipmentSlot p_40387_) {
         super(new HikerMaterial(), p_40387_, armorProps);
@@ -28,7 +29,7 @@ public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return AritsuMod.MODID+":"+ (slot == EquipmentSlot.LEGS ? "models/armor/hiker_layer_2" : "models/armor/hiker_layer_1");
+        return AritsuMod.MODID+":"+ (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/hiker_layer_1.png");
     }
 
     @Override
