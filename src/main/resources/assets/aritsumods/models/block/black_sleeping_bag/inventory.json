@@ -1,0 +1,6 @@
+{
+	"parent": "aritsumods:block/sleeping_bag_inventory",
+	"textures": {
+		"texture": "aritsumods:block/black_sleeping_bag"
+	}
+}
