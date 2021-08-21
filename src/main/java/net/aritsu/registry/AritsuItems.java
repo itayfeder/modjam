@@ -1,11 +1,12 @@
 package net.aritsu.registry;
 
+import net.aritsu.item.HikerArmorItem;
 import net.aritsu.item.SleepingBagItem;
 import net.aritsu.mod.AritsuMod;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -58,4 +59,10 @@ public class AritsuItems {
             () -> new SleepingBagItem(AritsuBlocks.RED_SLEEPING_BAG.get(), (new Item.Properties()).stacksTo(1).tab(CreativeModeTab.TAB_DECORATIONS)));
     public static final RegistryObject<Item> BLACK_SLEEPING_BAG = ITEMS.register("black_sleeping_bag",
             () -> new SleepingBagItem(AritsuBlocks.BLACK_SLEEPING_BAG.get(), (new Item.Properties()).stacksTo(1).tab(CreativeModeTab.TAB_DECORATIONS)));
+
+    public static final RegistryObject<Item> HIKER_ARMOR_HElMET = ITEMS.register("hiker_helmet", () -> new HikerArmorItem(EquipmentSlot.HEAD));
+    public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
+    public static final RegistryObject<Item> HIKER_ARMOR_LEGS = ITEMS.register("hiker_legs", () -> new HikerArmorItem(EquipmentSlot.LEGS));
+    public static final RegistryObject<Item> HIKER_ARMOR_BOOTS = ITEMS.register("hiker_boots", () -> new HikerArmorItem(EquipmentSlot.FEET));
+
 }
