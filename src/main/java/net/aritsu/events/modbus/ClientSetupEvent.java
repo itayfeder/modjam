@@ -1,6 +1,9 @@
 package net.aritsu.events.modbus;
 
+import net.aritsu.client.renderer.EmptyEntityRenderer;
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.registry.AritsuEntities;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +14,6 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event){
-
+        EntityRenderers.register(AritsuEntities.SIT_DUMMY.get(), EmptyEntityRenderer::new);
     }
 }

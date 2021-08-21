@@ -1,5 +1,8 @@
 package net.aritsu.mod;
 
+import net.aritsu.registry.AritsuBlocks;
+import net.aritsu.registry.AritsuEntities;
+import net.aritsu.registry.AritsuItems;
 import net.aritsu.util.ConfigData;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -20,5 +23,10 @@ public class AritsuMod {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigData.SERVER_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigData.CLIENT_SPEC);
+
+        AritsuBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
     }
 }

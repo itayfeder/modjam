@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "aritsumods:block/birch_log_seat",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "aritsumods:block/birch_log_seat"
+    },
+    "facing=south": {
+      "model": "aritsumods:block/birch_log_seat",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "aritsumods:block/birch_log_seat",
+      "y": 270
+    }
+  }
+}
