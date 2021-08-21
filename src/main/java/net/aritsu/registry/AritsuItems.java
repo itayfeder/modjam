@@ -7,8 +7,6 @@ import net.aritsu.mod.AritsuMod;
 import net.aritsu.util.ModTab;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -64,6 +62,9 @@ public class AritsuItems {
             () -> new SleepingBagItem(AritsuBlocks.BLACK_SLEEPING_BAG.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> HIKER_ARMOR_BOOTS = ITEMS.register("hiker_boots", () -> new HikerArmorItem(EquipmentSlot.FEET));
+    public static final RegistryObject<Item> HIKER_ARMOR_LEGS = ITEMS.register("hiker_legs", () -> new HikerArmorItem(EquipmentSlot.LEGS));
+    public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
+    public static final RegistryObject<Item> HIKER_ARMOR_HELMET = ITEMS.register("hiker_helmet", () -> new HikerArmorItem(EquipmentSlot.HEAD));
 
     public static final RegistryObject<Item> BAIT = ITEMS.register("bait",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));

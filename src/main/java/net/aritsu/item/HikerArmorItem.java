@@ -1,6 +1,7 @@
 package net.aritsu.item;
 
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.util.ClientReferences;
 import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;
@@ -34,7 +35,7 @@ public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
 
     @Override
     public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-        return null; //triggers default
+        return (A) ClientReferences.getArmorModel(armorSlot);
     }
 
     private static class HikerMaterial implements ArmorMaterial {

@@ -3,7 +3,7 @@ package net.aritsu.client.renderer.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
-import net.aritsu.client.renderer.models.HikerChestModel;
+import net.aritsu.events.modbus.AritsuModelRegistrationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -30,7 +30,7 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
     public BackPackLayer(PlayerRenderer renderer) {
         super(renderer);
 
-        ModelPart modelpart = Minecraft.getInstance().getEntityModels().bakeLayer(HikerChestModel.CHEST_MODEL_LOCATION);
+        ModelPart modelpart = Minecraft.getInstance().getEntityModels().bakeLayer(AritsuModelRegistrationEvent.BACKPACK_CHEST_MODEL_LOCATION);
         this.bottom = modelpart.getChild("bottom");
         this.lid = modelpart.getChild("lid");
         this.lock = modelpart.getChild("lock");
