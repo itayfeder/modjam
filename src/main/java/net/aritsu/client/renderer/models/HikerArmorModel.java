@@ -22,6 +22,12 @@ public class HikerArmorModel extends PlayerModel<AbstractClientPlayer> {
         this.rightPants.visible = this.rightLeg.visible;
         this.jacket.visible = this.body.visible;
 
+        this.leftSleeve.copyFrom(this.leftArm);
+        this.rightSleeve.copyFrom(this.rightArm);
+        this.rightPants.copyFrom(this.rightLeg);
+        this.leftPants.copyFrom(this.leftLeg);
+        this.jacket.copyFrom(this.body);
+
         super.renderToBuffer(p_102034_, p_102035_, p_102036_, p_102037_, p_102038_, p_102039_, p_102040_, p_102041_);
 
     }
