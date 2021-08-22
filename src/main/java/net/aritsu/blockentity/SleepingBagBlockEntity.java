@@ -1,10 +1,9 @@
 package net.aritsu.blockentity;
 
-import net.aritsu.registry.ArtisuBlockEntities;
+import net.aritsu.registry.AritsuBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SleepingBagBlockEntity extends BlockEntity {
@@ -16,6 +15,6 @@ public class SleepingBagBlockEntity extends BlockEntity {
     }
 
     public SleepingBagBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ArtisuBlockEntities.SLEEPING_BAG.get(), blockPos, blockState);
+        super(AritsuBlockEntities.SLEEPING_BAG.get(), blockPos, blockState);
     }
 }

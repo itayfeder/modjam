@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.block.CampfireGrillBlock;
 import net.aritsu.block.LogSeatBlock;
 import net.aritsu.block.SleepingBagBlock;
 import net.aritsu.mod.AritsuMod;
@@ -64,6 +65,11 @@ public class AritsuBlocks {
             () -> createBed(DyeColor.RED));
     public static final RegistryObject<Block> BLACK_SLEEPING_BAG = BLOCKS.register("black_sleeping_bag",
             () -> createBed(DyeColor.BLACK));
+
+    public static final RegistryObject<Block> CAMPFIRE_GRILL = BLOCKS.register("campfire_grill",
+            () -> new CampfireGrillBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(5.0F, 600).sound(SoundType.ANVIL)));
+
+
 
     private static Block createBed(DyeColor color) {
         return new SleepingBagBlock(color, BlockBehaviour.Properties.of(Material.WOOL, (p_152613_) -> {

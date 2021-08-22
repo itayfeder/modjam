@@ -2,10 +2,16 @@ package net.aritsu.events.modbus;
 
 import net.aritsu.client.renderer.EmptyEntityRenderer;
 import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
+import net.aritsu.client.renderer.tile.CampfireGrillRenderer;
 import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.registry.AritsuBlockEntities;
+import net.aritsu.registry.AritsuBlocks;
 import net.aritsu.registry.AritsuEntities;
 import net.aritsu.registry.AritsuItems;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -42,5 +48,8 @@ public class ClientSetupEvent {
         ItemProperties.register(AritsuItems.REINFORCED_FISHING_ROD.get(), new ResourceLocation("baited"), (p_174625_, p_174626_, p_174627_, p_174628_) -> {
             return ReinforcedFishingRodItem.getFullnessDisplay(p_174625_);
         });
+
+        ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.CAMPFIRE_GRILL.get(), RenderType.cutout());
+        BlockEntityRenderers.register(AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillRenderer::new);
     }
 }

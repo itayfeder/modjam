@@ -3,12 +3,11 @@ package net.aritsu.mod;
 import net.aritsu.registry.AritsuBlocks;
 import net.aritsu.registry.AritsuEntities;
 import net.aritsu.registry.AritsuItems;
-import net.aritsu.registry.ArtisuBlockEntities;
+import net.aritsu.registry.AritsuBlockEntities;
 import net.aritsu.util.ConfigData;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +27,7 @@ public class AritsuMod {
         AritsuBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ArtisuBlockEntities.TILEENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuBlockEntities.TILEENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 }

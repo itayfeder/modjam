@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.client.renderer.models.BackpackModel;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -25,7 +26,7 @@ public class AritsuModels {
     public static void clientSetup(EntityRenderersEvent.RegisterLayerDefinitions event) {
 
         //backpack chest
-        event.registerLayerDefinition(BACKPACK_CHEST_MODEL_LOCATION, ChestRenderer::createSingleBodyLayer);
+        event.registerLayerDefinition(BACKPACK_CHEST_MODEL_LOCATION, BackpackModel::createBodyLayer);
 
         //hiker armor models
         LayerDefinition head = LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(0.51f), false), 64, 64);

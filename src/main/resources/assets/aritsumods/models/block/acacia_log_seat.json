@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-   "parent": "block/block",
+	"parent": "block/block",
 	"textures": {
 		"0": "block/acacia_log",
 		"1": "block/acacia_log_top",

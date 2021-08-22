@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.blockentity.CampfireGrillBlockEntity;
 import net.aritsu.blockentity.SleepingBagBlockEntity;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -7,7 +8,7 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class ArtisuBlockEntities {
+public class AritsuBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> TILEENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, AritsuMod.MODID);
 
     public static final RegistryObject<BlockEntityType<SleepingBagBlockEntity>> SLEEPING_BAG = TILEENTITIES.register("sleeping_bag", () ->
@@ -28,4 +29,8 @@ public class ArtisuBlockEntities {
                     AritsuBlocks.GREEN_SLEEPING_BAG.get(),
                     AritsuBlocks.RED_SLEEPING_BAG.get(),
                     AritsuBlocks.BLACK_SLEEPING_BAG.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<CampfireGrillBlockEntity>> CAMPFIRE_GRILL = TILEENTITIES.register("campfire_grill", () ->
+            BlockEntityType.Builder.of(CampfireGrillBlockEntity::new,
+                    AritsuBlocks.CAMPFIRE_GRILL.get()).build(null));
 }

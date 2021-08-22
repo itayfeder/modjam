@@ -248,7 +248,7 @@ public class ReinforcedFishingHookEntity extends FishingHook {
     }
 
     protected boolean canHitEntity(Entity p_37135_) {
-        return super.canHitEntity(p_37135_) || p_37135_.isAlive() && p_37135_ instanceof ItemEntity;
+        return false;
     }
 
     protected void onHitEntity(EntityHitResult p_37144_) {

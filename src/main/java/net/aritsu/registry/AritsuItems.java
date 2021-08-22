@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.item.BackpackItem;
 import net.aritsu.item.HikerArmorItem;
 import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.item.SleepingBagItem;
@@ -70,4 +71,10 @@ public class AritsuItems {
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> REINFORCED_FISHING_ROD = ITEMS.register("reinforced_fishing_rod",
             () -> new ReinforcedFishingRodItem((new Item.Properties()).durability(256).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> BACKPACK = ITEMS.register("backpack",
+            () -> new BackpackItem((new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> CAMPFIRE_GRILL = ITEMS.register("campfire_grill",
+            () -> new BlockItem(AritsuBlocks.CAMPFIRE_GRILL.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
 }
