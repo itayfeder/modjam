@@ -1,33 +1,47 @@
 package net.aritsu.util;
 
-import net.aritsu.events.modbus.AritsuModelRegistrationEvent;
+import net.aritsu.client.renderer.models.HikerArmorModel;
+import net.aritsu.registry.AritsuModels;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 
 public class ClientReferences {
 
-    private static HumanoidModel<Player> innerModel;
-    private static HumanoidModel<Player> outerModel;
+    private static HikerArmorModel innerModel;
+    private static HikerArmorModel outerModel;
 
     public static HumanoidModel<?> getArmorModel(EquipmentSlot armorSlot) {
         EntityModelSet modelSets = Minecraft.getInstance().getEntityModels();
-
-        switch (armorSlot)
-        {
+        HikerArmorModel model = null;
+        ModelPart part = null;
+        
+        switch (armorSlot) {
             case HEAD -> {
-                return new PlayerModel<Player>(modelSets.bakeLayer(AritsuModelRegistrationEvent.HEAD_MODEL_LOCATION),false);
+                part = modelSets.bakeLayer(AritsuModels.HEAD_MODEL_LOCATION);
             }
             case CHEST, FEET -> {
-                return new PlayerModel<Player>(modelSets.bakeLayer(AritsuModelRegistrationEvent.CHESTNBOOTS_MODEL_LOCATION),false);
+                part = modelSets.bakeLayer(AritsuModels.CHESTNBOOTS_MODEL_LOCATION);
             }
             case LEGS -> {
-                return new PlayerModel<Player>(modelSets.bakeLayer(AritsuModelRegistrationEvent.LEGS_MODEL_LOCATION),false);
+                part = modelSets.bakeLayer(AritsuModels.LEGS_MODEL_LOCATION);
             }
         }
-        return null; //null will default armor models to MC armor models
+        if (part != null) {
+            model = new HikerArmorModel(part, false);
+            model.setAllVisible(true);
+
+            //set player model extras to visible. humanoid parts get set to visible by MC
+            switch (armorSlot) {
+                case HEAD -> model.head.visible = model.hat.visible = true;
+                case CHEST -> model.jacket.visible = model.rightSleeve.visible = model.leftSleeve.visible = true;
+                case LEGS -> model.leftPants.visible = model.rightPants.visible = model.jacket.visible = true;
+                case FEET -> model.leftPants.visible = model.rightPants.visible = true;
+            }
+
+        }
+        return model; //null will default armor models to MC armor models
     }
 }

@@ -27,6 +27,11 @@ public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
         super(new HikerMaterial(), p_40387_, armorProps);
     }
 
+    @Override
+    public Object getRenderPropertiesInternal() {
+        return this;
+    }
+
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
