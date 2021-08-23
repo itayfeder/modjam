@@ -1,15 +1,16 @@
 package net.aritsu.registry;
 
+import net.aritsu.block.BackPackBlock;
 import net.aritsu.block.CampfireGrillBlock;
 import net.aritsu.block.LogSeatBlock;
 import net.aritsu.block.SleepingBagBlock;
 import net.aritsu.mod.AritsuMod;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BedPart;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -32,6 +33,8 @@ public class AritsuBlocks {
             () -> new LogSeatBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.STONE).strength(2.0F).sound(SoundType.WOOD), WoodType.ACACIA));
     public static final RegistryObject<Block> DARK_OAK_LOG_SEAT = BLOCKS.register("dark_oak_log_seat",
             () -> new LogSeatBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD), WoodType.DARK_OAK));
+    public static final RegistryObject<Block> BACKPACKBLOCK = BLOCKS.register("backpack_block",
+            () -> new BackPackBlock(BlockBehaviour.Properties.of(Material.WOOL)));
 
     public static final RegistryObject<Block> WHITE_SLEEPING_BAG = BLOCKS.register("white_sleeping_bag",
             () -> createBed(DyeColor.WHITE));

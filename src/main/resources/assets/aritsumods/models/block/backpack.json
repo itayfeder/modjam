@@ -1,0 +1,31 @@
+{
+	"textures": {
+		"0": "aritsumods:block/backpack",
+		"particle": "aritsumods:block/backpack"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 0],
+			"to": [12, 9, 3],
+			"faces": {
+				"north": {"uv": [8, 0, 16, 9], "texture": "#0"},
+				"east": {"uv": [10, 7, 13, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 8, 9], "texture": "#0"},
+				"west": {"uv": [13, 7, 10, 16], "texture": "#0"},
+				"up": {"uv": [0, 9, 8, 12], "texture": "#0"},
+				"down": {"uv": [8, 6, 16, 9], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, 0, 3],
+			"to": [11, 5, 5],
+			"faces": {
+				"east": {"uv": [0, 0, 2, 5], "texture": "#0"},
+				"south": {"uv": [1, 0, 7, 5], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 5], "texture": "#0"},
+				"up": {"uv": [1, 9, 7, 11], "texture": "#0"},
+				"down": {"uv": [9, 7, 15, 9], "texture": "#0"}
+			}
+		}
+	]
+}

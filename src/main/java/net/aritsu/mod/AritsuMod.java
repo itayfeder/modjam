@@ -1,9 +1,6 @@
 package net.aritsu.mod;
 
-import net.aritsu.registry.AritsuBlocks;
-import net.aritsu.registry.AritsuEntities;
-import net.aritsu.registry.AritsuItems;
-import net.aritsu.registry.AritsuBlockEntities;
+import net.aritsu.registry.*;
 import net.aritsu.util.ConfigData;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +25,7 @@ public class AritsuMod {
         AritsuItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuBlockEntities.TILEENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuContainers.CONTAINER.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 }

@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.blockentity.BackPackBlockEntity;
 import net.aritsu.blockentity.CampfireGrillBlockEntity;
 import net.aritsu.blockentity.SleepingBagBlockEntity;
 import net.aritsu.mod.AritsuMod;
@@ -33,4 +34,8 @@ public class AritsuBlockEntities {
     public static final RegistryObject<BlockEntityType<CampfireGrillBlockEntity>> CAMPFIRE_GRILL = TILEENTITIES.register("campfire_grill", () ->
             BlockEntityType.Builder.of(CampfireGrillBlockEntity::new,
                     AritsuBlocks.CAMPFIRE_GRILL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BackPackBlockEntity>> BACKPACK_BE = TILEENTITIES.register("backpack_be", () ->
+            BlockEntityType.Builder.of(BackPackBlockEntity::new,
+                    AritsuBlocks.BACKPACKBLOCK.get()).build(null));
 }

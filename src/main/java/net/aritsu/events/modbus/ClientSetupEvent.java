@@ -5,10 +5,9 @@ import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
 import net.aritsu.client.renderer.tile.CampfireGrillRenderer;
 import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.mod.AritsuMod;
-import net.aritsu.registry.AritsuBlockEntities;
-import net.aritsu.registry.AritsuBlocks;
-import net.aritsu.registry.AritsuEntities;
-import net.aritsu.registry.AritsuItems;
+import net.aritsu.registry.*;
+import net.aritsu.screen.client.BackPackScreen;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -16,9 +15,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.FishingRodItem;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +28,7 @@ public class ClientSetupEvent {
     public static void setupClient(FMLClientSetupEvent event){
         EntityRenderers.register(AritsuEntities.SIT_DUMMY.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(AritsuEntities.REINFORCED_FISHING_BOBBER.get(), ReinforcedFishingHookRenderer::new);
+        MenuScreens.register(AritsuContainers.PETBUDDY_CONTAINER_TYPE.get(), BackPackScreen::new);
 
         ItemProperties.register(AritsuItems.REINFORCED_FISHING_ROD.get(), new ResourceLocation("cast"), (p_174595_, p_174596_, p_174597_, p_174598_) -> {
             if (p_174597_ == null) {
