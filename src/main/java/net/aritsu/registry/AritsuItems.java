@@ -1,14 +1,13 @@
 package net.aritsu.registry;
 
-import net.aritsu.item.BackpackItem;
-import net.aritsu.item.HikerArmorItem;
-import net.aritsu.item.ReinforcedFishingRodItem;
-import net.aritsu.item.SleepingBagItem;
+import net.aritsu.item.*;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.util.ModTab;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -77,4 +76,17 @@ public class AritsuItems {
 
     public static final RegistryObject<Item> CAMPFIRE_GRILL = ITEMS.register("campfire_grill",
             () -> new BlockItem(AritsuBlocks.CAMPFIRE_GRILL.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> MARSHMALLOW = ITEMS.register("marshmallow",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)
+                    .food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.3F).fast().build())));
+    public static final RegistryObject<Item> MARSHMALLOW_ON_A_STICK = ITEMS.register("marshmallow_on_a_stick",
+            () -> new MarshmallowOnAStickItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1).craftRemainder(Items.STICK)
+                    .food((new FoodProperties.Builder()).nutrition(3).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.NORMAL));
+    public static final RegistryObject<Item> ROASTED_MARSHMALLOW_ON_A_STICK = ITEMS.register("roasted_marshmallow_on_a_stick",
+            () -> new MarshmallowOnAStickItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1).craftRemainder(Items.STICK)
+                    .food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.6F).build()), MarshmallowOnAStickItem.Stage.ROASTED));
+    public static final RegistryObject<Item> BURNT_MARSHMALLOW_ON_A_STICK = ITEMS.register("burnt_marshmallow_on_a_stick",
+            () -> new MarshmallowOnAStickItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1).craftRemainder(Items.STICK)
+                    .food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.BURNT));
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "aritsumods:item/burnt_marshmallow_on_a_stick"
+  }
+}
