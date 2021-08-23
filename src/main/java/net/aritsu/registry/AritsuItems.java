@@ -72,10 +72,7 @@ public class AritsuItems {
             () -> new ReinforcedFishingRodItem((new Item.Properties()).durability(256).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> BACKPACK = ITEMS.register("backpack",
-            () -> new BackpackItem((new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
-
-    public static final RegistryObject<Item> BACKPACKBLOCK = ITEMS.register("backpack_block",
-            () -> new BlockItem(AritsuBlocks.BACKPACKBLOCK.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+            () -> new BackPackItem((new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> CAMPFIRE_GRILL = ITEMS.register("campfire_grill",
             () -> new BlockItem(AritsuBlocks.CAMPFIRE_GRILL.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));

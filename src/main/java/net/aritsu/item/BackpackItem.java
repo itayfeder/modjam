@@ -1,5 +1,6 @@
 package net.aritsu.item;
 
+import net.aritsu.registry.AritsuBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -9,20 +10,21 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Wearable;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-public class BackpackItem extends Item implements Wearable {
+public class BackPackItem extends BlockItem implements Wearable {
     public static final DispenseItemBehavior DISPENSE_ITEM_BEHAVIOR = new DefaultDispenseItemBehavior() {
         protected ItemStack execute(BlockSource p_40408_, ItemStack p_40409_) {
-            return BackpackItem.dispenseBackpack(p_40408_, p_40409_) ? p_40409_ : super.execute(p_40408_, p_40409_);
+            return BackPackItem.dispenseBackpack(p_40408_, p_40409_) ? p_40409_ : super.execute(p_40408_, p_40409_);
         }
     };
 
@@ -62,8 +64,8 @@ public class BackpackItem extends Item implements Wearable {
         }
     }
 
-    public BackpackItem(Properties p_41383_) {
-        super(p_41383_);
+    public BackPackItem(Properties prop) {
+        super(AritsuBlocks.BACKPACKBLOCK.get(), prop);
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
 

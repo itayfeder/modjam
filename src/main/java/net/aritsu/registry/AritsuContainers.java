@@ -11,6 +11,6 @@ public class AritsuContainers {
 
     public static final DeferredRegister<MenuType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, AritsuMod.MODID);
 
-    public static final RegistryObject<MenuType<BackPackContainer>> PETBUDDY_CONTAINER_TYPE = CONTAINER.register("artisu_backpack_container",
+    public static final RegistryObject<MenuType<BackPackContainer>> BACKPACK_CONTAINER_TYPE = CONTAINER.register("artisu_backpack_container",
             () -> new MenuType<>(BackPackContainer::registerClientContainer));
 }

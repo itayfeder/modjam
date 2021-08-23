@@ -1,6 +1,7 @@
 package net.aritsu.blockentity;
 
 import net.aritsu.registry.AritsuBlockEntities;
+import net.aritsu.screen.common.BackPackInventory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -12,8 +13,14 @@ import javax.annotation.Nullable;
 
 public class BackPackBlockEntity extends BlockEntity {
 
+    private final BackPackInventory backpackinventory = new BackPackInventory(this);
+
     public BackPackBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(AritsuBlockEntities.BACKPACK_BE.get(), blockPos, blockState);
+    }
+
+    public BackPackInventory getBackpackinventory() {
+        return backpackinventory;
     }
 
     ///////////////// 4 METHODS ABSOLUTELY NEEDED FOR CLIENT/SERVER
@@ -42,12 +49,16 @@ public class BackPackBlockEntity extends BlockEntity {
     //*************************************************************
 
     @Override
-    public CompoundTag save(CompoundTag p_58888_) {
-        return super.save(p_58888_);
+    public CompoundTag save(CompoundTag tag) {
+
+        tag.put("items", getBackpackinventory().serializeNBT());
+        return super.save(tag);
     }
 
     @Override
-    public void load(CompoundTag p_155245_) {
-        super.load(p_155245_);
+    public void load(CompoundTag tag) {
+        CompoundTag items = tag.getCompound("items");
+        getBackpackinventory().deserializeNBT(items);
+        super.load(tag);
     }
 }

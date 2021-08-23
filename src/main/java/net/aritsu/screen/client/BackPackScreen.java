@@ -1,37 +1,65 @@
 package net.aritsu.screen.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.aritsu.client.renderer.ItemRendererTransparent;
+import net.aritsu.mod.AritsuMod;
 import net.aritsu.screen.common.BackPackContainer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BackPackScreen extends AbstractContainerScreen<BackPackContainer> {
 
-    //enables rendering itemstacks transpart as a flavor for slot rendering. nice to use for specific slots so people know what to put in them
-    private final ItemRendererTransparent renderer;
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(AritsuMod.MODID, "textures/gui/backpack.png");
+    private static final ResourceLocation FLASK = new ResourceLocation(AritsuMod.MODID, "textures/gui/flask.png");
+    private static final ResourceLocation CHEST = new ResourceLocation(AritsuMod.MODID, "textures/gui/chest.png");
+    private static final ResourceLocation BAG = new ResourceLocation(AritsuMod.MODID, "textures/gui/bag.png");
+    private static final ResourceLocation TENT = new ResourceLocation(AritsuMod.MODID, "textures/gui/tent.png");
 
     public BackPackScreen(BackPackContainer backPackContainer, Inventory inventory, Component component) {
         super(backPackContainer, inventory, component);
-
-        BlockEntityWithoutLevelRenderer blockentitywithoutlevelrenderer = new BlockEntityWithoutLevelRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-        renderer = new ItemRendererTransparent(Minecraft.getInstance().textureManager, Minecraft.getInstance().getModelManager(),
-                Minecraft.getInstance().getItemColors(), blockentitywithoutlevelrenderer);
-
+        this.imageHeight = 151;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
+    protected void init() {
+        super.init();
     }
 
     @Override
-    protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack);
 
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+        int centerX = (this.width - this.imageWidth) / 2;
+        int centerY = (this.height - this.imageHeight) / 2;
+        this.blit(poseStack, centerX, centerY, 0, 0, this.imageWidth, this.imageHeight);
+
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+
+        this.renderTooltip(poseStack, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderBg(PoseStack poseStack, float f1, int mouseX, int mouseY) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        for (int slotId = 0; slotId < 4; slotId++)
+            if (this.menu.getSlot(slotId).getItem().isEmpty()) {
+
+                RenderSystem.setShaderTexture(0, getSlotTexture(slotId));
+                int centerX = (this.width - this.imageWidth) / 2;
+                int centerY = (this.height - this.imageHeight) / 2;
+                blit(poseStack, menu.getSlot(slotId).x + centerX, menu.getSlot(slotId).y + centerY, 0, 0, 16, 16,16,16);
+            }
+    }
+
+    private ResourceLocation getSlotTexture(int slotID) {
+        return slotID == 0 ? FLASK : slotID == 1 ? CHEST : slotID == 2 ? BAG : TENT;
     }
 }

@@ -28,7 +28,7 @@ public class ClientSetupEvent {
     public static void setupClient(FMLClientSetupEvent event){
         EntityRenderers.register(AritsuEntities.SIT_DUMMY.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(AritsuEntities.REINFORCED_FISHING_BOBBER.get(), ReinforcedFishingHookRenderer::new);
-        MenuScreens.register(AritsuContainers.PETBUDDY_CONTAINER_TYPE.get(), BackPackScreen::new);
+        MenuScreens.register(AritsuContainers.BACKPACK_CONTAINER_TYPE.get(), BackPackScreen::new);
 
         ItemProperties.register(AritsuItems.REINFORCED_FISHING_ROD.get(), new ResourceLocation("cast"), (p_174595_, p_174596_, p_174597_, p_174598_) -> {
             if (p_174597_ == null) {

@@ -1,5 +1,6 @@
 package net.aritsu.client.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.color.item.ItemColors;
@@ -30,9 +31,12 @@ public class ItemRendererTransparent extends ItemRenderer {
 
     @Override
     public void renderQuadList(PoseStack poseStack, VertexConsumer consumer, List<BakedQuad> quads, ItemStack stack, int light, int overlay) {
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableBlend();
         for (BakedQuad quad : quads) {
             consumer.putBulkData(poseStack.last(), quad, 0.5f, 0.5f, 0.5f, 0.3f, light, overlay, false);
         }
+
     }
 
     @Override
@@ -62,6 +66,10 @@ public class ItemRendererTransparent extends ItemRenderer {
                 }
 
                 this.renderModelLists(model, stack, light, overlay, poseStack, vertexconsumer);
+            }
+            else {
+                //chests can't be rendered transparent
+                net.minecraftforge.client.RenderProperties.get(stack).getItemStackRenderer().renderByItem(stack, transformType,poseStack,multiBufferSource,light,overlay);
             }
 
             poseStack.popPose();
