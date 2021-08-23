@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -22,69 +21,62 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Random;
 
 public class MarshmallowOnAStickItem extends Item {
+    private static final Random rnd = new Random();
     private final Stage stage;
 
-    public MarshmallowOnAStickItem(Properties p_41383_, Stage stag) {
-        super(p_41383_);
-        this.stage = stag;
+    public MarshmallowOnAStickItem(Properties properties, Stage stage) {
+        super(properties);
+        this.stage = stage;
     }
 
+    private static boolean isActuallyLookingAt(Player p, BlockPos pos, double limit) {
+        Vec3 playerVec = p.getPosition(1.0F).normalize();
+        Vec3 distanceVec = new Vec3(pos.getX() - p.getX(), pos.getY() - p.getY(), pos.getZ() - p.getZ()).normalize();
+        double dist = playerVec.distanceTo(distanceVec);
+        return dist < limit;
+    }
 
+    /**
+     * @param flag here is set to true when the held item is in the hotbar slot. this excludes offhand items
+     */
     @Override
-    public void inventoryTick(ItemStack p_41404_, Level p_41405_, Entity p_41406_, int p_41407_, boolean p_41408_) {
-        super.inventoryTick(p_41404_, p_41405_, p_41406_, p_41407_, p_41408_);
-        if (p_41406_ instanceof Player) {
-            Player p = (Player)p_41406_;
-            BlockHitResult result = getPlayerPOVHitResult(p_41405_, p, ClipContext.Fluid.SOURCE_ONLY);
-            Random rnd = new Random();
-            if (p_41405_.getBlockState(result.getBlockPos()).getBlock() instanceof CampfireBlock
-                    && isActuallyLookingAt(p, result.getBlockPos(), 4)
-                    && rnd.nextInt(50) == 10 && p_41408_) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int anInt, boolean flag) {
+        super.inventoryTick(stack, level, entity, anInt, flag);
+        if (stack.getItem() instanceof MarshmallowOnAStickItem) {
+            if (entity instanceof ServerPlayer player) {
+                InteractionHand hand = null;
+                if (player.getOffhandItem().equals(stack))
+                    hand = InteractionHand.OFF_HAND;
+                if (player.getMainHandItem().equals(stack))
+                    hand = InteractionHand.MAIN_HAND;
 
-                if (p.getMainHandItem().getItem() instanceof MarshmallowOnAStickItem) {
-                    switch (this.stage) {
-                        case NORMAL:
-                            p.setItemInHand(InteractionHand.MAIN_HAND, AritsuItems.ROASTED_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance());
-                            break;
-                        case ROASTED:
-                            p.setItemInHand(InteractionHand.MAIN_HAND, AritsuItems.BURNT_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance());
-                            break;
-                        case BURNT:
-                            break;
-                    }
-                }
-                else if (p.getOffhandItem().getItem() instanceof MarshmallowOnAStickItem) {
-                    switch (this.stage) {
-                        case NORMAL:
-                            p.setItemInHand(InteractionHand.OFF_HAND, AritsuItems.ROASTED_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance());
-                            break;
-                        case ROASTED:
-                            p.setItemInHand(InteractionHand.OFF_HAND, AritsuItems.BURNT_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance());
-                            break;
-                        case BURNT:
-                            break;
-                    }
+                BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+                if (level.getBlockState(result.getBlockPos()).getBlock() instanceof CampfireBlock
+                        && isActuallyLookingAt(player, result.getBlockPos(), 4)
+                        && rnd.nextInt(5/*seconds*/ * 20/*one second aka 20ticks*/) == 0) {
+                    ItemStack newStack = stage == Stage.NORMAL ? AritsuItems.ROASTED_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance() :
+                            AritsuItems.BURNT_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance();
+                    if (hand != null)
+                        player.setItemInHand(hand, newStack);
                 }
             }
         }
     }
 
-    private static boolean isActuallyLookingAt(Player p, BlockPos pos, double limit) {
-        Vec3 playerVec = p.getPosition(1.0F).normalize();
-        Vec3 distanceVec = new Vec3(pos.getX()-p.getX(), pos.getY()-p.getY(), pos.getZ()-p.getZ()).normalize();
-        double dist = playerVec.distanceTo(distanceVec);
-        return dist < limit;
-    }
+//    BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+//                if (level.getBlockState(result.getBlockPos()).getBlock() instanceof CampfireBlock
+//                        && isActuallyLookingAt(player, result.getBlockPos(), 4)
+//            && rnd.nextInt(5/*seconds*/ * 20/*one second aka 20ticks*/) == 0)
 
     @Override
     public ItemStack finishUsingItem(ItemStack p_41409_, Level p_41410_, LivingEntity p_41411_) {
         if (p_41411_ instanceof ServerPlayer) {
-            ServerPlayer serverplayer = (ServerPlayer)p_41411_;
+            ServerPlayer serverplayer = (ServerPlayer) p_41411_;
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, p_41409_);
             serverplayer.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (p_41411_ instanceof Player && !((Player)p_41411_).getAbilities().instabuild) {
+        if (p_41411_ instanceof Player && !((Player) p_41411_).getAbilities().instabuild) {
             p_41409_.shrink(1);
         }
 
