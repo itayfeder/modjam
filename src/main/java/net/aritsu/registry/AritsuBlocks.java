@@ -34,7 +34,7 @@ public class AritsuBlocks {
     public static final RegistryObject<Block> DARK_OAK_LOG_SEAT = BLOCKS.register("dark_oak_log_seat",
             () -> new LogSeatBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD), WoodType.DARK_OAK));
     public static final RegistryObject<Block> BACKPACKBLOCK = BLOCKS.register("backpack",
-            () -> new BackPackBlock(BlockBehaviour.Properties.of(Material.WOOL)));
+            () -> new BackPackBlock(BlockBehaviour.Properties.of(Material.WOOL).strength(1.0f,100).noOcclusion()));
 
     public static final RegistryObject<Block> WHITE_SLEEPING_BAG = BLOCKS.register("white_sleeping_bag",
             () -> createBed(DyeColor.WHITE));

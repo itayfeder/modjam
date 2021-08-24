@@ -1,6 +1,7 @@
 package net.aritsu.client.renderer.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import net.aritsu.registry.AritsuBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -27,7 +28,7 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
 
         poseStack.pushPose();
         this.getParentModel().body.translateAndRotate(poseStack);
-        renderWool(player, poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, -0.75f, 0.4f);
+        renderWool(player, poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
         poseStack.popPose();
     }
 
@@ -37,8 +38,10 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         BlockRenderDispatcher blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
         BlockState state = AritsuBlocks.BACKPACKBLOCK.get().defaultBlockState();
         float scale = 1f;
+        poseStack.translate(0.5f,0.5f,0.5f);
+        poseStack.mulPose(new Quaternion(0,180,180,true));
+        poseStack.translate(-0.5f,-0.5f,-0.5f);
         poseStack.scale(scale,scale,scale);
-
         poseStack.translate(offsetX, offsetY, offsetZ);
         BakedModel model = blockRenderDispatcher.getBlockModel(state);
         blockRenderDispatcher.getModelRenderer().renderModel(poseStack.last(),

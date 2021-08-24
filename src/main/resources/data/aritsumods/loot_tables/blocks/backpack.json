@@ -10,10 +10,10 @@
           "conditions": [
             {
               "condition": "minecraft:block_state_property",
-              "block": "aritsumods:backpack_block"
+              "block": "aritsumods:backpack"
             }
           ],
-          "name": "aritsumods:yellow_sleeping_bag.json"
+          "name": "aritsumods:backpack.json"
         }
       ],
       "conditions": [
