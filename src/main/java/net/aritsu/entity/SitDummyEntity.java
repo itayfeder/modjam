@@ -43,23 +43,15 @@ public class SitDummyEntity extends Entity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-
+/*ridetick is only called when the entity is a rider, and not a vehicle. we use the general tick update method instead.*/
     @Override
     public void tick() {
         super.tick();
+        //passenger (player) gets set imediatly on spawn.
+        //so when this is empty, the player has unmounted.
         if (this.getPassengers().isEmpty()) {
-            this.kill();
-            if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
-                level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
-            }
-        }
-    }
-
-    @Override
-    public void rideTick() {
-        super.rideTick();
-        if (this.getPassengers().isEmpty()) {
-            this.kill();
+            this.kill(); //remvoe this entity
+            //set log block to unoccupied so we can spawn a new entity and sit back down
             if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
                 level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
             }
