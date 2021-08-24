@@ -1,8 +1,8 @@
 package net.aritsu.entity;
 
+import net.aritsu.block.LogSeatBlock;
 import net.aritsu.registry.AritsuEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
@@ -12,39 +12,57 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class SitDummyEntity extends Entity {
 
-    public SitDummyEntity(Level p_19871_) {
-        super(AritsuEntities.SIT_DUMMY.get(), p_19871_);
+    private final BlockPos logPos;
+
+    public SitDummyEntity(EntityType type, Level level) {
+        super(type, level);
+        logPos = BlockPos.ZERO;
     }
 
     public SitDummyEntity(Level level, BlockPos pos) {
         super(AritsuEntities.SIT_DUMMY.get(), level);
-        this.setPos(pos.getX()+0.5,pos.getY()+0.35, pos.getZ()+0.5);
+        this.logPos = pos;
+        this.setPos(pos.getX() + 0.5, pos.getY() + 0.35, pos.getZ() + 0.5);
         this.noPhysics = true;
     }
 
-    public SitDummyEntity(EntityType<? extends SitDummyEntity> p_19870_, Level p_19871_) {
-        super(p_19870_, p_19871_);
+    @Override
+    protected void defineSynchedData() {
     }
 
     @Override
-    protected void defineSynchedData() { }
+    protected void readAdditionalSaveData(CompoundTag tag) {
+    }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag p_20052_) { }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag p_20139_) { }
+    protected void addAdditionalSaveData(CompoundTag tag) {
+    }
 
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.getPassengers().isEmpty()) {
+            this.kill();
+            if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
+                level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
+            }
+        }
+    }
+
     @Override
     public void rideTick() {
         super.rideTick();
-        if (this.getPassengers() == null) {
+        if (this.getPassengers().isEmpty()) {
             this.kill();
+            if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
+                level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
+            }
         }
     }
 }
