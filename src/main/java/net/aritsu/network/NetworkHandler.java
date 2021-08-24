@@ -1,8 +1,9 @@
 package net.aritsu.network;
 
 import net.aritsu.mod.AritsuMod;
-import net.aritsu.network.client.PacketSetBackPack;
-import net.aritsu.network.server.PacketSpawnBackPack;
+import net.aritsu.network.client.ClientPacketSetBackPack;
+import net.aritsu.network.client.ClientReceiveOtherBackPack;
+import net.aritsu.network.server.ServerPacketSpawnBackPack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
@@ -20,8 +21,9 @@ public class NetworkHandler {
     public NetworkHandler() {
         //register packets here
         //NETWORK.registerMessage(id++, null);
-        new PacketSpawnBackPack().register(id++);
-        new PacketSetBackPack().register(id++);
+        new ServerPacketSpawnBackPack().register(id++);
+        new ClientPacketSetBackPack().register(id++);
+        new ClientReceiveOtherBackPack().register(id++);
     }
 }
 

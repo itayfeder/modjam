@@ -3,7 +3,7 @@ package net.aritsu.events.forgebus;
 import net.aritsu.capability.PlayerData;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.network.NetworkHandler;
-import net.aritsu.network.server.PacketSpawnBackPack;
+import net.aritsu.network.server.ServerPacketSpawnBackPack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
@@ -19,7 +19,7 @@ public class PressKeyEventHandler {
         if (KeyRegistry.keybackpack.consumeClick()) {
 
             PlayerData.get(Minecraft.getInstance().player).ifPresent(data -> {
-                NetworkHandler.NETWORK.sendToServer(new PacketSpawnBackPack());
+                NetworkHandler.NETWORK.sendToServer(new ServerPacketSpawnBackPack());
             });
         }
     }

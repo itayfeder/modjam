@@ -3,7 +3,8 @@ package net.aritsu.block;
 import net.aritsu.blockentity.BackPackBlockEntity;
 import net.aritsu.capability.PlayerData;
 import net.aritsu.network.NetworkHandler;
-import net.aritsu.network.client.PacketSetBackPack;
+import net.aritsu.network.client.ClientPacketSetBackPack;
+import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.aritsu.registry.AritsuItems;
 import net.aritsu.screen.common.BackPackContainer;
 import net.aritsu.util.BagTag;
@@ -54,7 +55,8 @@ public class BackPackBlock extends BaseEntityBlock {
                     data.addBackpack(pack);
                     level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
                     level.removeBlockEntity(blockPos);
-                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PacketSetBackPack(pack));
+                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(pack));
+                    NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> serverPlayer), new ClientReceiveOtherBackPack(serverPlayer.getUUID(), data.getBackPack()));
                 });
             } else {
                 MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackpackinventory());

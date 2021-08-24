@@ -3,7 +3,8 @@ package net.aritsu.network.server;
 import net.aritsu.capability.PlayerData;
 import net.aritsu.network.IPacketBase;
 import net.aritsu.network.NetworkHandler;
-import net.aritsu.network.client.PacketSetBackPack;
+import net.aritsu.network.client.ClientPacketSetBackPack;
+import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,14 +23,14 @@ import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-public class PacketSpawnBackPack implements IPacketBase {
+public class ServerPacketSpawnBackPack implements IPacketBase {
 
     //empty constructor needed
-    public PacketSpawnBackPack() {
+    public ServerPacketSpawnBackPack() {
     }
 
     //bytebuffer constructor for decoding
-    public PacketSpawnBackPack(FriendlyByteBuf buf) {
+    public ServerPacketSpawnBackPack(FriendlyByteBuf buf) {
         decode(buf);
     }
 
@@ -69,7 +70,8 @@ public class PacketSpawnBackPack implements IPacketBase {
             PlayerData.get(player).ifPresent(data -> {
                 if (data.getBackPack().getItem() instanceof BlockItem blockItem) {
                     blockItem.place(new BlockPlaceContext(level, player, InteractionHand.MAIN_HAND, data.getBackPack(), result));
-                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new PacketSetBackPack(ItemStack.EMPTY));
+                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketSetBackPack(ItemStack.EMPTY));
+                    NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), new ClientReceiveOtherBackPack(player.getUUID(), ItemStack.EMPTY));
                 }
             });
         }
@@ -79,6 +81,6 @@ public class PacketSpawnBackPack implements IPacketBase {
 
     @Override
     public void register(int id) {
-        NetworkHandler.NETWORK.registerMessage(id, PacketSpawnBackPack.class, PacketSpawnBackPack::encode, PacketSpawnBackPack::new, PacketSpawnBackPack::handle);
+        NetworkHandler.NETWORK.registerMessage(id, ServerPacketSpawnBackPack.class, ServerPacketSpawnBackPack::encode, ServerPacketSpawnBackPack::new, ServerPacketSpawnBackPack::handle);
     }
 }

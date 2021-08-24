@@ -7,6 +7,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class ClientReferences {
 
@@ -17,7 +19,7 @@ public class ClientReferences {
         EntityModelSet modelSets = Minecraft.getInstance().getEntityModels();
         HikerArmorModel model = null;
         ModelPart part = null;
-        
+
         switch (armorSlot) {
             case HEAD -> {
                 part = modelSets.bakeLayer(AritsuModels.HEAD_MODEL_LOCATION);
@@ -43,5 +45,13 @@ public class ClientReferences {
 
         }
         return model; //null will default armor models to MC armor models
+    }
+
+    public static Level getClientLevel() {
+        return getClientPlayer().level;
+    }
+
+    public static Player getClientPlayer() {
+        return Minecraft.getInstance().player;
     }
 }
