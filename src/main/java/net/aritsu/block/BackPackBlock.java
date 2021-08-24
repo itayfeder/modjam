@@ -1,6 +1,9 @@
 package net.aritsu.block;
 
 import net.aritsu.blockentity.BackPackBlockEntity;
+import net.aritsu.capability.PlayerData;
+import net.aritsu.network.NetworkHandler;
+import net.aritsu.network.client.PacketSetBackPack;
 import net.aritsu.registry.AritsuItems;
 import net.aritsu.screen.common.BackPackContainer;
 import net.aritsu.util.BagTag;
@@ -22,10 +25,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
@@ -43,10 +48,21 @@ public class BackPackBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
-            MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackpackinventory());
-            MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("container.aritsumods.backpack"));
-            NetworkHooks.openGui(serverPlayer, namedProvider);
-            return InteractionResult.SUCCESS;
+            if (player.isCrouching()) {
+                PlayerData.get(player).ifPresent(data -> {
+                    ItemStack pack = createBackPackStack(backpack);
+                    data.addBackpack(pack);
+                    level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+                    level.removeBlockEntity(blockPos);
+                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PacketSetBackPack(pack));
+                });
+            } else {
+                MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackpackinventory());
+                MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("container.aritsumods.backpack"));
+                NetworkHooks.openGui(serverPlayer, namedProvider);
+                return InteractionResult.SUCCESS;
+            }
+
         }
         //client reaches here.
         return InteractionResult.CONSUME;
@@ -59,17 +75,20 @@ public class BackPackBlock extends BaseEntityBlock {
     }
 
     @Override
-    @Deprecated
-    public void onRemove(BlockState toState, Level level, BlockPos pos, BlockState fromState, boolean flag) {
-
-        if (!toState.is(fromState.getBlock()) && !level.isClientSide()) {
+    public boolean removedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof BackPackBlockEntity pack) {
-                ItemStack backPack = new ItemStack(AritsuItems.BACKPACK.get());
-                backPack.getOrCreateTag().put(BagTag.allItems, pack.getBackpackinventory().serializeNBT());
+                ItemStack backPack = createBackPackStack(pack);
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), backPack);
             }
-            super.onRemove(toState, level, pos, fromState, flag);
         }
+        return super.removedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
+
+    private ItemStack createBackPackStack(BackPackBlockEntity pack) {
+        ItemStack backPack = new ItemStack(AritsuItems.BACKPACK.get());
+        backPack.getOrCreateTag().put(BagTag.allItems, pack.getBackpackinventory().serializeNBT());
+        return backPack;
     }
 
     @Override
