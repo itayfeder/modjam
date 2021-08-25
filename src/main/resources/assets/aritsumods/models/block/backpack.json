@@ -1,4 +1,5 @@
 {
+	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "aritsumods:block/backpack",
 		"particle": "aritsumods:block/backpack"

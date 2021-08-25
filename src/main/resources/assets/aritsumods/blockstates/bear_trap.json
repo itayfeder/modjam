@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,triggered=false": {
+      "model": "aritsumods:block/bear_trap/off",
+      "y": 90
+    },
+    "facing=north,triggered=false": {
+      "model": "aritsumods:block/bear_trap/off"
+    },
+    "facing=south,triggered=false": {
+      "model": "aritsumods:block/bear_trap/off",
+      "y": 180
+    },
+    "facing=west,triggered=false": {
+      "model": "aritsumods:block/bear_trap/off",
+      "y": 270
+    },
+	"facing=east,triggered=true": {
+      "model": "aritsumods:block/bear_trap/on",
+      "y": 90
+    },
+    "facing=north,triggered=true": {
+      "model": "aritsumods:block/bear_trap/on"
+    },
+    "facing=south,triggered=true": {
+      "model": "aritsumods:block/bear_trap/on",
+      "y": 180
+    },
+    "facing=west,triggered=true": {
+      "model": "aritsumods:block/bear_trap/on",
+      "y": 270
+    }
+  }
+}

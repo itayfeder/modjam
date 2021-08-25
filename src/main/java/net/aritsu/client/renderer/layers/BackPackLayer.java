@@ -44,7 +44,7 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         poseStack.pushPose();
         this.getParentModel().body.translateAndRotate(poseStack);
         BlockRenderDispatcher blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
-        BlockState state = AritsuBlocks.BACKPACKBLOCK.get().defaultBlockState();
+        BlockState state = AritsuBlocks.BACKPACK.get().defaultBlockState();
         float scale = 1f;
         poseStack.translate(0.5f, 0.5f, 0.5f);
         poseStack.mulPose(new Quaternion(0, 180, 180, true));

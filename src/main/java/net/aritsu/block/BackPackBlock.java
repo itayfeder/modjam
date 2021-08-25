@@ -13,6 +13,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,6 +50,12 @@ public class BackPackBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
+            if (player.isCrouching()) {
+                player.swing(InteractionHand.MAIN_HAND);
+                level.playSound(player, blockPos, SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
+            }
+        }
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
             if (player.isCrouching()) {
                 PlayerData.get(player).ifPresent(data -> {
@@ -57,6 +65,7 @@ public class BackPackBlock extends BaseEntityBlock {
                     level.removeBlockEntity(blockPos);
                     NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(pack));
                     NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> serverPlayer), new ClientReceiveOtherBackPack(serverPlayer.getUUID(), data.getBackPack()));
+
                 });
             } else {
                 MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackpackinventory());

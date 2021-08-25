@@ -65,7 +65,7 @@ public class BackPackItem extends BlockItem implements Wearable {
     }
 
     public BackPackItem(Properties prop) {
-        super(AritsuBlocks.BACKPACKBLOCK.get(), prop);
+        super(AritsuBlocks.BACKPACK.get(), prop);
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
 

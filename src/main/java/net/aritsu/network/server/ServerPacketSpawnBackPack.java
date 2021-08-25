@@ -8,6 +8,8 @@ import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +19,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
@@ -66,7 +69,7 @@ public class ServerPacketSpawnBackPack implements IPacketBase {
         Level level = player.level;
         BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         BlockPos oneUp = result.getBlockPos().above();
-        if (level.getBlockState(oneUp).isAir()) {
+        if (level.getBlockState(oneUp).isAir() && result.getType() == HitResult.Type.BLOCK) {
             PlayerData.get(player).ifPresent(data -> {
                 if (data.getBackPack().getItem() instanceof BlockItem blockItem) {
                     blockItem.place(new BlockPlaceContext(level, player, InteractionHand.MAIN_HAND, data.getBackPack(), result));
@@ -74,6 +77,8 @@ public class ServerPacketSpawnBackPack implements IPacketBase {
                     NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), new ClientReceiveOtherBackPack(player.getUUID(), ItemStack.EMPTY));
                 }
             });
+            ((Player)player).swing(InteractionHand.MAIN_HAND);
+            player.level.playSound(player, new BlockPos(player.getX(), player.getY(), player.getZ()), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
         }
 
         context.get().setPacketHandled(true);

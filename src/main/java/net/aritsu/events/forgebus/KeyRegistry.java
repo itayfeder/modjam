@@ -21,7 +21,7 @@ public class KeyRegistry {
 
     public void registerKey() {
 
-        keybackpack = new KeyMapping("Unequip BackPack", GLFW.GLFW_KEY_B, "unequip backpack");
+        keybackpack = new KeyMapping("Unequip Backpack", GLFW.GLFW_KEY_B, "Camping Craze");
         ClientRegistry.registerKeyBinding(keybackpack);
     }
 

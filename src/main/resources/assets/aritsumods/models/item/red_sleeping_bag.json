@@ -1,3 +1,6 @@
 {
-  "parent": "aritsumods:block/red_sleeping_bag/inventory"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aritsumods:item/red_sleeping_bag"
+  }
 }

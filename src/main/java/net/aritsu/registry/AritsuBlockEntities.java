@@ -37,5 +37,5 @@ public class AritsuBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BackPackBlockEntity>> BACKPACK_BE = TILEENTITIES.register("backpack_be", () ->
             BlockEntityType.Builder.of(BackPackBlockEntity::new,
-                    AritsuBlocks.BACKPACKBLOCK.get()).build(null));
+                    AritsuBlocks.BACKPACK.get()).build(null));
 }

@@ -89,4 +89,7 @@ public class AritsuItems {
     public static final RegistryObject<Item> BURNT_MARSHMALLOW_ON_A_STICK = ITEMS.register("burnt_marshmallow_on_a_stick",
             () -> new MarshmallowOnAStickItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1).craftRemainder(Items.STICK)
                     .food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.BURNT));
+
+    public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
+            () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
 }

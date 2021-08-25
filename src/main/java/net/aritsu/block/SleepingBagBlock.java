@@ -14,17 +14,16 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.ExplosionDamageCalculator;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,10 +38,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class SleepingBagBlock extends BedBlock {
     public static final EnumProperty<BedPart> PART = BlockStateProperties.BED_PART;
@@ -176,7 +177,7 @@ public class SleepingBagBlock extends BedBlock {
                         }
                     }
 
-                    Either<Player.BedSleepingProblem, Unit> either = player.startSleepInBed(p_9115_).ifRight((p_9029_) -> {
+                    Either<Player.BedSleepingProblem, Unit> either = playerStartSleepInBed(p_9115_, player).ifRight((p_9029_) -> {
                         player.awardStat(Stats.SLEEP_IN_BED);
                         CriteriaTriggers.SLEPT_IN_BED.trigger((ServerPlayer)player);
                     });
@@ -191,6 +192,22 @@ public class SleepingBagBlock extends BedBlock {
         } else {
             return Either.left(Player.BedSleepingProblem.OTHER_PROBLEM);
         }
+    }
+
+    public Either<Player.BedSleepingProblem, Unit> playerStartSleepInBed(BlockPos p_36203_, Player player) {
+        ((LivingEntity)player).startSleeping(p_36203_);
+        ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "sleepCounter");
+        return Either.right(Unit.INSTANCE);
+    }
+
+    @Override
+    public Optional<Vec3> getRespawnPosition(BlockState state, EntityType<?> type, LevelReader world, BlockPos pos, float orientation, @Nullable LivingEntity entity) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean isPossibleToRespawnInThis() {
+        return false;
     }
 
     public static ServerLevel getLevel(Player player) {
