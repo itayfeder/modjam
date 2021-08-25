@@ -5,19 +5,27 @@ import net.aritsu.mod.AritsuMod;
 import net.aritsu.network.NetworkHandler;
 import net.aritsu.network.client.ClientPacketSetBackPack;
 import net.aritsu.network.client.ClientReceiveOtherBackPack;
+import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
+import java.util.Random;
+
 @Mod.EventBusSubscriber(modid = AritsuMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerTracker {
+
+    private static final Random random = new Random();
 
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
@@ -52,6 +60,19 @@ public class PlayerTracker {
         if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
             PlayerData.get(serverPlayer).ifPresent(data -> {
                 NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(data.getBackPack()));
+                if (data.loggedInForTheFirstTime) {
+                    ItemStack[] hiker = new ItemStack[]{new ItemStack(AritsuItems.HIKER_ARMOR_HELMET.get()), new ItemStack(AritsuItems.HIKER_ARMOR_CHEST.get()), new ItemStack(AritsuItems.HIKER_ARMOR_LEGS.get()), new ItemStack(AritsuItems.HIKER_ARMOR_BOOTS.get())};
+                    for (ItemStack armorStack : hiker) {
+                        if (armorStack.getItem() instanceof ArmorItem armorItem) {
+                            int index = armorItem.getSlot().getIndex();
+                            if (serverPlayer.getInventory().armor.get(index).isEmpty())
+                                serverPlayer.getInventory().armor.set(index, armorStack);
+                            else
+                                serverPlayer.getInventory().add(armorStack);
+                        }
+                        data.loggedInForTheFirstTime = false;
+                    }
+                }
             });
         }
     }
@@ -64,5 +85,24 @@ public class PlayerTracker {
                     NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> you), new ClientReceiveOtherBackPack(you.getUUID(), data.getBackPack()));
                 });
             }
+    }
+
+    @SubscribeEvent
+    public static void playerUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (event.getEntityLiving() instanceof Player player) {
+            PlayerData.get(player).ifPresent(data -> {
+                if (data.isHiker) {
+                    float exhaustionLevel = player.getFoodData().getExhaustionLevel();
+                    if (data.prevSaturation == -1.0f) {
+                        data.prevSaturation = exhaustionLevel;
+                    } else {
+                        if (data.prevSaturation > exhaustionLevel) {
+                            if (random.nextInt(5) == 0) //one chance in 5 or 20% more efficient
+                                player.getFoodData().setExhaustion(data.prevSaturation);
+                        }
+                    }
+                } else data.prevSaturation = -1.0f;
+            });
+        }
     }
 }

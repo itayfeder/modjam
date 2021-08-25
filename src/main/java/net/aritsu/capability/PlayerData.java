@@ -10,7 +10,10 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class PlayerData {
 
+    public boolean isHiker;
+    public float prevSaturation = 0.0f;
     private Player player;
+    public boolean loggedInForTheFirstTime = true;
     private ItemStackHandler inventoryForbackPack = new ItemStackHandler(1);
 
     public PlayerData() {
@@ -35,6 +38,7 @@ public class PlayerData {
     public Tag writeData() {
         CompoundTag tag = new CompoundTag();
         tag.put(BagTag.allItems, inventoryForbackPack.serializeNBT());
+        tag.putBoolean("loggedin",loggedInForTheFirstTime);
         return tag;
     }
 
@@ -42,6 +46,7 @@ public class PlayerData {
         if (tag instanceof CompoundTag saved) {
             if (saved.contains(BagTag.allItems) && saved.get(BagTag.allItems) instanceof CompoundTag items)
                 inventoryForbackPack.deserializeNBT(items);
+            loggedInForTheFirstTime = !saved.contains("loggedin") || saved.getBoolean("loggedin");
         }
     }
 
@@ -50,7 +55,7 @@ public class PlayerData {
         inventoryForbackPack.setStackInSlot(0, itemStack);
     }
 
-    public ItemStack getBackPack(){
+    public ItemStack getBackPack() {
         return inventoryForbackPack.getStackInSlot(0);
     }
 }

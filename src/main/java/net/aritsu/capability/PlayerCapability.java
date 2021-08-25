@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class PlayerCapability implements ICapabilitySerializable<CompoundTag> {
-
     /**
      * Unique key to identify the attached provider from others
      */
@@ -24,7 +23,6 @@ public class PlayerCapability implements ICapabilitySerializable<CompoundTag> {
      */
     @CapabilityInject(PlayerData.class)
     public static net.minecraftforge.common.capabilities.Capability<PlayerData> CAPABILITY;
-
     final PlayerData playerData = new PlayerData();
 
     /**
