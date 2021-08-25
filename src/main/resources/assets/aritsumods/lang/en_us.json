@@ -1,6 +1,8 @@
 {
   "itemGroup.camping_mod_tab": "Modjam Camping Mod",
+
   "block.aritsumods.backpack": "Camper's Backpack",
+
   "block.aritsumods.oak_log_seat": "Oak Log Seat",
   "block.aritsumods.spruce_log_seat": "Spruce Log Seat",
   "block.aritsumods.birch_log_seat": "Birch Log Seat",
@@ -35,18 +37,13 @@
   "item.aritsumods.reinforced_fishing_rod": "Reinforced Fishing Rod",
   "item.aritsumods.flask": "Flask",
   "item.aritsumods.flask": "Flask",
-<<<<<<< HEAD
-=======
 
   "item.aritsumods.blueberry": "Blueberries",
->>>>>>> origin/master
   "item.aritsumods.blueberry_pie": "Blueberry Pie",
   "item.aritsumods.glass_mug": "Glass Mug",
   "item.aritsumods.coffee_filled_mug": "Coffee Mug",
   "item.aritsumods.hot_cocoa_filled_mug": "Hot Cocoa Mug",
-<<<<<<< HEAD
   "item.aritsumods.coffee_beans": "Coffee Beans",
-=======
   "item.aritsumods.empty_kettle": "Empty Kettle",
   "item.aritsumods.water_kettle": "Water Kettle",
   "item.aritsumods.boiling_kettle": "Boiling Kettle",
@@ -54,16 +51,14 @@
   "item.aritsumods.coffee_beans": "Coffee Beans",
   "item.aritsumods.coffee_berry": "Coffee Berries",
 
->>>>>>> origin/master
   "item.aritsumods.marshmallow": "Marshmallow",
   "item.aritsumods.marshmallow_on_a_stick": "Marshmallow on a Stick",
   "item.aritsumods.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
   "item.aritsumods.burnt_marshmallow_on_a_stick": "Burnt Marshmallow on a Stick",
   "item.aritsumods.grizzly_bear_spawn_egg": "Grizzly Bear Spawn Egg",
   "entity.aritsumods.grizzly_bear": "Grizzly Bear",
-<<<<<<< HEAD
-  "container.aritsumods.backpack": "Camper's Backpack"
-=======
+
+  "container.aritsumods.backpack": "Camper's Backpack",
 
   "block.aritsumods.white_tent": "White Tent",
   "block.aritsumods.orange_tent": "Orange Tent",
@@ -81,5 +76,4 @@
   "block.aritsumods.green_tent": "Green Tent",
   "block.aritsumods.red_tent": "Red Tent",
   "block.aritsumods.black_tent": "Black Tent"
->>>>>>> origin/master
 }

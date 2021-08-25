@@ -1,9 +1,6 @@
 package net.aritsu.registry;
 
-import net.aritsu.blockentity.BackPackBlockEntity;
-import net.aritsu.blockentity.CampfireGrillBlockEntity;
-import net.aritsu.blockentity.SleepingBagBlockEntity;
-import net.aritsu.blockentity.TentBlockEntity;
+import net.aritsu.blockentity.*;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fmllegacy.RegistryObject;
@@ -58,4 +55,8 @@ public class AritsuBlockEntities {
     public static final RegistryObject<BlockEntityType<BackPackBlockEntity>> BACKPACK_BE = TILEENTITIES.register("backpack_be", () ->
             BlockEntityType.Builder.of(BackPackBlockEntity::new,
                     AritsuBlocks.BACKPACK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BearTrapBlockEntity>> BEAR_TRAP = TILEENTITIES.register("bear_trap", () ->
+            BlockEntityType.Builder.of(BearTrapBlockEntity::new,
+                    AritsuBlocks.BEAR_TRAP.get()).build(null));
 }

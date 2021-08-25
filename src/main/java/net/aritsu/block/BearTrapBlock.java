@@ -1,5 +1,8 @@
 package net.aritsu.block;
 
+import net.aritsu.blockentity.BearTrapBlockEntity;
+import net.aritsu.blockentity.CampfireGrillBlockEntity;
+import net.aritsu.registry.AritsuBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,6 +16,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -23,15 +29,16 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BearTrapBlock extends Block {
+public class BearTrapBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
-    protected static final VoxelShape SHAPE_NS = Block.box(2.0D, 0.0D, 3.0D, 14.0D, 3.0D, 13.0D);
-    protected static final VoxelShape SHAPE_NS_ON = Block.box(6.0D, 0.0D, 3.0D, 10.0D, 6.0D, 13.0D);
-    protected static final VoxelShape SHAPE_EW = Block.box(3.0D, 0.0D, 2.0D, 13.0D, 3.0D, 14.0D);
-    protected static final VoxelShape SHAPE_EW_ON = Block.box(3.0D, 0.0D, 6.0D, 13.0D, 6.0D, 10.0D);
+    public static final VoxelShape SHAPE_NS = Block.box(2.0D, 0.0D, 3.0D, 14.0D, 3.0D, 13.0D);
+    public static final VoxelShape SHAPE_NS_ON = Block.box(6.0D, 0.0D, 3.0D, 10.0D, 6.0D, 13.0D);
+    public static final VoxelShape SHAPE_EW = Block.box(3.0D, 0.0D, 2.0D, 13.0D, 3.0D, 14.0D);
+    public static final VoxelShape SHAPE_EW_ON = Block.box(3.0D, 0.0D, 6.0D, 13.0D, 6.0D, 10.0D);
 
     public BearTrapBlock(Properties p_49795_) {
         super(p_49795_);
@@ -82,7 +89,7 @@ public class BearTrapBlock extends Block {
         return true;
     }
 
-    public void entityInside(BlockState p_57270_, Level p_57271_, BlockPos p_57272_, Entity p_57273_) {
+    /*public void entityInside(BlockState p_57270_, Level p_57271_, BlockPos p_57272_, Entity p_57273_) {
         if (p_57273_ instanceof LivingEntity && p_57273_.yOld <= p_57272_.getY() + 0.1875) {
             p_57273_.makeStuckInBlock(p_57270_, new Vec3((double)0.05F, 0.00D, (double)0.05F));
             if (!p_57270_.getValue(TRIGGERED)) {
@@ -100,7 +107,7 @@ public class BearTrapBlock extends Block {
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext p_60575_) {
@@ -114,4 +121,17 @@ public class BearTrapBlock extends Block {
                 return p_60572_.getValue(TRIGGERED) ? SHAPE_EW_ON : SHAPE_EW;
         }
     }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos p_152759_, BlockState p_152760_) {
+        return new BearTrapBlockEntity(p_152759_, p_152760_);
+    }
+
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152755_, BlockState p_152756_, BlockEntityType<T> p_152757_) {
+        return createTickerHelper(p_152757_, AritsuBlockEntities.BEAR_TRAP.get(), BearTrapBlockEntity::trapTick);
+
+    }
+
 }

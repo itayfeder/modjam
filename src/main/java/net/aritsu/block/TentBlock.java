@@ -155,7 +155,17 @@ public class TentBlock extends BedBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-        return base;
+        switch (state.getValue(FACING)) {
+            case NORTH, SOUTH -> {
+                return NS;
+            }
+            case EAST, WEST -> {
+                return EW;
+            }
+            default -> {
+                return common;
+            }
+        }
     }
 
     @Override
@@ -195,10 +205,10 @@ public class TentBlock extends BedBlock {
                     ItemStack heldStack = player.getItemInHand(hand);
                     if (heldStack.getItem() instanceof SleepingBagItem) {
                         tentBlockEntity.setSleepingBag(heldStack);
-                        if (!player.isCreative())
-                            player.getItemInHand(hand).shrink(1);
+                        if (!player.getAbilities().instabuild)
+                            player.setItemInHand(hand, ItemStack.EMPTY);
                     }
-                    return InteractionResult.SUCCESS;
+                        return InteractionResult.CONSUME;
                 }
             }
             if (state.getValue(PART) != BedPart.HEAD) {
