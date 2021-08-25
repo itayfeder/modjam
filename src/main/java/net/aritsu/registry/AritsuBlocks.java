@@ -65,6 +65,39 @@ public class AritsuBlocks {
     public static final RegistryObject<Block> BLACK_SLEEPING_BAG = BLOCKS.register("black_sleeping_bag",
             () -> createBed(DyeColor.BLACK));
 
+    public static final RegistryObject<Block> WHITE_TENT = BLOCKS.register("white_tent",
+            () -> createTent(DyeColor.WHITE));
+    public static final RegistryObject<Block> ORANGE_TENT = BLOCKS.register("orange_tent",
+            () -> createTent(DyeColor.ORANGE));
+    public static final RegistryObject<Block> MAGENTA_TENT = BLOCKS.register("magenta_tent",
+            () -> createTent(DyeColor.MAGENTA));
+    public static final RegistryObject<Block> LIGHT_BLUE_TENT = BLOCKS.register("light_blue_tent",
+            () -> createTent(DyeColor.LIGHT_BLUE));
+    public static final RegistryObject<Block> YELLOW_TENT = BLOCKS.register("yellow_tent",
+            () -> createTent(DyeColor.YELLOW));
+    public static final RegistryObject<Block> LIME_TENT = BLOCKS.register("lime_tent",
+            () -> createTent(DyeColor.LIME));
+    public static final RegistryObject<Block> PINK_TENT = BLOCKS.register("pink_tent",
+            () -> createTent(DyeColor.PINK));
+    public static final RegistryObject<Block> GRAY_TENT = BLOCKS.register("gray_tent",
+            () -> createTent(DyeColor.GRAY));
+    public static final RegistryObject<Block> LIGHT_GRAY_TENT = BLOCKS.register("light_gray_tent",
+            () -> createTent(DyeColor.LIGHT_GRAY));
+    public static final RegistryObject<Block> CYAN_TENT = BLOCKS.register("cyan_tent",
+            () -> createTent(DyeColor.CYAN));
+    public static final RegistryObject<Block> PURPLE_TENT = BLOCKS.register("purple_tent",
+            () -> createTent(DyeColor.PURPLE));
+    public static final RegistryObject<Block> BLUE_TENT = BLOCKS.register("blue_tent",
+            () -> createTent(DyeColor.BLUE));
+    public static final RegistryObject<Block> BROWN_TENT = BLOCKS.register("brown_tent",
+            () -> createTent(DyeColor.BROWN));
+    public static final RegistryObject<Block> GREEN_TENT = BLOCKS.register("green_tent",
+            () -> createTent(DyeColor.GREEN));
+    public static final RegistryObject<Block> RED_TENT = BLOCKS.register("red_tent",
+            () -> createTent(DyeColor.RED));
+    public static final RegistryObject<Block> BLACK_TENT = BLOCKS.register("black_tent",
+            () -> createTent(DyeColor.BLACK));
+
     public static final RegistryObject<Block> CAMPFIRE_GRILL = BLOCKS.register("campfire_grill",
             () -> new CampfireGrillBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(5.0F, 600).sound(SoundType.METAL)));
 
@@ -82,5 +115,11 @@ public class AritsuBlocks {
         return new SleepingBagBlock(color, BlockBehaviour.Properties.of(Material.WOOL, (p_152613_) -> {
             return p_152613_.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMaterialColor() : MaterialColor.WOOL;
         }).sound(SoundType.WOOL).strength(0.2F).noOcclusion());
+    }
+
+    private static Block createTent(DyeColor color) {
+        return new TentBlock(color, BlockBehaviour.Properties.of(Material.WOOL, (blockState) -> {
+            return blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMaterialColor() : MaterialColor.WOOL;
+        }).sound(SoundType.WOOL).strength(0.5F).noOcclusion());
     }
 }

@@ -3,6 +3,7 @@ package net.aritsu.registry;
 import net.aritsu.blockentity.BackPackBlockEntity;
 import net.aritsu.blockentity.CampfireGrillBlockEntity;
 import net.aritsu.blockentity.SleepingBagBlockEntity;
+import net.aritsu.blockentity.TentBlockEntity;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fmllegacy.RegistryObject;
@@ -30,6 +31,25 @@ public class AritsuBlockEntities {
                     AritsuBlocks.GREEN_SLEEPING_BAG.get(),
                     AritsuBlocks.RED_SLEEPING_BAG.get(),
                     AritsuBlocks.BLACK_SLEEPING_BAG.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<TentBlockEntity>> TENT_BE = TILEENTITIES.register("tent_be", () ->
+            BlockEntityType.Builder.of(TentBlockEntity::new,
+                    AritsuBlocks.WHITE_TENT.get(),
+                    AritsuBlocks.ORANGE_TENT.get(),
+                    AritsuBlocks.MAGENTA_TENT.get(),
+                    AritsuBlocks.LIGHT_BLUE_TENT.get(),
+                    AritsuBlocks.YELLOW_TENT.get(),
+                    AritsuBlocks.LIME_TENT.get(),
+                    AritsuBlocks.PINK_TENT.get(),
+                    AritsuBlocks.GRAY_TENT.get(),
+                    AritsuBlocks.LIGHT_GRAY_TENT.get(),
+                    AritsuBlocks.CYAN_TENT.get(),
+                    AritsuBlocks.PURPLE_TENT.get(),
+                    AritsuBlocks.BLUE_TENT.get(),
+                    AritsuBlocks.BROWN_TENT.get(),
+                    AritsuBlocks.GREEN_TENT.get(),
+                    AritsuBlocks.RED_TENT.get(),
+                    AritsuBlocks.BLACK_TENT.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<CampfireGrillBlockEntity>> CAMPFIRE_GRILL = TILEENTITIES.register("campfire_grill", () ->
             BlockEntityType.Builder.of(CampfireGrillBlockEntity::new,

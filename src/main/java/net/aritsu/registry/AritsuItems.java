@@ -61,6 +61,39 @@ public class AritsuItems {
     public static final RegistryObject<Item> BLACK_SLEEPING_BAG = ITEMS.register("black_sleeping_bag",
             () -> new SleepingBagItem(AritsuBlocks.BLACK_SLEEPING_BAG.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
 
+    public static final RegistryObject<Item> WHITE_TENT = ITEMS.register("white_tent",
+            () -> new SleepingBagItem(AritsuBlocks.WHITE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> ORANGE_TENT = ITEMS.register("orange_tent",
+            () -> new SleepingBagItem(AritsuBlocks.ORANGE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> MAGENTA_TENT = ITEMS.register("magenta_tent",
+            () -> new SleepingBagItem(AritsuBlocks.MAGENTA_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> LIGHT_BLUE_tent = ITEMS.register("light_blue_tent",
+            () -> new SleepingBagItem(AritsuBlocks.LIGHT_BLUE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> YELLOW_TENT = ITEMS.register("yellow_tent",
+            () -> new SleepingBagItem(AritsuBlocks.YELLOW_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> LIME_TENT = ITEMS.register("lime_tent",
+            () -> new SleepingBagItem(AritsuBlocks.LIME_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> PINK_TENT = ITEMS.register("pink_tent",
+            () -> new SleepingBagItem(AritsuBlocks.PINK_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> GRAY_TENT = ITEMS.register("gray_tent",
+            () -> new SleepingBagItem(AritsuBlocks.GRAY_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> LIGHT_GRAY_TENT = ITEMS.register("light_gray_tent",
+            () -> new SleepingBagItem(AritsuBlocks.LIGHT_GRAY_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> CYAN_TENT = ITEMS.register("cyan_tent",
+            () -> new SleepingBagItem(AritsuBlocks.CYAN_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> PURPLE_TENT = ITEMS.register("purple_tent",
+            () -> new SleepingBagItem(AritsuBlocks.PURPLE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> BLUE_TENT = ITEMS.register("blue_tent",
+            () -> new SleepingBagItem(AritsuBlocks.BLUE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> BROWN_TENT = ITEMS.register("brown_tent",
+            () -> new SleepingBagItem(AritsuBlocks.BROWN_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> GREEN_TENT = ITEMS.register("green_tent",
+            () -> new SleepingBagItem(AritsuBlocks.GREEN_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> RED_TENT = ITEMS.register("red_tent",
+            () -> new SleepingBagItem(AritsuBlocks.RED_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> BLACK_TENT = ITEMS.register("black_tent",
+            () -> new SleepingBagItem(AritsuBlocks.BLACK_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
+
     public static final RegistryObject<Item> HIKER_ARMOR_BOOTS = ITEMS.register("hiker_boots", () -> new HikerArmorItem(EquipmentSlot.FEET));
     public static final RegistryObject<Item> HIKER_ARMOR_LEGS = ITEMS.register("hiker_legs", () -> new HikerArmorItem(EquipmentSlot.LEGS));
     public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
