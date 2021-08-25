@@ -54,6 +54,10 @@ public class CampfireGrillBlock extends BaseEntityBlock {
 
                 return InteractionResult.CONSUME;
             }
+            if (!p_51275_.isClientSide && campfireblockentity.placeKettle(p_51277_.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
+                p_51277_.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
+                return InteractionResult.SUCCESS;
+            }
         }
 
         return InteractionResult.PASS;

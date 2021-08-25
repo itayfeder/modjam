@@ -35,16 +35,51 @@
   "item.aritsumods.reinforced_fishing_rod": "Reinforced Fishing Rod",
   "item.aritsumods.flask": "Flask",
   "item.aritsumods.flask": "Flask",
+<<<<<<< HEAD
+=======
+
+  "item.aritsumods.blueberry": "Blueberries",
+>>>>>>> origin/master
   "item.aritsumods.blueberry_pie": "Blueberry Pie",
   "item.aritsumods.glass_mug": "Glass Mug",
   "item.aritsumods.coffee_filled_mug": "Coffee Mug",
   "item.aritsumods.hot_cocoa_filled_mug": "Hot Cocoa Mug",
+<<<<<<< HEAD
   "item.aritsumods.coffee_beans": "Coffee Beans",
+=======
+  "item.aritsumods.empty_kettle": "Empty Kettle",
+  "item.aritsumods.water_kettle": "Water Kettle",
+  "item.aritsumods.boiling_kettle": "Boiling Kettle",
+
+  "item.aritsumods.coffee_beans": "Coffee Beans",
+  "item.aritsumods.coffee_berry": "Coffee Berries",
+
+>>>>>>> origin/master
   "item.aritsumods.marshmallow": "Marshmallow",
   "item.aritsumods.marshmallow_on_a_stick": "Marshmallow on a Stick",
   "item.aritsumods.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
   "item.aritsumods.burnt_marshmallow_on_a_stick": "Burnt Marshmallow on a Stick",
   "item.aritsumods.grizzly_bear_spawn_egg": "Grizzly Bear Spawn Egg",
   "entity.aritsumods.grizzly_bear": "Grizzly Bear",
+<<<<<<< HEAD
   "container.aritsumods.backpack": "Camper's Backpack"
+=======
+
+  "block.aritsumods.white_tent": "White Tent",
+  "block.aritsumods.orange_tent": "Orange Tent",
+  "block.aritsumods.magenta_tent": "Magenta Tent",
+  "block.aritsumods.light_blue_tent": "Light Blue Tent",
+  "block.aritsumods.yellow_tent": "Yellow Tent",
+  "block.aritsumods.lime_tent": "Lime Tent",
+  "block.aritsumods.pink_tent": "Pink Tent",
+  "block.aritsumods.gray_tent": "Gray Tent",
+  "block.aritsumods.light_gray_tent": "Light Gray Tent",
+  "block.aritsumods.cyan_tent": "Cyan Tent",
+  "block.aritsumods.purple_tent": "Purple Tent",
+  "block.aritsumods.blue_tent": "Blue Tent",
+  "block.aritsumods.brown_tent": "Brown Tent",
+  "block.aritsumods.green_tent": "Green Tent",
+  "block.aritsumods.red_tent": "Red Tent",
+  "block.aritsumods.black_tent": "Black Tent"
+>>>>>>> origin/master
 }

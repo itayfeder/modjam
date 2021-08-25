@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SleepingBagItem extends BlockItem {
+<<<<<<< HEAD
     public SleepingBagItem(Block block, Properties properties) {
         super(block, properties);
     }
@@ -33,5 +34,13 @@ public class SleepingBagItem extends BlockItem {
 //                    return InteractionResult.SUCCESS;
 //                } else return InteractionResult.CONSUME;
         return super.onItemUseFirst(stack, context);
+=======
+    public SleepingBagItem(Block block, Item.Properties properties) {
+        super(block, properties);
+    }
+
+    protected boolean placeBlock(BlockPlaceContext blockPlaceContext, BlockState blockState) {
+        return blockPlaceContext.getLevel().setBlock(blockPlaceContext.getClickedPos(), blockState, 26);
+>>>>>>> origin/master
     }
 }

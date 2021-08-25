@@ -62,25 +62,19 @@ public class MarshmallowOnAStickItem extends Item {
             }
         }
     }
-
-//    BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-//                if (level.getBlockState(result.getBlockPos()).getBlock() instanceof CampfireBlock
-//                        && isActuallyLookingAt(player, result.getBlockPos(), 4)
-//            && rnd.nextInt(5/*seconds*/ * 20/*one second aka 20ticks*/) == 0)
-
     @Override
-    public ItemStack finishUsingItem(ItemStack p_41409_, Level p_41410_, LivingEntity p_41411_) {
-        if (p_41411_ instanceof ServerPlayer) {
-            ServerPlayer serverplayer = (ServerPlayer) p_41411_;
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, p_41409_);
+    public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
+        if (livingEntity instanceof ServerPlayer) {
+            ServerPlayer serverplayer = (ServerPlayer) livingEntity;
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, itemStack);
             serverplayer.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (p_41411_ instanceof Player && !((Player) p_41411_).getAbilities().instabuild) {
-            p_41409_.shrink(1);
+        if (livingEntity instanceof Player && !((Player) livingEntity).getAbilities().instabuild) {
+            itemStack.shrink(1);
         }
 
-        return p_41409_.isEmpty() ? new ItemStack(Items.STICK) : p_41409_;
+        return itemStack.isEmpty() ? new ItemStack(Items.STICK) : itemStack;
     }
 
     public enum Stage {
