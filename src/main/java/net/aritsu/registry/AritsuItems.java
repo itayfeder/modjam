@@ -3,12 +3,11 @@ package net.aritsu.registry;
 import net.aritsu.item.*;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.util.ModTab;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -125,25 +124,29 @@ public class AritsuItems {
                     .food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.BURNT));
 
     public static final RegistryObject<BlockItem> BLUEBERRY = ITEMS.register("blueberry",
-            () -> new BlockItem (AritsuBlocks.BLUEBERRY_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE)
+            () -> new ItemNameBlockItem(AritsuBlocks.BLUEBERRY_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
     public static final RegistryObject<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
             () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
 
     public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
-            () -> new BlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
+            () -> new ItemNameBlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
     public static final RegistryObject<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> GLASS_MUG = ITEMS.register("glass_mug",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> COFFEE_FILLED_MUG = ITEMS.register("coffee_filled_mug",
-            () -> new CoffeeFilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE)));
+            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(MobEffects.REGENERATION,1800,0)));
     public static final RegistryObject<Item> HOT_COCOA_FILLED_MUG = ITEMS.register("hot_cocoa_filled_mug",
-            () -> new HotCocoaFilledMug((new Item.Properties()).tab(ModTab.INSTANCE)));
+            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1800,0)));
     public static final RegistryObject<Item> EMPTY_KETTLE = ITEMS.register("empty_kettle",
-            () -> new HotCocoaFilledMug((new Item.Properties()).tab(ModTab.INSTANCE)));
+            () -> new EmptyKettleItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
+    public static final RegistryObject<Item> WATER_KETTLE = ITEMS.register("water_kettle",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
+    public static final RegistryObject<Item> BOILING_KETTLE = ITEMS.register("boiling_kettle",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
 
     public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
             () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));

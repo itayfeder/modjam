@@ -26,7 +26,7 @@ public class CampfireGrillRenderer implements BlockEntityRenderer<CampfireGrillB
             NonNullList<ItemStack> nonnulllist = p_112344_.getItems();
             int i = (int)p_112344_.getBlockPos().asLong();
 
-            for(int j = 0; j < nonnulllist.size(); ++j) {
+            for(int j = 0; j < nonnulllist.size()-1; ++j) {
                 ItemStack itemstack = nonnulllist.get(j);
                 if (itemstack != ItemStack.EMPTY) {
                     p_112346_.pushPose();
@@ -41,6 +41,17 @@ public class CampfireGrillRenderer implements BlockEntityRenderer<CampfireGrillB
                     p_112346_.popPose();
                 }
             }
+
+            ItemStack itemstack = nonnulllist.get(4);
+            if (itemstack != ItemStack.EMPTY) {
+                p_112346_.pushPose();
+                p_112346_.translate(0.45D, 0.30D, 0.5D);
+                p_112346_.translate(0.0D, 0.0D, 0.0D);
+                p_112346_.scale(0.625F, 0.625F, 0.625F);
+                Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, p_112348_, p_112349_, p_112346_, p_112347_, i + 4);
+                p_112346_.popPose();
+            }
+
         }
 
 

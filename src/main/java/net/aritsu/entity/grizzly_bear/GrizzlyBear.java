@@ -23,22 +23,24 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class GrizzlyBear extends Animal implements NeutralMob {
@@ -68,6 +70,7 @@ public class GrizzlyBear extends Animal implements NeutralMob {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearMeleeAttackGoal());
         this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearPanicGoal());
+        this.goalSelector.addGoal(2, new GrizzlyBear.GrizzlyBearEatBeehivesGoal((double)1.2F, 12, 4));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -339,6 +342,130 @@ public class GrizzlyBear extends Animal implements NeutralMob {
 
         public boolean canUse() {
             return !GrizzlyBear.this.isBaby() && !GrizzlyBear.this.isOnFire() ? false : super.canUse();
+        }
+    }
+
+    public class GrizzlyBearEatBeehivesGoal extends MoveToBlockGoal {
+        private static final int WAIT_TICKS = 40;
+        protected int ticksWaited;
+        private boolean reached;
+
+        public GrizzlyBearEatBeehivesGoal(double p_28675_, int p_28676_, int p_28677_) {
+            super(GrizzlyBear.this, p_28675_, p_28676_, p_28677_);
+        }
+
+        public double acceptedDistance() {
+            return 2.0D;
+        }
+
+        public boolean shouldRecalculatePath() {
+            return true;
+        }
+
+        protected boolean isValidTarget(LevelReader p_28680_, BlockPos p_28681_) {
+            BlockState blockstate = p_28680_.getBlockState(p_28681_);
+            return blockstate.is(Blocks.BEE_NEST) && blockstate.getValue(BeehiveBlock.HONEY_LEVEL) >= 5;
+        }
+
+        @Override
+        protected BlockPos getMoveToTarget() {
+            return this.blockPos.relative(GrizzlyBear.this.level.getBlockState(this.blockPos).getValue(BeehiveBlock.FACING), 1);
+        }
+
+        @Override
+        public void tick() {
+            if (this.isReachedTarget()) {
+                if (this.ticksWaited >= 0) {
+                    this.onReachedTarget();
+                } else {
+                    ++this.ticksWaited;
+                }
+            }
+
+            BlockPos blockpos = this.getMoveToTarget();
+            if (blockpos.closerThan(this.mob.position(), this.acceptedDistance()*1.5) && blockpos.getY()>GrizzlyBear.this.getY()) {
+                GrizzlyBear.this.setStanding(true);
+            }
+            if (!blockpos.closerThan(this.mob.position(), this.acceptedDistance())) {
+                this.reached = false;
+                ++this.tryTicks;
+                if (this.shouldRecalculatePath()) {
+                    BlockPos movepos = getMoveToTarget();
+                    this.mob.getNavigation().moveTo((double)((float)movepos.getX()) + 0.5D, (double)movepos.getY(), (double)((float)movepos.getZ()) + 0.5D, this.speedModifier);
+                }
+            } else {
+                this.reached = true;
+                --this.tryTicks;
+            }
+
+        }
+
+        @Override
+        protected boolean isReachedTarget() {
+            return this.reached;
+        }
+
+
+        protected void onReachedTarget() {
+            if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(GrizzlyBear.this.level, GrizzlyBear.this)) {
+                BlockState blockstate = GrizzlyBear.this.level.getBlockState(this.blockPos);
+                if (blockstate.is(Blocks.BEE_NEST)) {
+                    this.pickSweetBerries(blockstate);
+                }
+
+            }
+        }
+
+        private void pickSweetBerries(BlockState p_148929_) {
+            int i = p_148929_.getValue(BeehiveBlock.HONEY_LEVEL);
+            p_148929_.setValue(BeehiveBlock.HONEY_LEVEL, Integer.valueOf(0));
+            int j = 1 + GrizzlyBear.this.level.random.nextInt(2) + (i == 5 ? 1 : 0);
+            ItemStack itemstack = GrizzlyBear.this.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (itemstack.isEmpty()) {
+                GrizzlyBear.this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.HONEYCOMB));
+                --j;
+            }
+
+            if (j > 0) {
+                Block.popResource(GrizzlyBear.this.level, this.blockPos, new ItemStack(Items.HONEYCOMB, j));
+            }
+
+            GrizzlyBear.this.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 1.0F, 1.0F);
+            GrizzlyBear.this.level.setBlock(this.blockPos, p_148929_.setValue(BeehiveBlock.HONEY_LEVEL, Integer.valueOf(0)), 2);
+            ((BeehiveBlock)GrizzlyBear.this.level.getBlockState(this.blockPos).getBlock()).releaseBeesAndResetHoneyLevel(GrizzlyBear.this.level,GrizzlyBear.this.level.getBlockState(this.blockPos),  this.blockPos, null, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+            angerNearbyBees(GrizzlyBear.this.level, this.blockPos);
+            System.out.println("TEEEEEST: " + GrizzlyBear.this.isStanding());
+            stop();
+        }
+
+        private void angerNearbyBees(Level p_49650_, BlockPos p_49651_) {
+            List<Bee> list = p_49650_.getEntitiesOfClass(Bee.class, (new AABB(p_49651_)).inflate(8.0D, 6.0D, 8.0D));
+            if (!list.isEmpty()) {
+                List<GrizzlyBear> list1 = p_49650_.getEntitiesOfClass(GrizzlyBear.class, (new AABB(p_49651_)).inflate(8.0D, 6.0D, 8.0D));
+                if (list1.isEmpty()) return; //Forge: Prevent Error when no players are around.
+                int i = list1.size();
+
+                for(Bee bee : list) {
+                    if (bee.getTarget() == null) {
+                        bee.setTarget(list1.get(p_49650_.random.nextInt(i)));
+                    }
+                }
+            }
+
+        }
+
+        public boolean canUse() {
+            return !GrizzlyBear.this.isSleeping() && super.canUse();
+        }
+
+        public void start() {
+            this.ticksWaited = 0;
+            super.start();
+        }
+
+        public void stop() {
+            GrizzlyBear.this.setStanding(false);
+            super.stop();
         }
     }
 }
