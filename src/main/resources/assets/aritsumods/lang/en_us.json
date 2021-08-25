@@ -37,11 +37,15 @@
   "block.aritsumods.campfire_grill": "Campfire Grill",
   "block.aritsumods.bear_trap": "Bear Trap",
   "item.aritsumods.flask": "Flask",
+  "item.aritsumods.flask": "Flask",
 
   "block.aritsumods.blueberry_bush": "Blueberries",
   "item.aritsumods.blueberry_pie": "Blueberry Pie",
 
   "item.aritsumods.glass_mug": "Glass Mug",
+  "item.aritsumods.coffee_filled_mug": "Coffee Mug",
+  "item.aritsumods.hot_cocoa_filled_mug": "Hot Cocoa Mug",
+
   "item.aritsumods.coffee_beans": "Coffee Beans",
   "block.aritsumods.coffee_bush": "Coffee Berries",
 
