@@ -92,4 +92,7 @@ public class AritsuItems {
 
     public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
             () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> FLASK = ITEMS.register("flask",
+            () -> new FlaskItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
 }

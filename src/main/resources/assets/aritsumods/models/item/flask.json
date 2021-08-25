@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aritsumods:item/empty",
+    "layer1": "aritsumods:item/flask"
+  },
+	"overrides": [
+        {
+            "predicate": {
+                "filled": 0.00001
+            },
+            "model": "aritsumods:item/flask_filled"
+        }
+    ]
+}
