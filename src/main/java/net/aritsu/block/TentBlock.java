@@ -3,6 +3,7 @@ package net.aritsu.block;
 import com.mojang.datafixers.util.Either;
 import net.aritsu.blockentity.TentBlockEntity;
 import net.aritsu.item.SleepingBagItem;
+import net.aritsu.util.TentUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -55,7 +56,7 @@ public class TentBlock extends BedBlock {
     public static final EnumProperty<BedPart> PART = BlockStateProperties.BED_PART;
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
     private static final VoxelShape common = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-    private static final VoxelShape base = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    private static final VoxelShape base = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 0.5D, 16.0D);
 
     private static final VoxelShape shapeNS2 = Block.box(2.0D, 4.0D, 0.0D, 14.0D, 8.0D, 16.0D);
     private static final VoxelShape shapeNS3 = Block.box(4.0D, 8.0D, 0.0D, 12.0D, 12.0D, 16.0D);
@@ -99,32 +100,6 @@ public class TentBlock extends BedBlock {
         return !player.level.getBlockState(pos).isSuffocating(player.level, pos);
     }
 
-    public static boolean tentIsEmpty(TentBlockEntity tentBlockEntity, BlockState state, Level level, BlockPos pos) {
-        BlockEntity head = null;
-
-        if (state.getValue(PART) == BedPart.FOOT) {
-            head = switch (state.getValue(FACING)) {
-                case NORTH -> level.getBlockEntity(pos.north());
-                case SOUTH -> level.getBlockEntity(pos.south());
-                case EAST -> level.getBlockEntity(pos.east());
-                case WEST -> level.getBlockEntity(pos.west());
-                default -> head;
-            };
-        } else if (state.getValue(PART) == BedPart.HEAD) {
-            head = switch (state.getValue(FACING)) {
-                case NORTH -> level.getBlockEntity(pos.south());
-                case SOUTH -> level.getBlockEntity(pos.north());
-                case EAST -> level.getBlockEntity(pos.west());
-                case WEST -> level.getBlockEntity(pos.east());
-                default -> head;
-            };
-        }
-
-        if (head instanceof TentBlockEntity otherPart)
-            return otherPart.getSleepingBag().isEmpty() && tentBlockEntity.getSleepingBag().isEmpty();
-        return false;
-    }
-
     @Override
     public BlockEntity newBlockEntity(BlockPos blockpos, BlockState state) {
         return new TentBlockEntity(blockpos, state, this.color);
@@ -155,17 +130,7 @@ public class TentBlock extends BedBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(FACING)) {
-            case NORTH, SOUTH -> {
-                return NS;
-            }
-            case EAST, WEST -> {
-                return EW;
-            }
-            default -> {
-                return common;
-            }
-        }
+        return base;
     }
 
     @Override
@@ -201,14 +166,14 @@ public class TentBlock extends BedBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof TentBlockEntity tentBlockEntity) {
-                if (tentIsEmpty(tentBlockEntity, state, level, pos)) {
+                if (TentUtils.isTentEmpty(pos, level)) {
                     ItemStack heldStack = player.getItemInHand(hand);
                     if (heldStack.getItem() instanceof SleepingBagItem) {
                         tentBlockEntity.setSleepingBag(heldStack);
                         if (!player.getAbilities().instabuild)
-                            player.setItemInHand(hand, ItemStack.EMPTY);
-                    }
+                            player.setItemInHand(hand, ItemStack.EMPTY); //Set item imediatly empty, as it can only stack to 1
                         return InteractionResult.CONSUME;
+                    }
                 }
             }
             if (state.getValue(PART) != BedPart.HEAD) {
