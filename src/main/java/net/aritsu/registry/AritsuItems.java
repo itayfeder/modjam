@@ -90,6 +90,14 @@ public class AritsuItems {
             () -> new MarshmallowOnAStickItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1).craftRemainder(Items.STICK)
                     .food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.BURNT));
 
+    public static final RegistryObject<BlockItem> BLUEBERRY = ITEMS.register("blueberry",
+            () -> new BlockItem (AritsuBlocks.BLUEBERRY_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE)
+                .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
+
+    public static final RegistryObject<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
+            () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
+                .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
+
     public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
             () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
 

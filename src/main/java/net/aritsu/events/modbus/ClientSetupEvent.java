@@ -56,6 +56,7 @@ public class ClientSetupEvent {
         BlockEntityRenderers.register(AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillRenderer::new);
 
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BEAR_TRAP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BLUEBERRY_BUSH.get(), RenderType.cutout());
 
     }
 }
