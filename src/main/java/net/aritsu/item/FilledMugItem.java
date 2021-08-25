@@ -17,9 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
-public class CoffeeFilledMugItem extends Item {
-    public CoffeeFilledMugItem(Item.Properties p_41346_) {
+public class FilledMugItem extends Item {
+    private final MobEffectInstance instance;
+    public FilledMugItem(Item.Properties p_41346_, MobEffectInstance instance) {
         super(p_41346_);
+        this.instance = instance;
     }
 
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
@@ -31,7 +33,7 @@ public class CoffeeFilledMugItem extends Item {
         }
 
         if (!level.isClientSide) {
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION,1800,0));
+            livingEntity.addEffect(this.instance);
         }
         if (livingEntity instanceof Player && !((Player)livingEntity).getAbilities().instabuild) {
             itemStack.shrink(1);
