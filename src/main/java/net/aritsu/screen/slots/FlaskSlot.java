@@ -1,7 +1,7 @@
 package net.aritsu.screen.slots;
 
+import net.aritsu.item.FlaskItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -14,6 +14,6 @@ public class FlaskSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
-        return stack.getItem().equals(Items.GLASS_BOTTLE);
+        return stack.getItem() instanceof FlaskItem;
     }
 }

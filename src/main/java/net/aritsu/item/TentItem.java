@@ -1,19 +1,16 @@
 package net.aritsu.item;
 
-import net.aritsu.block.TentBlock;
-import net.aritsu.blockentity.TentBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SleepingBagItem extends BlockItem {
-    public SleepingBagItem(Block block, Properties properties) {
+public class TentItem extends BlockItem {
+    public TentItem(Block block, Item.Properties properties) {
         super(block, properties);
     }
 
@@ -23,14 +20,15 @@ public class SleepingBagItem extends BlockItem {
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        //TODO use tent on sleepingbag and replace sleepingbag with tent with sleepingbag in
+
 //        BlockPos pos = context.getClickedPos();
 //        Level level = context.getLevel();
+//        BlockState state = level.getBlockState(pos);
 //        if (!level.isClientSide())
-//            if (level.getBlockEntity(pos) instanceof TentBlockEntity tentBlockEntity)
-//                if (TentBlock.tentIsEmpty(tentBlockEntity, level.getBlockState(pos), level, pos)) {
-//                    tentBlockEntity.setSleepingBag(stack);
-//                    stack.shrink(1);
-//                    return InteractionResult.SUCCESS;
+//            if (state.getBlock() instanceof SleepingBagBlock bagBlock)
+//                if (stack.getItem() instanceof TentItem blockItem) {
+//                    Item bagItem = Item.BY_BLOCK.getOrDefault(bagBlock, AritsuItems.WHITE_SLEEPING_BAG.get());
 //                } else return InteractionResult.CONSUME;
         return super.onItemUseFirst(stack, context);
     }

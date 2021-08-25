@@ -1,5 +1,6 @@
 package net.aritsu.events.modbus;
 
+import net.aritsu.client.renderer.tile.TentRenderer;
 import net.aritsu.client.renderer.EmptyEntityRenderer;
 import net.aritsu.client.renderer.GrizzlyBearRenderer;
 import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
@@ -27,7 +28,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetupEvent {
 
     @SubscribeEvent
-    public static void setupClient(FMLClientSetupEvent event){
+    public static void setupClient(FMLClientSetupEvent event) {
+
         EntityRenderers.register(AritsuEntities.SIT_DUMMY.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(AritsuEntities.REINFORCED_FISHING_BOBBER.get(), ReinforcedFishingHookRenderer::new);
         EntityRenderers.register(AritsuEntities.GRIZZLY_BEAR.get(), GrizzlyBearRenderer::new);
@@ -57,6 +59,7 @@ public class ClientSetupEvent {
 
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.CAMPFIRE_GRILL.get(), RenderType.cutout());
         BlockEntityRenderers.register(AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillRenderer::new);
+        BlockEntityRenderers.register(AritsuBlockEntities.TENT_BE.get(), TentRenderer::new);
 
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BEAR_TRAP.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BLUEBERRY_BUSH.get(), RenderType.cutout());

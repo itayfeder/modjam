@@ -19,7 +19,7 @@ public class BackPackBlockEntity extends BlockEntity {
         super(AritsuBlockEntities.BACKPACK_BE.get(), blockPos, blockState);
     }
 
-    public BackPackInventory getBackpackinventory() {
+    public BackPackInventory getBackPackInventory() {
         return backpackinventory;
     }
 
@@ -51,14 +51,14 @@ public class BackPackBlockEntity extends BlockEntity {
     @Override
     public CompoundTag save(CompoundTag tag) {
 
-        tag.put("items", getBackpackinventory().serializeNBT());
+        tag.put("items", getBackPackInventory().serializeNBT());
         return super.save(tag);
     }
 
     @Override
     public void load(CompoundTag tag) {
         CompoundTag items = tag.getCompound("items");
-        getBackpackinventory().deserializeNBT(items);
+        getBackPackInventory().deserializeNBT(items);
         super.load(tag);
     }
 }

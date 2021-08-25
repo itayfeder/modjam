@@ -68,7 +68,7 @@ public class BackPackBlock extends BaseEntityBlock {
 
                 });
             } else {
-                MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackpackinventory());
+                MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackPackInventory());
                 MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("container.aritsumods.backpack"));
                 NetworkHooks.openGui(serverPlayer, namedProvider);
                 return InteractionResult.SUCCESS;
@@ -98,7 +98,7 @@ public class BackPackBlock extends BaseEntityBlock {
 
     private ItemStack createBackPackStack(BackPackBlockEntity pack) {
         ItemStack backPack = new ItemStack(AritsuItems.BACKPACK.get());
-        backPack.getOrCreateTag().put(BagTag.allItems, pack.getBackpackinventory().serializeNBT());
+        backPack.getOrCreateTag().put(BagTag.allItems, pack.getBackPackInventory().serializeNBT());
         return backPack;
     }
 
@@ -108,7 +108,7 @@ public class BackPackBlock extends BaseEntityBlock {
         if (stack.hasTag() && stack.getTag() != null && stack.getTag().contains(BagTag.allItems)) {
             if (stack.getTag().get(BagTag.allItems) instanceof CompoundTag itemsTag)
                 if (level.getBlockEntity(pos) instanceof BackPackBlockEntity be) {
-                    be.getBackpackinventory().deserializeNBT(itemsTag);
+                    be.getBackPackInventory().deserializeNBT(itemsTag);
                 }
         }
     }

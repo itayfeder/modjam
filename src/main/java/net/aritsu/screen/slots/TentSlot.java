@@ -1,9 +1,7 @@
 package net.aritsu.screen.slots;
 
-import net.minecraft.world.item.BlockItem;
+import net.aritsu.item.TentItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.WoolCarpetBlock;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -16,6 +14,6 @@ public class TentSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
-        return stack.getItem() instanceof BlockItem && Block.byItem(stack.getItem()) instanceof WoolCarpetBlock;
+        return stack.getItem() instanceof TentItem;
     }
 }

@@ -1,15 +1,12 @@
 {
   "itemGroup.camping_mod_tab": "Modjam Camping Mod",
-
   "block.aritsumods.backpack": "Camper's Backpack",
-
   "block.aritsumods.oak_log_seat": "Oak Log Seat",
   "block.aritsumods.spruce_log_seat": "Spruce Log Seat",
   "block.aritsumods.birch_log_seat": "Birch Log Seat",
   "block.aritsumods.jungle_log_seat": "Jungle Log Seat",
   "block.aritsumods.acacia_log_seat": "Acacia Log Seat",
   "block.aritsumods.dark_oak_log_seat": "Dark Oak Log Seat",
-
   "block.aritsumods.white_sleeping_bag": "White Sleeping Bag",
   "block.aritsumods.orange_sleeping_bag": "Orange Sleeping Bag",
   "block.aritsumods.magenta_sleeping_bag": "Magenta Sleeping Bag",
@@ -26,34 +23,28 @@
   "block.aritsumods.green_sleeping_bag": "Green Sleeping Bag",
   "block.aritsumods.red_sleeping_bag": "Red Sleeping Bag",
   "block.aritsumods.black_sleeping_bag": "Black Sleeping Bag",
-
+  "block.aritsumods.coffee_bush": "Coffee Berries",
+  "block.aritsumods.campfire_grill": "Campfire Grill",
+  "block.aritsumods.bear_trap": "Bear Trap",
+  "block.aritsumods.blueberry_bush": "Blueberries",
   "item.aritsumods.hiker_boots": "Hiker's Boots",
   "item.aritsumods.hiker_chest": "Hiker's Flanel",
   "item.aritsumods.hiker_legs": "Hiker's Pants",
   "item.aritsumods.hiker_helmet": "Hiker's Cap",
-
   "item.aritsumods.bait": "Bait",
   "item.aritsumods.reinforced_fishing_rod": "Reinforced Fishing Rod",
-  "block.aritsumods.campfire_grill": "Campfire Grill",
-  "block.aritsumods.bear_trap": "Bear Trap",
   "item.aritsumods.flask": "Flask",
   "item.aritsumods.flask": "Flask",
-
-  "block.aritsumods.blueberry_bush": "Blueberries",
   "item.aritsumods.blueberry_pie": "Blueberry Pie",
-
   "item.aritsumods.glass_mug": "Glass Mug",
   "item.aritsumods.coffee_filled_mug": "Coffee Mug",
   "item.aritsumods.hot_cocoa_filled_mug": "Hot Cocoa Mug",
-
   "item.aritsumods.coffee_beans": "Coffee Beans",
-  "block.aritsumods.coffee_bush": "Coffee Berries",
-
   "item.aritsumods.marshmallow": "Marshmallow",
   "item.aritsumods.marshmallow_on_a_stick": "Marshmallow on a Stick",
   "item.aritsumods.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
   "item.aritsumods.burnt_marshmallow_on_a_stick": "Burnt Marshmallow on a Stick",
-
   "item.aritsumods.grizzly_bear_spawn_egg": "Grizzly Bear Spawn Egg",
-  "entity.aritsumods.grizzly_bear": "Grizzly Bear"
+  "entity.aritsumods.grizzly_bear": "Grizzly Bear",
+  "container.aritsumods.backpack": "Camper's Backpack"
 }
