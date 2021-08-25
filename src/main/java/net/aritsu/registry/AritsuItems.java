@@ -146,9 +146,9 @@ public class AritsuItems {
     public static final RegistryObject<Item> GLASS_MUG = ITEMS.register("glass_mug",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> COFFEE_FILLED_MUG = ITEMS.register("coffee_filled_mug",
-            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(MobEffects.REGENERATION,1800,0)));
+            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(AritsuEffects.SUGAR_RUSH.get(),1800,0,false, false)));
     public static final RegistryObject<Item> HOT_COCOA_FILLED_MUG = ITEMS.register("hot_cocoa_filled_mug",
-            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1800,0)));
+            () -> new FilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE), new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1200,0)));
     public static final RegistryObject<Item> EMPTY_KETTLE = ITEMS.register("empty_kettle",
             () -> new EmptyKettleItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
     public static final RegistryObject<Item> WATER_KETTLE = ITEMS.register("water_kettle",

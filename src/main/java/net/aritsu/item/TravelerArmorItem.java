@@ -123,7 +123,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                     return 5;
                 }
                 case FEET -> {
-                    return 3;
+                    return 5;
                 }
             }
             return 0;

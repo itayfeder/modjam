@@ -26,6 +26,7 @@ public class AritsuMod {
         AritsuEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuBlockEntities.TILEENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuContainers.CONTAINER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuEffects.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 }
