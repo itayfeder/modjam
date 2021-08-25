@@ -99,6 +99,11 @@ public class AritsuItems {
     public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
     public static final RegistryObject<Item> HIKER_ARMOR_HELMET = ITEMS.register("hiker_helmet", () -> new HikerArmorItem(EquipmentSlot.HEAD));
 
+    public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new HikerArmorItem(EquipmentSlot.FEET));
+    public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new HikerArmorItem(EquipmentSlot.LEGS));
+    public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new HikerArmorItem(EquipmentSlot.CHEST));
+
+
     public static final RegistryObject<Item> BAIT = ITEMS.register("bait",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> REINFORCED_FISHING_ROD = ITEMS.register("reinforced_fishing_rod",
@@ -133,6 +138,9 @@ public class AritsuItems {
     public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
             () -> new ItemNameBlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
     public static final RegistryObject<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> BEAR_FUR = ITEMS.register("bear_fur",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> GLASS_MUG = ITEMS.register("glass_mug",
