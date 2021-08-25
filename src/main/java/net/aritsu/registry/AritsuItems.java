@@ -8,6 +8,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -126,7 +127,6 @@ public class AritsuItems {
     public static final RegistryObject<BlockItem> BLUEBERRY = ITEMS.register("blueberry",
             () -> new BlockItem (AritsuBlocks.BLUEBERRY_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
-
     public static final RegistryObject<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
             () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
@@ -136,4 +136,8 @@ public class AritsuItems {
 
     public static final RegistryObject<Item> FLASK = ITEMS.register("flask",
             () -> new FlaskItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
+
+    public static final RegistryObject<Item> GRIZZLY_BEAR_SPAWN_EGG = ITEMS.register("grizzly_bear_spawn_egg",
+            () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR,8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
+
 }

@@ -1,5 +1,6 @@
 package net.aritsu.registry;
 
+import net.aritsu.client.renderer.models.GrizzlyBearModel;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 public class AritsuModels {
 
     public static ModelLayerLocation BACKPACK_CHEST_MODEL_LOCATION = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "hiker_backpack_chest");
+    public static ModelLayerLocation GRIZZLY_BEAR_LOCATION = new ModelLayerLocation(new ResourceLocation("grizzly_bear"), "grizzly_bear");
 
     public static ModelLayerLocation HEAD_MODEL_LOCATION = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "hiker_head");
     public static ModelLayerLocation CHESTNBOOTS_MODEL_LOCATION = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "hiker_chest");
@@ -31,6 +33,8 @@ public class AritsuModels {
         event.registerLayerDefinition(HEAD_MODEL_LOCATION, () -> head);
         event.registerLayerDefinition(CHESTNBOOTS_MODEL_LOCATION, () -> chestNboots);
         event.registerLayerDefinition(LEGS_MODEL_LOCATION, () -> legs);
+
+        event.registerLayerDefinition(GRIZZLY_BEAR_LOCATION, GrizzlyBearModel::createBodyLayer);
     }
 }
 

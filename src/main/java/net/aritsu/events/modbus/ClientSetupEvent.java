@@ -1,6 +1,7 @@
 package net.aritsu.events.modbus;
 
 import net.aritsu.client.renderer.EmptyEntityRenderer;
+import net.aritsu.client.renderer.GrizzlyBearRenderer;
 import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
 import net.aritsu.client.renderer.tile.CampfireGrillRenderer;
 import net.aritsu.item.FlaskItem;
@@ -29,6 +30,8 @@ public class ClientSetupEvent {
     public static void setupClient(FMLClientSetupEvent event){
         EntityRenderers.register(AritsuEntities.SIT_DUMMY.get(), EmptyEntityRenderer::new);
         EntityRenderers.register(AritsuEntities.REINFORCED_FISHING_BOBBER.get(), ReinforcedFishingHookRenderer::new);
+        EntityRenderers.register(AritsuEntities.GRIZZLY_BEAR.get(), GrizzlyBearRenderer::new);
+
         MenuScreens.register(AritsuContainers.BACKPACK_CONTAINER_TYPE.get(), BackPackScreen::new);
 
         ItemProperties.register(AritsuItems.REINFORCED_FISHING_ROD.get(), new ResourceLocation("cast"), (p_174595_, p_174596_, p_174597_, p_174598_) -> {

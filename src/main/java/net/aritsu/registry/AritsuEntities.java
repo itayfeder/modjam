@@ -2,6 +2,7 @@ package net.aritsu.registry;
 
 import net.aritsu.entity.ReinforcedFishingHookEntity;
 import net.aritsu.entity.SitDummyEntity;
+import net.aritsu.entity.grizzly_bear.GrizzlyBear;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -20,5 +21,9 @@ public class AritsuEntities {
     public static final RegistryObject<EntityType<ReinforcedFishingHookEntity>> REINFORCED_FISHING_BOBBER = ENTITIES.register("reinforced_fishing_bobber",
             () -> EntityType.Builder.<ReinforcedFishingHookEntity>of(ReinforcedFishingHookEntity::new, MobCategory.MISC)
             .noSave().noSummon().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(5).build(AritsuMod.MODID + ":reinforced_fishing_bobber"));
+
+    public static final RegistryObject<EntityType<GrizzlyBear>> GRIZZLY_BEAR = ENTITIES.register("grizzly_bear",
+            () -> EntityType.Builder.<GrizzlyBear>of(GrizzlyBear::new, MobCategory.CREATURE)
+                    .sized(1.4F, 1.4F).clientTrackingRange(10).build(AritsuMod.MODID + ":grizzly_bear"));
 
 }

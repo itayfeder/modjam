@@ -1,33 +1,33 @@
 {
   "variants": {
     "facing=east,part=foot": {
-      "model": "aritsumods:block/orange_tent/bottom",
+      "model": "aritsumods:block/orange_tent/front",
       "y": 270
     },
     "facing=north,part=foot": {
-      "model": "aritsumods:block/orange_tent/bottom",
+      "model": "aritsumods:block/orange_tent/front",
       "y": 180
     },
     "facing=south,part=foot": {
-      "model": "aritsumods:block/orange_tent/bottom"
+      "model": "aritsumods:block/orange_tent/front"
     },
     "facing=west,part=foot": {
-      "model": "aritsumods:block/orange_tent/bottom",
+      "model": "aritsumods:block/orange_tent/front",
       "y": 90
     },
 	"facing=east,part=head": {
-      "model": "aritsumods:block/orange_tent/top",
+      "model": "aritsumods:block/orange_tent/back",
       "y": 270
     },
     "facing=north,part=head": {
-      "model": "aritsumods:block/orange_tent/top",
+      "model": "aritsumods:block/orange_tent/back",
       "y": 180
     },
     "facing=south,part=head": {
-      "model": "aritsumods:block/orange_tent/top"
+      "model": "aritsumods:block/orange_tent/back"
     },
     "facing=west,part=head": {
-      "model": "aritsumods:block/orange_tent/top",
+      "model": "aritsumods:block/orange_tent/back",
       "y": 90
     }
   }
