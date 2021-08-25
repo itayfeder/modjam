@@ -1,23 +1,19 @@
 package net.aritsu.item;
 
-import net.aritsu.block.TentBlock;
-import net.aritsu.blockentity.TentBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SleepingBagItem extends BlockItem {
-<<<<<<< HEAD
     public SleepingBagItem(Block block, Properties properties) {
         super(block, properties);
     }
 
+    @Override
     protected boolean placeBlock(BlockPlaceContext placeContext, BlockState state) {
         return placeContext.getLevel().setBlock(placeContext.getClickedPos(), state, 26);
     }
@@ -34,13 +30,5 @@ public class SleepingBagItem extends BlockItem {
 //                    return InteractionResult.SUCCESS;
 //                } else return InteractionResult.CONSUME;
         return super.onItemUseFirst(stack, context);
-=======
-    public SleepingBagItem(Block block, Item.Properties properties) {
-        super(block, properties);
-    }
-
-    protected boolean placeBlock(BlockPlaceContext blockPlaceContext, BlockState blockState) {
-        return blockPlaceContext.getLevel().setBlock(blockPlaceContext.getClickedPos(), blockState, 26);
->>>>>>> origin/master
     }
 }
