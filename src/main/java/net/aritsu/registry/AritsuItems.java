@@ -131,6 +131,20 @@ public class AritsuItems {
             () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
 
+    public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
+            () -> new BlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
+    public static final RegistryObject<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
+
+    public static final RegistryObject<Item> GLASS_MUG = ITEMS.register("glass_mug",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> COFFEE_FILLED_MUG = ITEMS.register("coffee_filled_mug",
+            () -> new CoffeeFilledMugItem((new Item.Properties()).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> HOT_COCOA_FILLED_MUG = ITEMS.register("hot_cocoa_filled_mug",
+            () -> new HotCocoaFilledMug((new Item.Properties()).tab(ModTab.INSTANCE)));
+    public static final RegistryObject<Item> EMPTY_KETTLE = ITEMS.register("empty_kettle",
+            () -> new HotCocoaFilledMug((new Item.Properties()).tab(ModTab.INSTANCE)));
+
     public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
             () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));
 

@@ -60,6 +60,7 @@ public class ClientSetupEvent {
 
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BEAR_TRAP.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.BLUEBERRY_BUSH.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.COFFEE_BUSH.get(), RenderType.cutout());
 
     }
 }

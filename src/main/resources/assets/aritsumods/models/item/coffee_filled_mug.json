@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "aritsumods:item/coffee_filled_mug"
+  }
+}

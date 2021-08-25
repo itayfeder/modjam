@@ -109,6 +109,8 @@ public class AritsuBlocks {
 
     public static final RegistryObject<Block> BLUEBERRY_BUSH = BLOCKS.register("blueberry_bush",
             () ->  new BlueberryBushBlock(BlockBehaviour.Properties.of(Material.PLANT).randomTicks().noCollission().sound(SoundType.SWEET_BERRY_BUSH)));
+    public static final RegistryObject<Block> COFFEE_BUSH = BLOCKS.register("coffee_bush",
+            () ->  new CoffeeBushBlock(BlockBehaviour.Properties.of(Material.PLANT).randomTicks().noCollission().sound(SoundType.SWEET_BERRY_BUSH)));
 
 
     private static Block createBed(DyeColor color) {

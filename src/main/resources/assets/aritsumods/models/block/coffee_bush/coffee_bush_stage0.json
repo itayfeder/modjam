@@ -1,13 +1,13 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "aritsu_mods:block/coffee_bush",
-		"particle": "aritsu_mods:block/coffee_bush"
+		"0": "aritsumods:block/coffee_bush",
+		"particle": "aritsumods:block/coffee_bush"
 	},
 	"elements": [
 		{
-			"from": [5, 0, 6],
-			"to": [11, 6, 12],
+			"from": [5, 0, 5],
+			"to": [11, 6, 11],
 			"faces": {
 				"north": {"uv": [0, 0, 6, 6], "texture": "#0"},
 				"east": {"uv": [0, 0, 6, 6], "texture": "#0"},
