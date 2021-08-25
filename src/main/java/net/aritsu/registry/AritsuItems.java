@@ -99,9 +99,9 @@ public class AritsuItems {
     public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
     public static final RegistryObject<Item> HIKER_ARMOR_HELMET = ITEMS.register("hiker_helmet", () -> new HikerArmorItem(EquipmentSlot.HEAD));
 
-    public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new HikerArmorItem(EquipmentSlot.FEET));
-    public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new HikerArmorItem(EquipmentSlot.LEGS));
-    public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new HikerArmorItem(EquipmentSlot.CHEST));
+    public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new TravelerArmorItem(EquipmentSlot.FEET));
+    public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new TravelerArmorItem(EquipmentSlot.LEGS));
+    public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new TravelerArmorItem(EquipmentSlot.CHEST));
 
 
     public static final RegistryObject<Item> BAIT = ITEMS.register("bait",

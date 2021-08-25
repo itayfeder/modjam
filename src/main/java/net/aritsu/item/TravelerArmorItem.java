@@ -6,12 +6,18 @@ import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
@@ -32,7 +38,57 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return AritsuMod.MODID+":"+ (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/hiker_layer_1.png");
+        return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/hiker_layer_1.png");
+    }
+
+    @Override
+    public void onArmorTick(ItemStack stack, Level world, Player player) {
+        super.onArmorTick(stack, world, player);
+        if (stack.getItem() instanceof TravelerArmorItem armorItem) {
+            switch (armorItem.getSlot()) {
+                case CHEST:
+                    if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
+                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
+                    } else {
+                        if (player.getEffect(MobEffects.DAMAGE_BOOST).getDuration() <= 200)
+                            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
+                    }
+                    break;
+                case LEGS:
+                    if (player.getEffect(MobEffects.DOLPHINS_GRACE) == null) {
+                        player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 300, 0));
+                    } else {
+                        if (player.getEffect(MobEffects.DOLPHINS_GRACE).getDuration() <= 200)
+                            player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 300, 0));
+                    }
+                    if (player.getEffect(MobEffects.CONDUIT_POWER) == null) {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
+                    } else {
+                        if (player.getEffect(MobEffects.CONDUIT_POWER).getDuration() <= 200)
+                            player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
+                    }
+                    break;
+                case FEET:
+                    if (player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
+                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
+                    } else {
+                        if (player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 200)
+                            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
+                    }
+                    if (player.horizontalCollision) {
+                        double motX = player.getDeltaMovement().x;
+                        player.getDeltaMovement();
+                        motX = player.getDeltaMovement().z;
+                        player.fallDistance = 0.0F;
+                        if (player.isCrouching()) {
+                            player.setDeltaMovement(motX, 0.0D, motX);
+                        } else {
+                            player.setDeltaMovement(motX, 0.1976D, motX);
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     @Override
@@ -41,7 +97,6 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     }
 
     private static class TravelerMaterial implements ArmorMaterial {
-
         @Override
         public int getDurabilityForSlot(EquipmentSlot slot) {
             switch (slot) {
