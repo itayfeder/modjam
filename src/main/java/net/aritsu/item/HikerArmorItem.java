@@ -23,8 +23,8 @@ public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
 
     private static final Properties armorProps = new Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200).tab(ModTab.INSTANCE);
 
-    public HikerArmorItem(EquipmentSlot p_40387_) {
-        super(new HikerMaterial(), p_40387_, armorProps);
+    public HikerArmorItem(EquipmentSlot slot) {
+        super(new HikerMaterial(), slot, armorProps);
     }
 
     @Override

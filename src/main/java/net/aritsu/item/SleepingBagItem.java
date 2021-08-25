@@ -7,11 +7,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SleepingBagItem extends BlockItem {
-    public SleepingBagItem(Block p_40558_, Item.Properties p_40559_) {
-        super(p_40558_, p_40559_);
+    public SleepingBagItem(Block block, Item.Properties properties) {
+        super(block, properties);
     }
 
-    protected boolean placeBlock(BlockPlaceContext p_40561_, BlockState p_40562_) {
-        return p_40561_.getLevel().setBlock(p_40561_.getClickedPos(), p_40562_, 26);
+    protected boolean placeBlock(BlockPlaceContext blockPlaceContext, BlockState blockState) {
+        return blockPlaceContext.getLevel().setBlock(blockPlaceContext.getClickedPos(), blockState, 26);
     }
 }

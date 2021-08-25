@@ -35,26 +35,26 @@ import java.util.stream.Stream;
 
 public class ReinforcedFishingRodItem extends FishingRodItem {
 
-    public ReinforcedFishingRodItem(Properties p_41285_) {
-        super(p_41285_);
+    public ReinforcedFishingRodItem(Properties properties) {
+        super(properties);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level p_41290_, Player p_41291_, InteractionHand p_41292_) {
-        ItemStack itemstack = p_41291_.getItemInHand(p_41292_);
-        if (p_41291_.fishing != null) {
-            if (!p_41290_.isClientSide) {
-                int i = p_41291_.fishing.retrieve(itemstack);
-                itemstack.hurtAndBreak(i, p_41291_, (p_41288_) -> {
-                    p_41288_.broadcastBreakEvent(p_41292_);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        ItemStack itemstack = player.getItemInHand(interactionHand);
+        if (player.fishing != null) {
+            if (!level.isClientSide) {
+                int i = player.fishing.retrieve(itemstack);
+                itemstack.hurtAndBreak(i, player, (p_41288_) -> {
+                    p_41288_.broadcastBreakEvent(interactionHand);
                 });
             }
 
-            p_41290_.playSound((Player)null, p_41291_.getX(), p_41291_.getY(), p_41291_.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (p_41290_.getRandom().nextFloat() * 0.4F + 0.8F));
-            p_41290_.gameEvent(p_41291_, GameEvent.FISHING_ROD_REEL_IN, p_41291_);
+            level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+            level.gameEvent(player, GameEvent.FISHING_ROD_REEL_IN, player);
         } else {
-            p_41290_.playSound((Player)null, p_41291_.getX(), p_41291_.getY(), p_41291_.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (p_41290_.getRandom().nextFloat() * 0.4F + 0.8F));
-            if (!p_41290_.isClientSide) {
+            level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+            if (!level.isClientSide) {
                 int j;
                 if (getContents(itemstack).toArray().length > 0) {
                     j = 1 + EnchantmentHelper.getFishingSpeedBonus(itemstack) * 2;
@@ -63,33 +63,33 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
                 }
                 int k = EnchantmentHelper.getFishingLuckBonus(itemstack);
 
-                p_41290_.addFreshEntity(new ReinforcedFishingHookEntity(p_41291_, p_41290_, k, j));
+                level.addFreshEntity(new ReinforcedFishingHookEntity(player, level, k, j));
                 removeSingleItem(itemstack);
             }
 
-            p_41291_.awardStat(Stats.ITEM_USED.get(this));
-            p_41290_.gameEvent(p_41291_, GameEvent.FISHING_ROD_CAST, p_41291_);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            level.gameEvent(player, GameEvent.FISHING_ROD_CAST, player);
         }
 
-        return InteractionResultHolder.sidedSuccess(itemstack, p_41290_.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
 
     public int getEnchantmentValue() {
         return 1;
     }
 
-    public static float getFullnessDisplay(ItemStack p_150767_) {
-        return (float)getContentWeight(p_150767_) / 64.0F;
+    public static float getFullnessDisplay(ItemStack itemStack) {
+        return (float)getContentWeight(itemStack) / 64.0F;
     }
 
-    private static int getContentWeight(ItemStack p_150779_) {
-        return getContents(p_150779_).mapToInt((p_150785_) -> {
-            return getWeight(p_150785_) * p_150785_.getCount();
+    private static int getContentWeight(ItemStack itemStack) {
+        return getContents(itemStack).mapToInt((itemStack1) -> {
+            return getWeight(itemStack1) * itemStack1.getCount();
         }).sum();
     }
 
-    private static Stream<ItemStack> getContents(ItemStack p_150783_) {
-        CompoundTag compoundtag = p_150783_.getTag();
+    private static Stream<ItemStack> getContents(ItemStack itemStack) {
+        CompoundTag compoundtag = itemStack.getTag();
         if (compoundtag == null) {
             return Stream.empty();
         } else {
@@ -98,34 +98,34 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
         }
     }
 
-    private static int getWeight(ItemStack p_150777_) {
-        if (p_150777_.is(AritsuItems.REINFORCED_FISHING_ROD.get())) {
-            return 4 + getContentWeight(p_150777_);
+    private static int getWeight(ItemStack itemStack) {
+        if (itemStack.is(AritsuItems.REINFORCED_FISHING_ROD.get())) {
+            return 4 + getContentWeight(itemStack);
         } else {
-            if ((p_150777_.is(Items.BEEHIVE) || p_150777_.is(Items.BEE_NEST)) && p_150777_.hasTag()) {
-                CompoundTag compoundtag = p_150777_.getTagElement("BlockEntityTag");
+            if ((itemStack.is(Items.BEEHIVE) || itemStack.is(Items.BEE_NEST)) && itemStack.hasTag()) {
+                CompoundTag compoundtag = itemStack.getTagElement("BlockEntityTag");
                 if (compoundtag != null && !compoundtag.getList("Bees", 10).isEmpty()) {
                     return 64;
                 }
             }
 
-            return 64 / p_150777_.getMaxStackSize();
+            return 64 / itemStack.getMaxStackSize();
         }
     }
 
-    public boolean overrideStackedOnOther(ItemStack p_150733_, Slot p_150734_, ClickAction p_150735_, Player p_150736_) {
-        if (p_150735_ != ClickAction.SECONDARY) {
+    public boolean overrideStackedOnOther(ItemStack itemStack, Slot slot, ClickAction clickAction, Player player) {
+        if (clickAction != ClickAction.SECONDARY) {
             return false;
         } else {
-            ItemStack itemstack = p_150734_.getItem();
+            ItemStack itemstack = slot.getItem();
             if (itemstack.getItem() == AritsuItems.BAIT.get()) {
                 if (itemstack.isEmpty()) {
-                    removeOne(p_150733_).ifPresent((p_150740_) -> {
-                        add(p_150733_, p_150734_.safeInsert(p_150740_));
+                    removeOne(itemStack).ifPresent((p_150740_) -> {
+                        add(itemStack, slot.safeInsert(p_150740_));
                     });
                 } else if (itemstack.getItem().canFitInsideContainerItems()) {
-                    int i = (64 - getContentWeight(p_150733_)) / getWeight(itemstack);
-                    add(p_150733_, p_150734_.safeTake(itemstack.getCount(), i, p_150736_));
+                    int i = (64 - getContentWeight(itemStack)) / getWeight(itemstack);
+                    add(itemStack, slot.safeTake(itemstack.getCount(), i, player));
                 }
 
                 return true;
@@ -135,13 +135,13 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
         }
     }
 
-    public boolean overrideOtherStackedOnMe(ItemStack p_150742_, ItemStack p_150743_, Slot p_150744_, ClickAction p_150745_, Player p_150746_, SlotAccess p_150747_) {
-        if (p_150745_ == ClickAction.SECONDARY && p_150744_.allowModification(p_150746_)) {
-            if (p_150743_.getItem() == AritsuItems.BAIT.get() || p_150743_.isEmpty()) {
-                if (p_150743_.isEmpty()) {
-                    removeOne(p_150742_).ifPresent(p_150747_::set);
+    public boolean overrideOtherStackedOnMe(ItemStack itemStack, ItemStack itemStack1, Slot slot, ClickAction clickAction, Player player, SlotAccess slotAccess) {
+        if (clickAction == ClickAction.SECONDARY && slot.allowModification(player)) {
+            if (itemStack1.getItem() == AritsuItems.BAIT.get() || itemStack1.isEmpty()) {
+                if (itemStack1.isEmpty()) {
+                    removeOne(itemStack).ifPresent(slotAccess::set);
                 } else {
-                    p_150743_.shrink(add(p_150742_, p_150743_));
+                    itemStack1.shrink(add(itemStack, itemStack1));
                 }
                 return true;
             }
@@ -152,21 +152,21 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
         }
     }
 
-    private static int add(ItemStack p_150764_, ItemStack p_150765_) {
-        if (!p_150765_.isEmpty() && p_150765_.getItem().canFitInsideContainerItems()) {
-            CompoundTag compoundtag = p_150764_.getOrCreateTag();
+    private static int add(ItemStack stack, ItemStack itemStack) {
+        if (!itemStack.isEmpty() && itemStack.getItem().canFitInsideContainerItems()) {
+            CompoundTag compoundtag = stack.getOrCreateTag();
             if (!compoundtag.contains("Bait")) {
                 compoundtag.put("Bait", new ListTag());
             }
 
-            int i = getContentWeight(p_150764_);
-            int j = getWeight(p_150765_);
-            int k = Math.min(p_150765_.getCount(), (64 - i) / j);
+            int i = getContentWeight(stack);
+            int j = getWeight(itemStack);
+            int k = Math.min(itemStack.getCount(), (64 - i) / j);
             if (k == 0) {
                 return 0;
             } else {
                 ListTag listtag = compoundtag.getList("Bait", 10);
-                Optional<CompoundTag> optional = getMatchingItem(p_150765_, listtag);
+                Optional<CompoundTag> optional = getMatchingItem(itemStack, listtag);
                 if (optional.isPresent()) {
                     CompoundTag compoundtag1 = optional.get();
                     ItemStack itemstack = ItemStack.of(compoundtag1);
@@ -175,7 +175,7 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
                     listtag.remove(compoundtag1);
                     listtag.add(0, (Tag)compoundtag1);
                 } else {
-                    ItemStack itemstack1 = p_150765_.copy();
+                    ItemStack itemstack1 = itemStack.copy();
                     itemstack1.setCount(k);
                     CompoundTag compoundtag2 = new CompoundTag();
                     itemstack1.save(compoundtag2);
@@ -189,9 +189,9 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
         }
     }
 
-    private static Optional<CompoundTag> getMatchingItem(ItemStack p_150757_, ListTag p_150758_) {
-        return p_150757_.is(AritsuItems.REINFORCED_FISHING_ROD.get()) ? Optional.empty() : p_150758_.stream().filter(CompoundTag.class::isInstance).map(CompoundTag.class::cast).filter((p_150755_) -> {
-            return ItemStack.isSameItemSameTags(ItemStack.of(p_150755_), p_150757_);
+    private static Optional<CompoundTag> getMatchingItem(ItemStack itemStack, ListTag listTag) {
+        return itemStack.is(AritsuItems.REINFORCED_FISHING_ROD.get()) ? Optional.empty() : listTag.stream().filter(CompoundTag.class::isInstance).map(CompoundTag.class::cast).filter((p_150755_) -> {
+            return ItemStack.isSameItemSameTags(ItemStack.of(p_150755_), itemStack);
         }).findFirst();
     }
 
@@ -242,17 +242,17 @@ public class ReinforcedFishingRodItem extends FishingRodItem {
         }
     }
 
-    public Optional<TooltipComponent> getTooltipImage(ItemStack p_150775_) {
+    public Optional<TooltipComponent> getTooltipImage(ItemStack itemStack) {
         NonNullList<ItemStack> nonnulllist = NonNullList.create();
-        getContents(p_150775_).forEach(nonnulllist::add);
-        return Optional.of(new BundleTooltip(nonnulllist, getContentWeight(p_150775_)));
+        getContents(itemStack).forEach(nonnulllist::add);
+        return Optional.of(new BundleTooltip(nonnulllist, getContentWeight(itemStack)));
     }
 
-    public void appendHoverText(ItemStack p_150749_, Level p_150750_, List<Component> p_150751_, TooltipFlag p_150752_) {
-        p_150751_.add((new TranslatableComponent("item.minecraft.bundle.fullness", getContentWeight(p_150749_), 64)).withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack itemStack, Level level, List<Component> components, TooltipFlag tooltipFlag) {
+        components.add((new TranslatableComponent("item.minecraft.bundle.fullness", getContentWeight(itemStack), 64)).withStyle(ChatFormatting.GRAY));
     }
 
-    public void onDestroyed(ItemEntity p_150728_) {
-        ItemUtils.onContainerDestroyed(p_150728_, getContents(p_150728_.getItem()));
+    public void onDestroyed(ItemEntity itemEntity) {
+        ItemUtils.onContainerDestroyed(itemEntity, getContents(itemEntity.getItem()));
     }
 }
