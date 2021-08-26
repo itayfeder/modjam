@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#","m","#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:acacia_log"
+    },
+    "m": {
+      "item": "aritsumods:roasted_marshmallow_on_a_stick"
+    }
+  },
+  "result": {
+    "item": "aritsumods:smore",
+    "count": 1
+  }
+}
