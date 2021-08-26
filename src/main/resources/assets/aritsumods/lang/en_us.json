@@ -75,5 +75,7 @@
   "block.aritsumods.brown_tent": "Brown Tent",
   "block.aritsumods.green_tent": "Green Tent",
   "block.aritsumods.red_tent": "Red Tent",
-  "block.aritsumods.black_tent": "Black Tent"
+  "block.aritsumods.black_tent": "Black Tent",
+
+  "effect.aritsumods.sugar_rush": "Sugar Rush"
 }

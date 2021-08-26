@@ -12,7 +12,7 @@ public class EnergizedEffect extends MobEffect {
     private final ResourceLocation potionIcon;
     public EnergizedEffect() {
         super(MobEffectCategory.BENEFICIAL, 13893703);
-        potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/sturdy.png");
+        potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/energized.png");
     }
     public String getName() {
         return "effect.energized";
