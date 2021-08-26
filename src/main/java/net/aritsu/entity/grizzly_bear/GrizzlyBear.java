@@ -1,6 +1,7 @@
 package net.aritsu.entity.grizzly_bear;
 
 import net.aritsu.registry.AritsuEntities;
+import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,14 +40,17 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class GrizzlyBear extends Animal implements NeutralMob {
+public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.minecraftforge.common.IForgeShearable {
     private static final EntityDataAccessor<Boolean> DATA_STANDING_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_SHEARED_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_SHEAR_TIMER_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.INT);
     private static final float STAND_ANIMATION_TICKS = 6.0F;
     private float clientSideStandAnimationO;
     private float clientSideStandAnimation;
@@ -89,20 +95,29 @@ public class GrizzlyBear extends Animal implements NeutralMob {
 
     public static boolean checkGrizzlyBearSpawnRules(EntityType<GrizzlyBear> p_29550_, LevelAccessor p_29551_, MobSpawnType p_29552_, BlockPos p_29553_, Random p_29554_) {
         Optional<ResourceKey<Biome>> optional = p_29551_.getBiomeName(p_29553_);
-        if (!Objects.equals(optional, Optional.of(Biomes.FROZEN_OCEAN)) && !Objects.equals(optional, Optional.of(Biomes.DEEP_FROZEN_OCEAN))) {
+        if (!Objects.equals(optional, Optional.of(Biomes.TAIGA)) &&
+                !Objects.equals(optional, Optional.of(Biomes.TAIGA_HILLS)) &&
+                !Objects.equals(optional, Optional.of(Biomes.GIANT_TREE_TAIGA)) &&
+                !Objects.equals(optional, Optional.of(Biomes.GIANT_TREE_TAIGA_HILLS)) &&
+                !Objects.equals(optional, Optional.of(Biomes.GIANT_SPRUCE_TAIGA)) &&
+                !Objects.equals(optional, Optional.of(Biomes.GIANT_SPRUCE_TAIGA_HILLS))) {
             return checkAnimalSpawnRules(p_29550_, p_29551_, p_29552_, p_29553_, p_29554_);
         } else {
-            return p_29551_.getRawBrightness(p_29553_, 0) > 8 && p_29551_.getBlockState(p_29553_.below()).is(Blocks.ICE);
+            return p_29551_.getRawBrightness(p_29553_, 0) > 8 && p_29551_.getBlockState(p_29553_.below()).is(Blocks.GRASS_BLOCK);
         }
     }
 
     public void readAdditionalSaveData(CompoundTag p_29541_) {
         super.readAdditionalSaveData(p_29541_);
+        this.setSheared(p_29541_.getBoolean("Sheared"));
+        this.setShearTimer(p_29541_.getInt("ShearTimer"));
         this.readPersistentAngerSaveData(this.level, p_29541_);
     }
 
     public void addAdditionalSaveData(CompoundTag p_29548_) {
         super.addAdditionalSaveData(p_29548_);
+        p_29548_.putBoolean("Sheared", this.isSheared());
+        p_29548_.putInt("ShearTimer", this.getShearTimer());
         this.addPersistentAngerSaveData(p_29548_);
     }
 
@@ -153,6 +168,8 @@ public class GrizzlyBear extends Animal implements NeutralMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_STANDING_ID, false);
+        this.entityData.define(DATA_SHEARED_ID, false);
+        this.entityData.define(DATA_SHEAR_TIMER_ID, 0);
     }
 
     public void tick() {
@@ -176,6 +193,10 @@ public class GrizzlyBear extends Animal implements NeutralMob {
 
         if (!this.level.isClientSide) {
             this.updatePersistentAnger((ServerLevel)this.level, true);
+            if (this.getShearTimer() <= 0) {
+                this.setSheared(false);
+            }
+            this.setShearTimer(Math.max(0, this.getShearTimer()-1));
         }
 
     }
@@ -207,6 +228,23 @@ public class GrizzlyBear extends Animal implements NeutralMob {
         this.entityData.set(DATA_STANDING_ID, p_29568_);
     }
 
+    public boolean isSheared() {
+        return this.entityData.get(DATA_SHEARED_ID);
+    }
+
+    public void setSheared(boolean p_29568_) {
+        this.entityData.set(DATA_SHEARED_ID, p_29568_);
+    }
+
+    public int getShearTimer() {
+        return this.entityData.get(DATA_SHEAR_TIMER_ID);
+    }
+
+    public void setShearTimer(int p_29568_) {
+        this.entityData.set(DATA_SHEAR_TIMER_ID, p_29568_);
+    }
+
+
     public float getStandingAnimationScale(float p_29570_) {
         return Mth.lerp(p_29570_, this.clientSideStandAnimationO, this.clientSideStandAnimation) / 6.0F;
     }
@@ -222,6 +260,49 @@ public class GrizzlyBear extends Animal implements NeutralMob {
 
         return super.finalizeSpawn(p_29533_, p_29534_, p_29535_, p_29536_, p_29537_);
     }
+
+    @Override
+    public void shear(SoundSource p_21749_) {
+        this.level.playSound((Player)null, this, SoundEvents.SHEEP_SHEAR, p_21749_, 1.0F, 1.0F);
+        this.setSheared(true);
+        int i = 1 + this.random.nextInt(3);
+
+        for(int j = 0; j < i; ++j) {
+            ItemEntity itementity = this.spawnAtLocation(AritsuItems.BEAR_FUR.get(), 1);
+            if (itementity != null) {
+                itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+            }
+        }
+    }
+
+    @Override
+    public boolean readyForShearing() {
+        return this.isAlive() && !this.isSheared() && !this.isBaby();
+    }
+
+    @Override
+    public boolean isShearable(@javax.annotation.Nonnull ItemStack item, Level world, BlockPos pos) {
+        return readyForShearing();
+    }
+
+    @javax.annotation.Nonnull
+    @Override
+    public java.util.List<ItemStack> onSheared(@Nullable Player player, @javax.annotation.Nonnull ItemStack item, Level world, BlockPos pos, int fortune) {
+        world.playSound(null, this, SoundEvents.SHEEP_SHEAR, player == null ? SoundSource.BLOCKS : SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (!world.isClientSide) {
+            this.setSheared(true);
+            int i = 1 + this.random.nextInt(3);
+
+            java.util.List<ItemStack> items = new java.util.ArrayList<>();
+            for (int j = 0; j < i; ++j) {
+                items.add(new ItemStack(AritsuItems.BEAR_FUR.get()));
+            }
+            this.setShearTimer(600);
+            return items;
+        }
+        return java.util.Collections.emptyList();
+    }
+
 
     class GrizzlyBearAttackPlayersGoal extends NearestAttackableTargetGoal<Player> {
         public GrizzlyBearAttackPlayersGoal() {
