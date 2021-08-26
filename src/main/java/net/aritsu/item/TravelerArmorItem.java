@@ -6,19 +6,16 @@ import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.IItemRenderProperties;
-import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
@@ -40,7 +37,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
+        return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/traveler_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
     }
     Random rnd =new Random();
     int soundChance=0;
