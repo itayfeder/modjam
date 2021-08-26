@@ -1,5 +1,8 @@
 package net.aritsu.screen.common;
 
+import net.aritsu.item.FlaskItem;
+import net.aritsu.item.SleepingBagItem;
+import net.aritsu.item.TentItem;
 import net.aritsu.registry.AritsuContainers;
 import net.aritsu.screen.slots.*;
 import net.minecraft.world.entity.player.Inventory;
@@ -74,19 +77,34 @@ public class BackPackContainer extends AbstractContainerMenu {
             //shift clicked inside backpack
             if (slotnumber < backpackInventory.getSlots()) {
                 //move to player inventory
-                if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size(), true)) {
+                if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size()-9, false)) {
+                    return ItemStack.EMPTY;
+                }else if(!this.moveItemStackTo(slotItem, this.slots.size()-9, this.slots.size(), false)){
                     return ItemStack.EMPTY;
                 }
             } else {
                 //check for specific item
-                //TODO add all specific items
-                if (slotItem.getItem().equals(Items.GLASS_BOTTLE)) {
+                if (slotItem.getItem() instanceof FlaskItem) {
                     //move to specific item slot
                     if (!this.moveItemStackTo(slotItem, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                    //move to extra slots
-                } else if (!this.moveItemStackTo(slotItem, 4, backpackInventory.getSlots(), true)) {
+                } else if (slotItem.getItem().equals(Items.ENDER_CHEST)) {
+                    if (!this.moveItemStackTo(slotItem, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (slotItem.getItem() instanceof SleepingBagItem) {
+                    if (!this.moveItemStackTo(slotItem, 2, 3, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (slotItem.getItem() instanceof TentItem) {
+                    if (!this.moveItemStackTo(slotItem, 3, 4, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+
+                //move to extra slots
+                else if (!this.moveItemStackTo(slotItem, 4, backpackInventory.getSlots(), false)) {
                     return ItemStack.EMPTY;
                 }
             }
