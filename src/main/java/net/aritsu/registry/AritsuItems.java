@@ -135,6 +135,10 @@ public class AritsuItems {
             () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
                 .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
 
+    public static final RegistryObject<Item> SMORE = ITEMS.register("smore",
+            () -> new SmoreItem ((new Item.Properties().tab(ModTab.INSTANCE)
+                .food(new FoodProperties.Builder().nutrition(4).saturationMod(5F).build()))));
+
     public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
             () -> new ItemNameBlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
     public static final RegistryObject<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
