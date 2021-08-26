@@ -5,14 +5,18 @@ import net.aritsu.mod.AritsuMod;
 import net.aritsu.network.NetworkHandler;
 import net.aritsu.network.client.ClientPacketSetBackPack;
 import net.aritsu.network.client.ClientReceiveOtherBackPack;
+import net.aritsu.registry.AritsuEffects;
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -103,6 +107,32 @@ public class PlayerTracker {
                     }
                 } else data.prevSaturation = -1.0f;
             });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingUpdateEvent(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        //moved update tick to player data so it's player specific
+        PlayerData.get(player).ifPresent(data -> {
+            if (player.getEffect(AritsuEffects.ENERGIZED.get()) != null) {
+                //update timer only if the player has the effect.
+                data.customEffectTick++;
+                if (data.customEffectTick % 50 == 0)
+                    player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
+            } else//reset the tick to 0 if thep layer doesnt have the effect to prevent the number ramping up throughout play time
+                data.customEffectTick = 0;
+        });
+    }
+
+    @SubscribeEvent
+    public static void jumpEvent(LivingEvent.LivingJumpEvent event) {
+        LivingEntity entity = event.getEntityLiving();
+        if (entity instanceof Player player) {
+            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) != null) {
+                double motX = player.getDeltaMovement().x, motY = player.getDeltaMovement().y, motZ = player.getDeltaMovement().z;
+                player.setDeltaMovement(motX, motY + 0.3D, motZ);
+            }
         }
     }
 }

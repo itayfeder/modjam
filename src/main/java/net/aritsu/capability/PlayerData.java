@@ -15,6 +15,7 @@ public class PlayerData {
     private Player player;
     public boolean loggedInForTheFirstTime = true;
     private ItemStackHandler inventoryForbackPack = new ItemStackHandler(1);
+    public int customEffectTick = 0;
 
     public PlayerData() {
 
