@@ -3,6 +3,7 @@ package net.aritsu.block;
 import com.mojang.datafixers.util.Either;
 import net.aritsu.blockentity.TentBlockEntity;
 import net.aritsu.item.SleepingBagItem;
+import net.aritsu.screen.common.TentContainer;
 import net.aritsu.util.TentUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -12,8 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Unit;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,6 +21,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -39,6 +41,7 @@ import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -47,6 +50,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -165,17 +169,29 @@ public class TentBlock extends BedBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide()) {
-            if (level.getBlockEntity(pos) instanceof TentBlockEntity tentBlockEntity) {
-                if (TentUtils.isTentEmpty(pos, level)) {
-                    ItemStack heldStack = player.getItemInHand(hand);
-                    if (heldStack.getItem() instanceof SleepingBagItem) {
-                        tentBlockEntity.setSleepingBag(heldStack);
-                        if (!player.getAbilities().instabuild)
-                            player.setItemInHand(hand, ItemStack.EMPTY); //Set item imediatly empty, as it can only stack to 1
-                        return InteractionResult.CONSUME;
+            TentBlockEntity tentBlockEntity = TentUtils.getTentBlockEntityForInventory(pos, level);
+            if (tentBlockEntity == null)
+                return InteractionResult.FAIL;
+
+            if (player.isCrouching()) {
+                MenuConstructor provider = TentContainer.getServerContainerProvider(tentBlockEntity.getInventory(), ContainerLevelAccess.create(level, pos));
+                MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("container.aritsumods.tent"));
+                NetworkHooks.openGui((ServerPlayer) player, namedProvider);
+                return InteractionResult.SUCCESS;
+            } else if (!TentUtils.tentHasSleepingBag(pos, level)) {
+                ItemStack heldStack = player.getItemInHand(hand);
+                if (heldStack.getItem() instanceof SleepingBagItem) {
+                    tentBlockEntity.setSleepingBag(heldStack);
+                    if (!player.getAbilities().instabuild) {
+//                        heldStack.shrink(1);
+                        player.setItemInHand(hand, ItemStack.EMPTY);
                     }
+                    return InteractionResult.SUCCESS;
                 }
+                return InteractionResult.FAIL;
             }
+
+
             if (state.getValue(PART) != BedPart.HEAD) {
                 pos = pos.relative(state.getValue(FACING));
                 state = level.getBlockState(pos);
@@ -208,6 +224,7 @@ public class TentBlock extends BedBlock {
                 });
                 return InteractionResult.SUCCESS;
             }
+
         }
         return InteractionResult.CONSUME;
     }
@@ -283,4 +300,17 @@ public class TentBlock extends BedBlock {
         return false;
     }
 
+    @Override
+    public boolean removedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (!level.isClientSide()) {
+            TentBlockEntity tent = TentUtils.getTentBlockEntityForInventory(pos, level);
+            if (tent != null) {
+                for (ItemStack drop : tent.getInventory().getAllItems()) {
+                    if (!drop.isEmpty())
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), drop);
+                }
+            }
+        }
+        return super.removedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
 }

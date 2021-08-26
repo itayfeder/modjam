@@ -10,6 +10,8 @@ import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.*;
 import net.aritsu.screen.client.BackPackScreen;
+import net.aritsu.screen.client.TentScreen;
+import net.aritsu.screen.common.TentContainer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -35,6 +37,7 @@ public class ClientSetupEvent {
         EntityRenderers.register(AritsuEntities.GRIZZLY_BEAR.get(), GrizzlyBearRenderer::new);
 
         MenuScreens.register(AritsuContainers.BACKPACK_CONTAINER_TYPE.get(), BackPackScreen::new);
+        MenuScreens.register(AritsuContainers.TENT_CONTAINER_TYPE.get(), TentScreen::new);
 
         ItemProperties.register(AritsuItems.REINFORCED_FISHING_ROD.get(), new ResourceLocation("cast"), (p_174595_, p_174596_, p_174597_, p_174598_) -> {
             if (p_174597_ == null) {

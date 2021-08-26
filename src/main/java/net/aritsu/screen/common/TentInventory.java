@@ -10,7 +10,7 @@ public class TentInventory extends ItemStackHandler {
     private final TentBlockEntity be;
 
     public TentInventory(TentBlockEntity be) {
-        super(2);
+        super(6);
         this.be = be;
     }
 

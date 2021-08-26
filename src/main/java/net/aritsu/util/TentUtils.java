@@ -48,11 +48,22 @@ public class TentUtils {
         return BlockPos.ZERO;
     }
 
-    public static boolean isTentEmpty(BlockPos current, Level level) {
-        BlockPos neighbour = getTentNeighbourPos(current, level);
-        if (level.getBlockEntity(neighbour) instanceof TentBlockEntity secondTent && level.getBlockEntity(current) instanceof TentBlockEntity curentTent) {
-            return secondTent.getInventory().getStackInSlot(0).isEmpty() && curentTent.getInventory().getStackInSlot(0).isEmpty();
+    public static boolean tentHasSleepingBag(BlockPos current, Level level) {
+        TentBlockEntity tent = getTentBlockEntityForInventory(current, level);
+        return tent != null && !tent.getInventory().getStackInSlot(0).isEmpty();
+    }
+
+    public static TentBlockEntity getTentBlockEntityForInventory(BlockPos current, Level level) {
+        if (level.getBlockState(current).hasProperty(TentBlock.PART) && level.getBlockState(current).getValue(TentBlock.PART) == BedPart.FOOT) {
+            if (level.getBlockEntity(current) instanceof TentBlockEntity tent)
+                return tent;
+        } else {
+            BlockPos neighbour = getTentNeighbourPos(current, level);
+            if (level.getBlockState(neighbour).hasProperty(TentBlock.PART) && level.getBlockState(neighbour).getValue(TentBlock.PART) == BedPart.FOOT) {
+                if (level.getBlockEntity(neighbour) instanceof TentBlockEntity tent)
+                    return tent;
+            }
         }
-        return false;
+        return null;
     }
 }

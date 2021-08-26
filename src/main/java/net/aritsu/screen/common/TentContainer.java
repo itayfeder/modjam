@@ -4,6 +4,8 @@ import net.aritsu.item.FlaskItem;
 import net.aritsu.item.SleepingBagItem;
 import net.aritsu.item.TentItem;
 import net.aritsu.registry.AritsuContainers;
+import net.aritsu.screen.slots.LanternSlot;
+import net.aritsu.screen.slots.SleepingBagSlot;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -18,6 +20,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Optional;
 
@@ -30,38 +33,43 @@ public class TentContainer extends AbstractContainerMenu {
     private static final int INV_SLOT_END = 37;
     private static final int USE_ROW_SLOT_START = 37;
     private static final int USE_ROW_SLOT_END = 46;
-    final ItemStackHandler backpackInventory;
+    final ItemStackHandler tentInventory;
     private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
     private final ResultContainer resultSlots = new ResultContainer();
     private final ContainerLevelAccess access;
-    private Player player;
+    private final Player player;
 
     public TentContainer(int id, Inventory playerInventory, ItemStackHandler inventory) {
         this(id, playerInventory, inventory, ContainerLevelAccess.NULL);
     }
 
-    public TentContainer(int id, Inventory playerInventory, ItemStackHandler inventory, ContainerLevelAccess access) {
+    public TentContainer(int id, Inventory playerInventory, ItemStackHandler tentInventory, ContainerLevelAccess access) {
         super(AritsuContainers.TENT_CONTAINER_TYPE.get(), id);
         this.access = access;
-        backpackInventory = inventory;
+        this.tentInventory = tentInventory;
         this.player = playerInventory.player;
+
+        this.addSlot(new SleepingBagSlot(tentInventory, 0, 30, 81));
+        this.addSlot(new LanternSlot(tentInventory, 1, 30 + 18, 81));
+        for (int x = 0; x < 4; x++)
+            this.addSlot(new SlotItemHandler(tentInventory, x+2, 84 + 18*x, 81));
 
         this.addSlot(new ResultSlot(player, this.craftSlots, this.resultSlots, 0, 124, 35));
 
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                this.addSlot(new Slot(this.craftSlots, j + i * 3, 30 + j * 18, 17 + i * 18));
+        for (int y = 0; y < 3; ++y) {
+            for (int x = 0; x < 3; ++x) {
+                this.addSlot(new Slot(this.craftSlots, x + y * 3, 30 + x * 18, 17 + y * 18));
             }
         }
 
-        for (int k = 0; k < 3; ++k) {
-            for (int i1 = 0; i1 < 9; ++i1) {
-                this.addSlot(new Slot(playerInventory, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
+        for (int y = 0; y < 3; ++y) {
+            for (int x = 0; x < 9; ++x) {
+                this.addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, (84 + 27) + y * 18));
             }
         }
 
-        for (int l = 0; l < 9; ++l) {
-            this.addSlot(new Slot(playerInventory, l, 8 + l * 18, 142));
+        for (int x = 0; x < 9; ++x) {
+            this.addSlot(new Slot(playerInventory, x, 8 + x * 18, 142 + 27));
         }
     }
 
@@ -73,9 +81,9 @@ public class TentContainer extends AbstractContainerMenu {
     /**
      * Get the server container provider for NetworkHooks.openGui
      */
-    public static MenuConstructor getServerContainerProvider(ItemStackHandler stackHandler) {
+    public static MenuConstructor getServerContainerProvider(ItemStackHandler stackHandler, ContainerLevelAccess access) {
 
-        return (id, playerInventory, serverPlayer) -> new TentContainer(id, playerInventory, stackHandler);
+        return (id, playerInventory, serverPlayer) -> new TentContainer(id, playerInventory, stackHandler, access);
     }
 
     protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
@@ -110,9 +118,9 @@ public class TentContainer extends AbstractContainerMenu {
             copy = slotItem.copy();
 
             //shift clicked inside backpack
-            if (slotnumber < backpackInventory.getSlots()) {
+            if (slotnumber < tentInventory.getSlots()) {
                 //move to player inventory
-                if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size() - 9, false)) {
+                if (!this.moveItemStackTo(slotItem, tentInventory.getSlots(), this.slots.size() - 9, false)) {
                     return ItemStack.EMPTY;
                 } else if (!this.moveItemStackTo(slotItem, this.slots.size() - 9, this.slots.size(), false)) {
                     return ItemStack.EMPTY;
@@ -139,7 +147,7 @@ public class TentContainer extends AbstractContainerMenu {
                 }
 
                 //move to extra slots
-                else if (!this.moveItemStackTo(slotItem, 4, backpackInventory.getSlots(), false)) {
+                else if (!this.moveItemStackTo(slotItem, 4, tentInventory.getSlots(), false)) {
                     return ItemStack.EMPTY;
                 }
             }
