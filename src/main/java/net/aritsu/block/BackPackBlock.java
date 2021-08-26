@@ -53,7 +53,7 @@ public class BackPackBlock extends BaseEntityBlock {
         if (level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
             if (player.isCrouching()) {
                 player.swing(InteractionHand.MAIN_HAND);
-                level.playSound(player, blockPos, SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
+                level.playSound(player, player.getOnPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
             }
         }
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {

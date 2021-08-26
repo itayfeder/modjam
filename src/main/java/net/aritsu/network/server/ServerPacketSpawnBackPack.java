@@ -8,8 +8,6 @@ import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -77,8 +75,6 @@ public class ServerPacketSpawnBackPack implements IPacketBase {
                     NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), new ClientReceiveOtherBackPack(player.getUUID(), ItemStack.EMPTY));
                 }
             });
-            ((Player)player).swing(InteractionHand.MAIN_HAND);
-            player.level.playSound(player, new BlockPos(player.getX(), player.getY(), player.getZ()), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
         }
 
         context.get().setPacketHandled(true);
