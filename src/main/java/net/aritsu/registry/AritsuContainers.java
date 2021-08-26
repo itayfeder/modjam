@@ -2,6 +2,7 @@ package net.aritsu.registry;
 
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.screen.common.BackPackContainer;
+import net.aritsu.screen.common.TentContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -13,4 +14,7 @@ public class AritsuContainers {
 
     public static final RegistryObject<MenuType<BackPackContainer>> BACKPACK_CONTAINER_TYPE = CONTAINER.register("artisu_backpack_container",
             () -> new MenuType<>(BackPackContainer::registerClientContainer));
+
+    public static final RegistryObject<MenuType<TentContainer>> TENT_CONTAINER_TYPE = CONTAINER.register("artisu_tent_container",
+            () -> new MenuType<>(TentContainer::registerClientContainer));
 }
