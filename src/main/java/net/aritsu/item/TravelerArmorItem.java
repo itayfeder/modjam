@@ -24,6 +24,9 @@ import java.util.Random;
 public class TravelerArmorItem extends ArmorItem implements IItemRenderProperties {
 
     private static final Item.Properties armorProps = new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200).tab(ModTab.INSTANCE);
+    Random rnd = new Random();
+    int soundChance = 0;
+    double pitch = 0;
 
     public TravelerArmorItem(EquipmentSlot slot) {
         super(new TravelerArmorItem.TravelerMaterial(), slot, armorProps);
@@ -39,9 +42,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/traveler_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
     }
-    Random rnd =new Random();
-    int soundChance=0;
-    double pitch=0;
+
     @Override
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
@@ -81,15 +82,16 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         double motX = player.getDeltaMovement().x;
                         player.getDeltaMovement();
                         motX = player.getDeltaMovement().z;
-                        double motY=player.getDeltaMovement().y;
+                        double motY = player.getDeltaMovement().y;
                         player.fallDistance = 0.0F;
                         if (player.isCrouching()) {
                             player.setDeltaMovement(motX, 0.0D, motX);
                         } else {
-                            if (motY>=2) player.setDeltaMovement(motX, 2D, motX); else player.setDeltaMovement(motX, motY+ 0.1D, motX);
+                            if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
+                            else player.setDeltaMovement(motX, motY + 0.1D, motX);
                             soundChance++;
-                            pitch=rnd.nextDouble();
-                            if(soundChance%7==0)player.playSound(SoundEvents.STONE_STEP,(float) pitch,1);
+                            pitch = rnd.nextDouble();
+                            if (soundChance % 7 == 0) player.playSound(SoundEvents.STONE_STEP, (float) pitch, 1);
                         }
 
                     }

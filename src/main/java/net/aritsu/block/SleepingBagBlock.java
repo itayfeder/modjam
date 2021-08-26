@@ -16,15 +16,19 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -39,7 +43,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,6 +59,29 @@ public class SleepingBagBlock extends BedBlock {
         super(p_49454_, p_49455_);
         this.color = p_49454_;
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, BedPart.FOOT).setValue(OCCUPIED, false));
+    }
+
+    public static ServerLevel getLevel(Player player) {
+        return (ServerLevel) player.level;
+    }
+
+    private static boolean bedInRange(BlockPos p_9117_, Direction p_9118_, Player player) {
+        if (p_9118_ == null) return false;
+        return isReachableBedBlock(p_9117_, player) || isReachableBedBlock(p_9117_.relative(p_9118_.getOpposite()), player);
+    }
+
+    private static boolean isReachableBedBlock(BlockPos p_9223_, Player player) {
+        Vec3 vec3 = Vec3.atBottomCenterOf(p_9223_);
+        return Math.abs(player.getX() - vec3.x()) <= 3.0D && Math.abs(player.getY() - vec3.y()) <= 2.0D && Math.abs(player.getZ() - vec3.z()) <= 3.0D;
+    }
+
+    private static boolean bedBlocked(BlockPos p_9192_, Direction p_9193_, Player player) {
+        BlockPos blockpos = p_9192_.above();
+        return !freeAt(blockpos, player) || !freeAt(blockpos.relative(p_9193_.getOpposite()), player);
+    }
+
+    protected static boolean freeAt(BlockPos p_36351_, Player player) {
+        return !player.level.getBlockState(p_36351_).isSuffocating(player.level, p_36351_);
     }
 
     @Override
@@ -119,7 +145,7 @@ public class SleepingBagBlock extends BedBlock {
                     p_49516_.removeBlock(blockpos, false);
                 }
 
-                p_49516_.explode((Entity)null, DamageSource.badRespawnPointExplosion(), (ExplosionDamageCalculator)null, (double)p_49517_.getX() + 0.5D, (double)p_49517_.getY() + 0.5D, (double)p_49517_.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
+                p_49516_.explode(null, DamageSource.badRespawnPointExplosion(), null, (double) p_49517_.getX() + 0.5D, (double) p_49517_.getY() + 0.5D, (double) p_49517_.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
                 return InteractionResult.SUCCESS;
             } else if (p_49515_.getValue(OCCUPIED)) {
                 if (!this.kickVillagerOutOfBed(p_49516_, p_49517_)) {
@@ -179,13 +205,13 @@ public class SleepingBagBlock extends BedBlock {
 
                     Either<Player.BedSleepingProblem, Unit> either = playerStartSleepInBed(p_9115_, player).ifRight((p_9029_) -> {
                         player.awardStat(Stats.SLEEP_IN_BED);
-                        CriteriaTriggers.SLEPT_IN_BED.trigger((ServerPlayer)player);
+                        CriteriaTriggers.SLEPT_IN_BED.trigger((ServerPlayer) player);
                     });
                     if (!getLevel(player).canSleepThroughNights()) {
                         player.displayClientMessage(new TranslatableComponent("sleep.not_possible"), true);
                     }
 
-                    ((ServerLevel)player.level).updateSleepingPlayerList();
+                    ((ServerLevel) player.level).updateSleepingPlayerList();
                     return either;
                 }
             }
@@ -195,7 +221,7 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     public Either<Player.BedSleepingProblem, Unit> playerStartSleepInBed(BlockPos p_36203_, Player player) {
-        ((LivingEntity)player).startSleeping(p_36203_);
+        player.startSleeping(p_36203_);
         ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "sleepCounter");
         return Either.right(Unit.INSTANCE);
     }
@@ -208,28 +234,5 @@ public class SleepingBagBlock extends BedBlock {
     @Override
     public boolean isPossibleToRespawnInThis() {
         return false;
-    }
-
-    public static ServerLevel getLevel(Player player) {
-        return (ServerLevel)player.level;
-    }
-
-    private static boolean bedInRange(BlockPos p_9117_, Direction p_9118_, Player player) {
-        if (p_9118_ == null) return false;
-        return isReachableBedBlock(p_9117_, player) || isReachableBedBlock(p_9117_.relative(p_9118_.getOpposite()), player);
-    }
-
-    private static boolean isReachableBedBlock(BlockPos p_9223_, Player player) {
-        Vec3 vec3 = Vec3.atBottomCenterOf(p_9223_);
-        return Math.abs(player.getX() - vec3.x()) <= 3.0D && Math.abs(player.getY() - vec3.y()) <= 2.0D && Math.abs(player.getZ() - vec3.z()) <= 3.0D;
-    }
-
-    private static boolean bedBlocked(BlockPos p_9192_, Direction p_9193_, Player player) {
-        BlockPos blockpos = p_9192_.above();
-        return !freeAt(blockpos, player) || !freeAt(blockpos.relative(p_9193_.getOpposite()), player);
-    }
-
-    protected static boolean freeAt(BlockPos p_36351_, Player player) {
-        return !player.level.getBlockState(p_36351_).isSuffocating(player.level, p_36351_);
     }
 }

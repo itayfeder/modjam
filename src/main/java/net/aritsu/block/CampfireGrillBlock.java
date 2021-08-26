@@ -19,9 +19,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -43,7 +41,7 @@ public class CampfireGrillBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState p_51274_, Level p_51275_, BlockPos p_51276_, Player p_51277_, InteractionHand p_51278_, BlockHitResult p_51279_) {
         BlockEntity blockentity = p_51275_.getBlockEntity(p_51276_);
         if (blockentity instanceof CampfireGrillBlockEntity) {
-            CampfireGrillBlockEntity campfireblockentity = (CampfireGrillBlockEntity)blockentity;
+            CampfireGrillBlockEntity campfireblockentity = (CampfireGrillBlockEntity) blockentity;
             ItemStack itemstack = p_51277_.getItemInHand(p_51278_);
             Optional<CampfireCookingRecipe> optional = campfireblockentity.getCookableRecipe(itemstack);
             if (optional.isPresent()) {
@@ -81,7 +79,7 @@ public class CampfireGrillBlock extends BaseEntityBlock {
         if (!p_51281_.is(p_51284_.getBlock())) {
             BlockEntity blockentity = p_51282_.getBlockEntity(p_51283_);
             if (blockentity instanceof CampfireGrillBlockEntity) {
-                Containers.dropContents(p_51282_, p_51283_, ((CampfireGrillBlockEntity)blockentity).getItems());
+                Containers.dropContents(p_51282_, p_51283_, ((CampfireGrillBlockEntity) blockentity).getItems());
             }
 
             super.onRemove(p_51281_, p_51282_, p_51283_, p_51284_, p_51285_);

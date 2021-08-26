@@ -1,17 +1,9 @@
 package net.aritsu.block;
 
 import net.aritsu.blockentity.BearTrapBlockEntity;
-import net.aritsu.blockentity.CampfireGrillBlockEntity;
 import net.aritsu.registry.AritsuBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,12 +17,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BearTrapBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -51,7 +41,7 @@ public class BearTrapBlock extends BaseEntityBlock {
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter p_57101_, BlockPos p_57102_, CollisionContext p_57103_) {
-        switch ((Direction)state.getValue(FACING)) {
+        switch (state.getValue(FACING)) {
             case NORTH:
             case SOUTH:
             default:
@@ -111,7 +101,7 @@ public class BearTrapBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext p_60575_) {
-        switch ((Direction)p_60572_.getValue(FACING)) {
+        switch (p_60572_.getValue(FACING)) {
             case NORTH:
             case SOUTH:
             default:

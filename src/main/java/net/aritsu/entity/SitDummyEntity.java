@@ -43,7 +43,7 @@ public class SitDummyEntity extends Entity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-/*ridetick is only called when the entity is a rider, and not a vehicle. we use the general tick update method instead.*/
+    /*ridetick is only called when the entity is a rider, and not a vehicle. we use the general tick update method instead.*/
     @Override
     public void tick() {
         super.tick();

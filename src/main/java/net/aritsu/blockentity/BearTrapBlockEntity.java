@@ -3,22 +3,16 @@ package net.aritsu.blockentity;
 import net.aritsu.block.BearTrapBlock;
 import net.aritsu.registry.AritsuBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 import java.util.Random;
@@ -33,7 +27,7 @@ public class BearTrapBlockEntity extends BlockEntity {
 
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb);
         for (LivingEntity entity : entities) {
-            entity.makeStuckInBlock(state, new Vec3((double)0.05F, 0.00D, (double)0.05F));
+            entity.makeStuckInBlock(state, new Vec3(0.05F, 0.00D, 0.05F));
             if (!state.getValue(BearTrapBlock.TRIGGERED)) {
                 if (!level.isClientSide) {
                     entity.hurt(DamageSource.GENERIC, 8.0F);
@@ -44,7 +38,7 @@ public class BearTrapBlockEntity extends BlockEntity {
                     for (int i = 0; i < 3; i++) {
                         double randX = 0.5 + (0.3125 - 0) * rnd.nextDouble() * (rnd.nextBoolean() ? 1 : -1);
                         double randZ = 0.5 + (0.3125 - 0) * rnd.nextDouble() * (rnd.nextBoolean() ? 1 : -1);
-                        level.addParticle(ParticleTypes.CRIT,pos.getX() + randX, pos.getY() + 0.1875, pos.getZ() + randZ, 0, 0, 0);
+                        level.addParticle(ParticleTypes.CRIT, pos.getX() + randX, pos.getY() + 0.1875, pos.getZ() + randZ, 0, 0, 0);
                     }
                 }
             }
@@ -52,7 +46,7 @@ public class BearTrapBlockEntity extends BlockEntity {
     }
 
     public static AABB getShape(BlockState state, BlockPos pos) {
-        switch ((Direction) state.getValue(BearTrapBlock.FACING)) {
+        switch (state.getValue(BearTrapBlock.FACING)) {
             case NORTH:
             case SOUTH:
             default:
@@ -63,7 +57,8 @@ public class BearTrapBlockEntity extends BlockEntity {
                         pos.getX() + 0.625, pos.getY() + 0.375, pos.getZ() + 0.8125);
             case EAST:
             case WEST:
-                if (!state.getValue(BearTrapBlock.TRIGGERED)) return new AABB(pos.getX() + 0.1875, pos.getY(), pos.getZ() + 0.125,
+                if (!state.getValue(BearTrapBlock.TRIGGERED))
+                    return new AABB(pos.getX() + 0.1875, pos.getY(), pos.getZ() + 0.125,
                             pos.getX() + 0.8125, pos.getY() + 0.3125, pos.getZ() + 0.875);
                 else return new AABB(pos.getX() + 0.1875, pos.getY(), pos.getZ() + 0.375,
                         pos.getX() + 0.8125, pos.getY() + 0.375, pos.getZ() + 0.625);

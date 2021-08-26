@@ -6,6 +6,7 @@ import net.minecraft.world.item.Items;
 
 public class ModTab extends CreativeModeTab {
     public static final ModTab INSTANCE = new ModTab();
+
     public ModTab() {
         super("camping_mod_tab");
     }

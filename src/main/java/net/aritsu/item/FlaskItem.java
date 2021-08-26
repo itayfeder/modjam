@@ -3,8 +3,6 @@ package net.aritsu.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,21 +24,15 @@ import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class FlaskItem extends Item {
-
-    public ItemStack getDefaultInstance() {
-        return PotionUtils.setPotion(super.getDefaultInstance(), Potions.EMPTY);
-    }
 
     public FlaskItem(Properties properties) {
         super(properties);
     }
 
     public static float getFullnessDisplay(ItemStack itemStack) {
-        return (float)getChargeCount(itemStack) / 9.0F;
+        return (float) getChargeCount(itemStack) / 9.0F;
     }
 
     private static int getChargeCount(ItemStack itemStack) {
@@ -61,6 +53,37 @@ public class FlaskItem extends Item {
         }
     }
 
+    private static int add(ItemStack stack, Potion pot) {
+        if (pot == getPotion(stack) || getPotion(stack) == Potions.EMPTY) {
+            CompoundTag compoundtag = stack.getTag();
+            if (getPotion(stack) == Potions.EMPTY) {
+                PotionUtils.setPotion(stack, pot);
+            }
+            if (compoundtag != null) {
+                compoundtag.putInt("Charges", getChargeCount(stack) + 1);
+            } else {
+                stack.getOrCreateTag().putInt("Charges", 1);
+            }
+
+            return getChargeCount(stack);
+        } else {
+            return 0;
+        }
+    }
+
+    private static void removeOne(ItemStack stack) {
+        CompoundTag compoundtag = stack.getOrCreateTag();
+        stack.getOrCreateTag().putInt("Charges", getChargeCount(stack) - 1);
+        if (getChargeCount(stack) == 0) {
+            PotionUtils.setPotion(stack, Potions.EMPTY);
+        }
+
+    }
+
+    public ItemStack getDefaultInstance() {
+        return PotionUtils.setPotion(super.getDefaultInstance(), Potions.EMPTY);
+    }
+
     public boolean overrideOtherStackedOnMe(ItemStack itemStack, ItemStack itemStack1, Slot slot, ClickAction clickAction, Player player, SlotAccess slotAccess) {
         if (clickAction == ClickAction.SECONDARY && slot.allowModification(player)) {
             if (itemStack1.getItem() instanceof PotionItem
@@ -69,10 +92,9 @@ public class FlaskItem extends Item {
                 add(itemStack, PotionUtils.getPotion(itemStack1));
                 if (!player.getAbilities().instabuild) {
                     itemStack1.shrink(1);
-                    player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE,1));
+                    player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE, 1));
                 }
-            }
-            else if (itemStack1.getItem() instanceof BottleItem && getPotion(itemStack) != Potions.EMPTY) {
+            } else if (itemStack1.getItem() instanceof BottleItem && getPotion(itemStack) != Potions.EMPTY) {
                 itemStack1.shrink(1);
                 player.getInventory().add(PotionUtils.setPotion(Items.POTION.getDefaultInstance(), getPotion(itemStack)));
                 removeOne(itemStack);
@@ -85,13 +107,13 @@ public class FlaskItem extends Item {
     }
 
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
-        Player player = livingEntity instanceof Player ? (Player)livingEntity : null;
+        Player player = livingEntity instanceof Player ? (Player) livingEntity : null;
         if (player instanceof ServerPlayer) {
-            CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer)player, itemStack);
+            CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) player, itemStack);
         }
 
         if (!level.isClientSide) {
-            for(MobEffectInstance mobeffectinstance : PotionUtils.getMobEffects(itemStack)) {
+            for (MobEffectInstance mobeffectinstance : PotionUtils.getMobEffects(itemStack)) {
                 if (mobeffectinstance.getEffect().isInstantenous()) {
                     mobeffectinstance.getEffect().applyInstantenousEffect(player, player, livingEntity, mobeffectinstance.getAmplifier(), 1.0D);
                 } else {
@@ -109,34 +131,6 @@ public class FlaskItem extends Item {
 
         level.gameEvent(livingEntity, GameEvent.DRINKING_FINISH, livingEntity.eyeBlockPosition());
         return itemStack;
-    }
-
-    private static int add(ItemStack stack, Potion pot) {
-        if (pot == getPotion(stack) || getPotion(stack) == Potions.EMPTY) {
-            CompoundTag compoundtag = stack.getTag();
-            if (getPotion(stack) == Potions.EMPTY) {
-                PotionUtils.setPotion(stack, pot);
-            }
-            if (compoundtag != null) {
-                compoundtag.putInt("Charges", getChargeCount(stack)+1);
-            }
-            else {
-                stack.getOrCreateTag().putInt("Charges", 1);
-            }
-
-            return getChargeCount(stack);
-        } else {
-            return 0;
-        }
-    }
-
-    private static void removeOne(ItemStack stack) {
-        CompoundTag compoundtag = stack.getOrCreateTag();
-        stack.getOrCreateTag().putInt("Charges", getChargeCount(stack)-1);
-        if (getChargeCount(stack) == 0) {
-            PotionUtils.setPotion(stack, Potions.EMPTY);
-        }
-
     }
 
     public int getUseDuration(ItemStack itemStack) {

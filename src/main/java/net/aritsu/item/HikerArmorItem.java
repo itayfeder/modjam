@@ -35,7 +35,7 @@ public class HikerArmorItem extends ArmorItem implements IItemRenderProperties {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return AritsuMod.MODID+":"+ (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/hiker_layer_1.png");
+        return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/hiker_layer_1.png");
     }
 
     @Override

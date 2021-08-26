@@ -66,10 +66,9 @@ public class ItemRendererTransparent extends ItemRenderer {
                 }
 
                 this.renderModelLists(model, stack, light, overlay, poseStack, vertexconsumer);
-            }
-            else {
+            } else {
                 //chests can't be rendered transparent
-                net.minecraftforge.client.RenderProperties.get(stack).getItemStackRenderer().renderByItem(stack, transformType,poseStack,multiBufferSource,light,overlay);
+                net.minecraftforge.client.RenderProperties.get(stack).getItemStackRenderer().renderByItem(stack, transformType, poseStack, multiBufferSource, light, overlay);
             }
 
             poseStack.popPose();

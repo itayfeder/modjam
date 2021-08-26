@@ -1,6 +1,5 @@
 package net.aritsu.screen.slots;
 
-import net.aritsu.block.SleepingBagBlock;
 import net.aritsu.item.SleepingBagItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

@@ -28,7 +28,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
     private final int[] cookingProgress = new int[5];
     private final int[] cookingTime = new int[4];
 
-    public CampfireGrillBlockEntity( BlockPos p_155229_, BlockState p_155230_) {
+    public CampfireGrillBlockEntity(BlockPos p_155229_, BlockState p_155230_) {
         super(AritsuBlockEntities.CAMPFIRE_GRILL.get(), p_155229_, p_155230_);
     }
 
@@ -36,8 +36,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
         if (p_155307_.getBlockState(p_155308_.below()).getBlock() instanceof CampfireBlock) {
             if (p_155307_.getBlockState(p_155308_.below()).getValue(CampfireBlock.LIT)) {
                 cook(p_155307_, p_155308_, p_155309_, p_155310_);
-            }
-            else {
+            } else {
                 cooldown(p_155307_, p_155308_, p_155309_, p_155310_);
             }
         }
@@ -47,7 +46,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
     public static void cook(Level p_155307_, BlockPos p_155308_, BlockState p_155309_, CampfireGrillBlockEntity p_155310_) {
         boolean flag = false;
 
-        for(int i = 0; i < p_155310_.items.size()-1; ++i) {
+        for (int i = 0; i < p_155310_.items.size() - 1; ++i) {
             ItemStack itemstack = p_155310_.items.get(i);
             if (!itemstack.isEmpty()) {
                 flag = true;
@@ -57,7 +56,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
                     ItemStack itemstack1 = p_155307_.getRecipeManager().getRecipeFor(RecipeType.CAMPFIRE_COOKING, container, p_155307_).map((p_155305_) -> {
                         return p_155305_.assemble(container);
                     }).orElse(itemstack);
-                    Containers.dropItemStack(p_155307_, (double)p_155308_.getX(), (double)p_155308_.getY(), (double)p_155308_.getZ(), itemstack1);
+                    Containers.dropItemStack(p_155307_, p_155308_.getX(), p_155308_.getY(), p_155308_.getZ(), itemstack1);
                     p_155310_.items.set(i, ItemStack.EMPTY);
                     p_155307_.sendBlockUpdated(p_155308_, p_155309_, p_155309_, 3);
                 }
@@ -71,7 +70,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
             if (p_155310_.cookingProgress[4] >= 600) {
                 Container container = new SimpleContainer(itemstack);
                 ItemStack itemstack1 = AritsuItems.BOILING_KETTLE.get().getDefaultInstance();
-                Containers.dropItemStack(p_155307_, (double)p_155308_.getX(), (double)p_155308_.getY(), (double)p_155308_.getZ(), itemstack1);
+                Containers.dropItemStack(p_155307_, p_155308_.getX(), p_155308_.getY(), p_155308_.getZ(), itemstack1);
                 p_155310_.items.set(4, ItemStack.EMPTY);
                 p_155307_.sendBlockUpdated(p_155308_, p_155309_, p_155309_, 3);
             }
@@ -86,7 +85,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
     public static void cooldown(Level p_155314_, BlockPos p_155315_, BlockState p_155316_, CampfireGrillBlockEntity p_155317_) {
         boolean flag = false;
 
-        for(int i = 0; i < p_155317_.items.size()-1; ++i) {
+        for (int i = 0; i < p_155317_.items.size() - 1; ++i) {
             if (p_155317_.cookingProgress[i] > 0) {
                 flag = true;
                 p_155317_.cookingProgress[i] = Mth.clamp(p_155317_.cookingProgress[i] - 2, 0, p_155317_.cookingTime[i]);
@@ -109,22 +108,22 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
             if (p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.LIT)) {
                 Random random = p_155319_.random;
                 if (random.nextFloat() < 0.11F) {
-                    for(int i = 0; i < random.nextInt(2) + 2; ++i) {
+                    for (int i = 0; i < random.nextInt(2) + 2; ++i) {
                         CampfireBlock.makeParticles(p_155319_, p_155320_, p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.SIGNAL_FIRE), false);
                     }
                 }
 
                 int l = p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.FACING).get2DDataValue();
 
-                for(int j = 0; j < p_155322_.items.size()-1; ++j) {
+                for (int j = 0; j < p_155322_.items.size() - 1; ++j) {
                     if (!p_155322_.items.get(j).isEmpty() && random.nextFloat() < 0.2F) {
                         Direction direction = Direction.from2DDataValue(Math.floorMod(j + l, 4));
                         float f = 0.3125F;
-                        double d0 = (double)p_155320_.getX() + 0.5D - (double)((float)direction.getStepX() * 0.3125F) + (double)((float)direction.getClockWise().getStepX() * 0.3125F);
-                        double d1 = (double)p_155320_.getY() + 0.0234375D;
-                        double d2 = (double)p_155320_.getZ() + 0.5D - (double)((float)direction.getStepZ() * 0.3125F) + (double)((float)direction.getClockWise().getStepZ() * 0.3125F);
+                        double d0 = (double) p_155320_.getX() + 0.5D - (double) ((float) direction.getStepX() * 0.3125F) + (double) ((float) direction.getClockWise().getStepX() * 0.3125F);
+                        double d1 = (double) p_155320_.getY() + 0.0234375D;
+                        double d2 = (double) p_155320_.getZ() + 0.5D - (double) ((float) direction.getStepZ() * 0.3125F) + (double) ((float) direction.getClockWise().getStepZ() * 0.3125F);
 
-                        for(int k = 0; k < 4; ++k) {
+                        for (int k = 0; k < 4; ++k) {
                             p_155319_.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
                         }
                     }
@@ -132,7 +131,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
 
                 if (!p_155322_.items.get(4).isEmpty() && random.nextFloat() < 0.2F) {
 
-                    for(int k = 0; k < 4; ++k) {
+                    for (int k = 0; k < 4; ++k) {
                         p_155319_.addParticle(ParticleTypes.CLOUD, 0.45D, 0.30D, 0.5D, 0.0D, 5.0E-4D, 0.0D);
                     }
                 }
@@ -204,7 +203,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
     }
 
     public boolean placeFood(ItemStack p_59054_, int p_59055_) {
-        for(int i = 0; i < this.items.size()-1; ++i) {
+        for (int i = 0; i < this.items.size() - 1; ++i) {
             ItemStack itemstack = this.items.get(i);
             if (itemstack.isEmpty()) {
                 this.cookingTime[i] = p_59055_;

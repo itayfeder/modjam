@@ -37,56 +37,30 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Predicate;
 
 public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.minecraftforge.common.IForgeShearable {
     private static final EntityDataAccessor<Boolean> DATA_STANDING_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_SHEARED_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_SHEAR_TIMER_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.INT);
     private static final float STAND_ANIMATION_TICKS = 6.0F;
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     private float clientSideStandAnimationO;
     private float clientSideStandAnimation;
     private int warningSoundTicks;
-    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     private int remainingPersistentAngerTime;
     private UUID persistentAngerTarget;
 
     public GrizzlyBear(EntityType<? extends GrizzlyBear> p_29519_, Level p_29520_) {
         super(p_29519_, p_29520_);
-    }
-
-    public AgeableMob getBreedOffspring(ServerLevel p_149005_, AgeableMob p_149006_) {
-        return AritsuEntities.GRIZZLY_BEAR.get().create(p_149005_);
-    }
-
-    public boolean isFood(ItemStack p_29565_) {
-        return false;
-    }
-
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearMeleeAttackGoal());
-        this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearPanicGoal());
-        this.goalSelector.addGoal(2, new GrizzlyBear.GrizzlyBearEatBeehivesGoal((double)1.2F, 12, 4));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new GrizzlyBear.GrizzlyBearHurtByTargetGoal());
-        this.targetSelector.addGoal(2, new GrizzlyBear.GrizzlyBearAttackPlayersGoal());
-        this.targetSelector.addGoal(2, new GrizzlyBear.GrizzlyBearAttackFoodHolderGoal());
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Fox.class, 10, true, true, (Predicate<LivingEntity>)null));
-        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -107,6 +81,32 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         }
     }
 
+    public AgeableMob getBreedOffspring(ServerLevel p_149005_, AgeableMob p_149006_) {
+        return AritsuEntities.GRIZZLY_BEAR.get().create(p_149005_);
+    }
+
+    public boolean isFood(ItemStack p_29565_) {
+        return false;
+    }
+
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearMeleeAttackGoal());
+        this.goalSelector.addGoal(1, new GrizzlyBear.GrizzlyBearPanicGoal());
+        this.goalSelector.addGoal(2, new GrizzlyBear.GrizzlyBearEatBeehivesGoal(1.2F, 12, 4));
+        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new GrizzlyBear.GrizzlyBearHurtByTargetGoal());
+        this.targetSelector.addGoal(2, new GrizzlyBear.GrizzlyBearAttackPlayersGoal());
+        this.targetSelector.addGoal(2, new GrizzlyBear.GrizzlyBearAttackFoodHolderGoal());
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Fox.class, 10, true, true, null));
+        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, false));
+    }
+
     public void readAdditionalSaveData(CompoundTag p_29541_) {
         super.readAdditionalSaveData(p_29541_);
         this.setSheared(p_29541_.getBoolean("Sheared"));
@@ -125,20 +125,20 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
     }
 
-    public void setRemainingPersistentAngerTime(int p_29543_) {
-        this.remainingPersistentAngerTime = p_29543_;
-    }
-
     public int getRemainingPersistentAngerTime() {
         return this.remainingPersistentAngerTime;
     }
 
-    public void setPersistentAngerTarget(@Nullable UUID p_29539_) {
-        this.persistentAngerTarget = p_29539_;
+    public void setRemainingPersistentAngerTime(int p_29543_) {
+        this.remainingPersistentAngerTime = p_29543_;
     }
 
     public UUID getPersistentAngerTarget() {
         return this.persistentAngerTarget;
+    }
+
+    public void setPersistentAngerTarget(@Nullable UUID p_29539_) {
+        this.persistentAngerTarget = p_29539_;
     }
 
     protected SoundEvent getAmbientSound() {
@@ -192,11 +192,11 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         }
 
         if (!this.level.isClientSide) {
-            this.updatePersistentAnger((ServerLevel)this.level, true);
+            this.updatePersistentAnger((ServerLevel) this.level, true);
             if (this.getShearTimer() <= 0) {
                 this.setSheared(false);
             }
-            this.setShearTimer(Math.max(0, this.getShearTimer()-1));
+            this.setShearTimer(Math.max(0, this.getShearTimer() - 1));
         }
 
     }
@@ -212,7 +212,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
     }
 
     public boolean doHurtTarget(Entity p_29522_) {
-        boolean flag = p_29522_.hurt(DamageSource.mobAttack(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+        boolean flag = p_29522_.hurt(DamageSource.mobAttack(this), (float) ((int) this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
         if (flag) {
             this.doEnchantDamageEffects(this, p_29522_);
         }
@@ -263,14 +263,14 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
 
     @Override
     public void shear(SoundSource p_21749_) {
-        this.level.playSound((Player)null, this, SoundEvents.SHEEP_SHEAR, p_21749_, 1.0F, 1.0F);
+        this.level.playSound(null, this, SoundEvents.SHEEP_SHEAR, p_21749_, 1.0F, 1.0F);
         this.setSheared(true);
         int i = 1 + this.random.nextInt(3);
 
-        for(int j = 0; j < i; ++j) {
+        for (int j = 0; j < i; ++j) {
             ItemEntity itementity = this.spawnAtLocation(AritsuItems.BEAR_FUR.get(), 1);
             if (itementity != null) {
-                itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+                itementity.setDeltaMovement(itementity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
             }
         }
     }
@@ -306,7 +306,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
 
     class GrizzlyBearAttackPlayersGoal extends NearestAttackableTargetGoal<Player> {
         public GrizzlyBearAttackPlayersGoal() {
-            super(GrizzlyBear.this, Player.class, 20, true, true, (Predicate<LivingEntity>)null);
+            super(GrizzlyBear.this, Player.class, 20, true, true, null);
         }
 
         public boolean canUse() {
@@ -314,7 +314,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
                 return false;
             } else {
                 if (super.canUse()) {
-                    for(GrizzlyBear GrizzlyBear : GrizzlyBear.this.level.getEntitiesOfClass(GrizzlyBear.class, GrizzlyBear.this.getBoundingBox().inflate(8.0D, 4.0D, 8.0D))) {
+                    for (GrizzlyBear GrizzlyBear : GrizzlyBear.this.level.getEntitiesOfClass(GrizzlyBear.class, GrizzlyBear.this.getBoundingBox().inflate(8.0D, 4.0D, 8.0D))) {
                         if (GrizzlyBear.isBaby()) {
                             return true;
                         }
@@ -332,7 +332,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
 
     class GrizzlyBearAttackFoodHolderGoal extends NearestAttackableTargetGoal<Player> {
         public GrizzlyBearAttackFoodHolderGoal() {
-            super(GrizzlyBear.this, Player.class, 20, true, true, (Predicate<LivingEntity>)null);
+            super(GrizzlyBear.this, Player.class, 20, true, true, null);
         }
 
         public boolean canUse() {
@@ -340,7 +340,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
                 return false;
             } else {
                 if (super.canUse()) {
-                    for(Player player : GrizzlyBear.this.level.getEntitiesOfClass(Player.class, GrizzlyBear.this.getBoundingBox().inflate(16.0D, 8.0D, 16.0D))) {
+                    for (Player player : GrizzlyBear.this.level.getEntitiesOfClass(Player.class, GrizzlyBear.this.getBoundingBox().inflate(16.0D, 8.0D, 16.0D))) {
                         if (player.getMainHandItem().getItem().getFoodProperties() != null || player.getOffhandItem().getItem().getFoodProperties() != null) {
                             return true;
                         }
@@ -412,7 +412,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         }
 
         protected double getAttackReachSqr(LivingEntity p_29587_) {
-            return (double)(4.0F + p_29587_.getBbWidth());
+            return 4.0F + p_29587_.getBbWidth();
         }
     }
 
@@ -422,7 +422,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         }
 
         public boolean canUse() {
-            return !GrizzlyBear.this.isBaby() && !GrizzlyBear.this.isOnFire() ? false : super.canUse();
+            return (GrizzlyBear.this.isBaby() || GrizzlyBear.this.isOnFire()) && super.canUse();
         }
     }
 
@@ -464,7 +464,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
             }
 
             BlockPos blockpos = this.getMoveToTarget();
-            if (blockpos.closerThan(this.mob.position(), this.acceptedDistance()*1.5) && blockpos.getY()>GrizzlyBear.this.getY()) {
+            if (blockpos.closerThan(this.mob.position(), this.acceptedDistance() * 1.5) && blockpos.getY() > GrizzlyBear.this.getY()) {
                 GrizzlyBear.this.setStanding(true);
             }
             if (!blockpos.closerThan(this.mob.position(), this.acceptedDistance())) {
@@ -472,7 +472,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
                 ++this.tryTicks;
                 if (this.shouldRecalculatePath()) {
                     BlockPos movepos = getMoveToTarget();
-                    this.mob.getNavigation().moveTo((double)((float)movepos.getX()) + 0.5D, (double)movepos.getY(), (double)((float)movepos.getZ()) + 0.5D, this.speedModifier);
+                    this.mob.getNavigation().moveTo((double) ((float) movepos.getX()) + 0.5D, movepos.getY(), (double) ((float) movepos.getZ()) + 0.5D, this.speedModifier);
                 }
             } else {
                 this.reached = true;
@@ -513,7 +513,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
 
             GrizzlyBear.this.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 1.0F, 1.0F);
             GrizzlyBear.this.level.setBlock(this.blockPos, p_148929_.setValue(BeehiveBlock.HONEY_LEVEL, Integer.valueOf(0)), 2);
-            ((BeehiveBlock)GrizzlyBear.this.level.getBlockState(this.blockPos).getBlock()).releaseBeesAndResetHoneyLevel(GrizzlyBear.this.level,GrizzlyBear.this.level.getBlockState(this.blockPos),  this.blockPos, null, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+            ((BeehiveBlock) GrizzlyBear.this.level.getBlockState(this.blockPos).getBlock()).releaseBeesAndResetHoneyLevel(GrizzlyBear.this.level, GrizzlyBear.this.level.getBlockState(this.blockPos), this.blockPos, null, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             angerNearbyBees(GrizzlyBear.this.level, this.blockPos);
             System.out.println("TEEEEEST: " + GrizzlyBear.this.isStanding());
             stop();
@@ -526,7 +526,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
                 if (list1.isEmpty()) return; //Forge: Prevent Error when no players are around.
                 int i = list1.size();
 
-                for(Bee bee : list) {
+                for (Bee bee : list) {
                     if (bee.getTarget() == null) {
                         bee.setTarget(list1.get(p_49650_.random.nextInt(i)));
                     }

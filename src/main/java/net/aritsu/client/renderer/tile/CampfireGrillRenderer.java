@@ -12,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 
 public class CampfireGrillRenderer implements BlockEntityRenderer<CampfireGrillBlockEntity> {
     private static final float SIZE = 0.375F;
@@ -24,9 +23,9 @@ public class CampfireGrillRenderer implements BlockEntityRenderer<CampfireGrillB
         if (p_112344_.getLevel().getBlockState(p_112344_.getBlockPos().below()).getBlock() instanceof CampfireBlock) {
             Direction direction = p_112344_.getLevel().getBlockState(p_112344_.getBlockPos().below()).getValue(CampfireBlock.FACING);
             NonNullList<ItemStack> nonnulllist = p_112344_.getItems();
-            int i = (int)p_112344_.getBlockPos().asLong();
+            int i = (int) p_112344_.getBlockPos().asLong();
 
-            for(int j = 0; j < nonnulllist.size()-1; ++j) {
+            for (int j = 0; j < nonnulllist.size() - 1; ++j) {
                 ItemStack itemstack = nonnulllist.get(j);
                 if (itemstack != ItemStack.EMPTY) {
                     p_112346_.pushPose();

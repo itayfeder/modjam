@@ -7,7 +7,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class EmptyKettleItem extends Item {
@@ -23,8 +22,7 @@ public class EmptyKettleItem extends Item {
             p_40581_.getPlayer().setItemInHand(p_40581_.getHand(), AritsuItems.WATER_KETTLE.get().getDefaultInstance());
             p_40581_.getLevel().setBlock(context.getClickedPos(), Blocks.AIR.defaultBlockState(), 3);
             return InteractionResult.SUCCESS;
-        }
-        else {
+        } else {
             return super.useOn(p_40581_);
         }
     }

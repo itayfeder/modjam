@@ -8,6 +8,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class BackPackInventory extends ItemStackHandler {
 
     private final BackPackBlockEntity be;
+
     public BackPackInventory(BackPackBlockEntity be) {
         //9craft slots + 1output slot,<no yes> 1 ender chest, 1sleeping bag, 1 tent, 6 extra slots, 1 flask
         super(10);

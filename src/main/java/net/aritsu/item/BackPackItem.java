@@ -13,10 +13,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Wearable;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
@@ -27,6 +25,11 @@ public class BackPackItem extends BlockItem implements Wearable {
             return BackPackItem.dispenseBackpack(p_40408_, p_40409_) ? p_40409_ : super.execute(p_40408_, p_40409_);
         }
     };
+
+    public BackPackItem(Properties prop) {
+        super(AritsuBlocks.BACKPACK.get(), prop);
+        DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
+    }
 
     public static boolean dispenseBackpack(BlockSource p_40399_, ItemStack p_40400_) {
         BlockPos blockpos = p_40399_.getPos().relative(p_40399_.getBlockState().getValue(DispenserBlock.FACING));
@@ -39,8 +42,8 @@ public class BackPackItem extends BlockItem implements Wearable {
             ItemStack itemstack = p_40400_.split(1);
             livingentity.setItemSlot(equipmentslot, itemstack);
             if (livingentity instanceof Mob) {
-                ((Mob)livingentity).setDropChance(equipmentslot, 2.0F);
-                ((Mob)livingentity).setPersistenceRequired();
+                ((Mob) livingentity).setDropChance(equipmentslot, 2.0F);
+                ((Mob) livingentity).setPersistenceRequired();
             }
 
             return true;
@@ -62,11 +65,6 @@ public class BackPackItem extends BlockItem implements Wearable {
         } else {
             return InteractionResultHolder.fail(itemstack);
         }
-    }
-
-    public BackPackItem(Properties prop) {
-        super(AritsuBlocks.BACKPACK.get(), prop);
-        DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
 
     @Override

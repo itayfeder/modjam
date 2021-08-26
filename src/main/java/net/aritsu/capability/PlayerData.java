@@ -10,12 +10,12 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class PlayerData {
 
+    private final ItemStackHandler inventoryForbackPack = new ItemStackHandler(1);
     public boolean isHiker;
     public float prevSaturation = 0.0f;
-    private Player player;
     public boolean loggedInForTheFirstTime = true;
-    private ItemStackHandler inventoryForbackPack = new ItemStackHandler(1);
     public int customEffectTick = 0;
+    private Player player;
 
     public PlayerData() {
 
@@ -39,7 +39,7 @@ public class PlayerData {
     public Tag writeData() {
         CompoundTag tag = new CompoundTag();
         tag.put(BagTag.allItems, inventoryForbackPack.serializeNBT());
-        tag.putBoolean("loggedin",loggedInForTheFirstTime);
+        tag.putBoolean("loggedin", loggedInForTheFirstTime);
         return tag;
     }
 

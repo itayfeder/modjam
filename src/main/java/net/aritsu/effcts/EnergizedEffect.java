@@ -5,15 +5,15 @@ import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class EnergizedEffect extends MobEffect {
     private final ResourceLocation potionIcon;
+
     public EnergizedEffect() {
         super(MobEffectCategory.BENEFICIAL, 16776973);
-        potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/energized.png");
+        potionIcon = new ResourceLocation(AritsuMod.MODID, "textures/mob_effect/energized.png");
     }
+
     public String getName() {
         return "effect.energized";
     }

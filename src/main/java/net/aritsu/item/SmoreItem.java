@@ -1,10 +1,6 @@
 package net.aritsu.item;
 
 import net.aritsu.registry.AritsuEffects;
-import net.aritsu.registry.AritsuItems;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

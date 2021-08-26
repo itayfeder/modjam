@@ -55,7 +55,7 @@ public class BackPackScreen extends AbstractContainerScreen<BackPackContainer> {
                 RenderSystem.setShaderTexture(0, getSlotTexture(slotId));
                 int centerX = (this.width - this.imageWidth) / 2;
                 int centerY = (this.height - this.imageHeight) / 2;
-                blit(poseStack, menu.getSlot(slotId).x + centerX, menu.getSlot(slotId).y + centerY, 0, 0, 16, 16,16,16);
+                blit(poseStack, menu.getSlot(slotId).x + centerX, menu.getSlot(slotId).y + centerY, 0, 0, 16, 16, 16, 16);
             }
     }
 

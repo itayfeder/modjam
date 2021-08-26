@@ -1,17 +1,16 @@
 package net.aritsu.events.modbus;
 
-import net.aritsu.client.renderer.tile.TentRenderer;
 import net.aritsu.client.renderer.EmptyEntityRenderer;
 import net.aritsu.client.renderer.GrizzlyBearRenderer;
 import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
 import net.aritsu.client.renderer.tile.CampfireGrillRenderer;
+import net.aritsu.client.renderer.tile.TentRenderer;
 import net.aritsu.item.FlaskItem;
 import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.*;
 import net.aritsu.screen.client.BackPackScreen;
 import net.aritsu.screen.client.TentScreen;
-import net.aritsu.screen.common.TentContainer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;

@@ -31,7 +31,7 @@ public class LogSeatBlock extends Block {
     protected static final VoxelShape SHAPE_NS = Block.box(0.0D, 0.0D, 3.0D, 16.0D, 10.0D, 13.0D);
     protected static final VoxelShape SHAPE_EW = Block.box(3.0D, 0.0D, 0.0D, 13.0D, 10.0D, 16.0D);
 
-    private WoodType woodType;
+    private final WoodType woodType;
 
     public LogSeatBlock(Properties props, WoodType woodType) {
         super(props);
@@ -45,7 +45,7 @@ public class LogSeatBlock extends Block {
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter p_57101_, BlockPos p_57102_, CollisionContext p_57103_) {
-        switch ((Direction)state.getValue(FACING)) {
+        switch (state.getValue(FACING)) {
             case NORTH:
             case SOUTH:
             default:
@@ -63,12 +63,11 @@ public class LogSeatBlock extends Block {
                 SitDummyEntity seat = new SitDummyEntity(level, pos);
                 level.addFreshEntity(seat);
                 player.startRiding(seat);
-                level.setBlock(pos,state.setValue(OCCUPIED, true),3);
+                level.setBlock(pos, state.setValue(OCCUPIED, true), 3);
                 return InteractionResult.SUCCESS;
-            }
-            else {
+            } else {
                 List<SitDummyEntity> entities = level.getEntitiesOfClass(SitDummyEntity.class, new AABB
-                        (pos.getX(), pos.getY(), pos.getZ(), pos.getX()+1, pos.getY()+1, pos.getZ()+1));
+                        (pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                 if (entities.size() == 1) {
                     player.startRiding(entities.get(0));
                 }
@@ -81,7 +80,7 @@ public class LogSeatBlock extends Block {
     @Override
     public void destroy(LevelAccessor p_49860_, BlockPos p_49861_, BlockState p_49862_) {
         List<SitDummyEntity> entities = p_49860_.getEntitiesOfClass(SitDummyEntity.class, new AABB
-                (p_49861_.getX(), p_49861_.getY(), p_49861_.getZ(), p_49861_.getX()+1, p_49861_.getY()+1, p_49861_.getZ()+1));
+                (p_49861_.getX(), p_49861_.getY(), p_49861_.getZ(), p_49861_.getX() + 1, p_49861_.getY() + 1, p_49861_.getZ() + 1));
         for (SitDummyEntity entity : entities) {
             entity.kill();
         }

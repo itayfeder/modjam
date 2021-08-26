@@ -23,7 +23,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    private ItemStackHandler fakeInventory = new ItemStackHandler(10);
+    private final ItemStackHandler fakeInventory = new ItemStackHandler(10);
 
     public BackPackLayer(PlayerRenderer renderer) {
         super(renderer);

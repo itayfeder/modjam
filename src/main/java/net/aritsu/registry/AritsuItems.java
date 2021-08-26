@@ -3,11 +3,12 @@ package net.aritsu.registry;
 import net.aritsu.item.*;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.util.ModTab;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -129,18 +130,18 @@ public class AritsuItems {
                     .food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.3F).build()), MarshmallowOnAStickItem.Stage.BURNT));
 
     public static final RegistryObject<BlockItem> BLUEBERRY = ITEMS.register("blueberry",
-            () -> new ItemNameBlockItem(AritsuBlocks.BLUEBERRY_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE)
-                .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
+            () -> new ItemNameBlockItem(AritsuBlocks.BLUEBERRY_BUSH.get(), (new Item.Properties().tab(ModTab.INSTANCE)
+                    .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
     public static final RegistryObject<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
-            () -> new Item ((new Item.Properties().tab(ModTab.INSTANCE)
-                .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
+            () -> new Item((new Item.Properties().tab(ModTab.INSTANCE)
+                    .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
 
     public static final RegistryObject<Item> SMORE = ITEMS.register("smore",
-            () -> new SmoreItem ((new Item.Properties().tab(ModTab.INSTANCE)
-                .food(new FoodProperties.Builder().nutrition(4).saturationMod(5F).build()))));
+            () -> new SmoreItem((new Item.Properties().tab(ModTab.INSTANCE)
+                    .food(new FoodProperties.Builder().nutrition(4).saturationMod(5F).build()))));
 
     public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
-            () -> new ItemNameBlockItem (AritsuBlocks.COFFEE_BUSH.get(),(new Item.Properties().tab(ModTab.INSTANCE))));
+            () -> new ItemNameBlockItem(AritsuBlocks.COFFEE_BUSH.get(), (new Item.Properties().tab(ModTab.INSTANCE))));
     public static final RegistryObject<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
 
@@ -167,6 +168,6 @@ public class AritsuItems {
             () -> new FlaskItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
 
     public static final RegistryObject<Item> GRIZZLY_BEAR_SPAWN_EGG = ITEMS.register("grizzly_bear_spawn_egg",
-            () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR,8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
+            () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR, 8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
 
 }
