@@ -22,6 +22,7 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TravelerArmorItem extends ArmorItem implements IItemRenderProperties {
 
@@ -41,7 +42,9 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/hiker_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
     }
-
+    Random rnd =new Random();
+    int soundChance=0;
+    double pitch=0;
     @Override
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
@@ -80,11 +83,15 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         double motX = player.getDeltaMovement().x;
                         player.getDeltaMovement();
                         motX = player.getDeltaMovement().z;
+                        double motY=player.getDeltaMovement().y;
                         player.fallDistance = 0.0F;
                         if (player.isCrouching()) {
                             player.setDeltaMovement(motX, 0.0D, motX);
                         } else {
-                            player.setDeltaMovement(motX, 0.1976D, motX);
+                            if (motY>=2) player.setDeltaMovement(motX, 2D, motX); else player.setDeltaMovement(motX, motY+ 0.1D, motX);
+                            soundChance++;
+                            pitch=rnd.nextDouble();
+                            if(soundChance%7==0)player.playSound(SoundEvents.STONE_STEP,(float) pitch,1);
                         }
 
                     }
