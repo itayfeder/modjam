@@ -21,15 +21,6 @@ public class TentItem extends BlockItem {
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         //TODO use tent on sleepingbag and replace sleepingbag with tent with sleepingbag in
-
-//        BlockPos pos = context.getClickedPos();
-//        Level level = context.getLevel();
-//        BlockState state = level.getBlockState(pos);
-//        if (!level.isClientSide())
-//            if (state.getBlock() instanceof SleepingBagBlock bagBlock)
-//                if (stack.getItem() instanceof TentItem blockItem) {
-//                    Item bagItem = Item.BY_BLOCK.getOrDefault(bagBlock, AritsuItems.WHITE_SLEEPING_BAG.get());
-//                } else return InteractionResult.CONSUME;
         return super.onItemUseFirst(stack, context);
     }
 }

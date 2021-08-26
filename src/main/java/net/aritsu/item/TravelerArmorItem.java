@@ -46,6 +46,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
         if (stack.getItem() instanceof TravelerArmorItem armorItem) {
+            //TODO these could be events instead of potion effects
             switch (armorItem.getSlot()) {
                 case CHEST:
                     if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
