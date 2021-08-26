@@ -62,8 +62,10 @@ public class MarshmallowOnAStickItem extends Item {
             }
         }
     }
+
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
+        super.finishUsingItem(itemStack, level, livingEntity);
         if (livingEntity instanceof ServerPlayer) {
             ServerPlayer serverplayer = (ServerPlayer) livingEntity;
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, itemStack);
