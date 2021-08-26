@@ -5,20 +5,17 @@ import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class SugarRushEffect extends MobEffect {
+public class EnergizedEffect extends MobEffect {
     private final ResourceLocation potionIcon;
-    public SugarRushEffect() {
+    public EnergizedEffect() {
         super(MobEffectCategory.BENEFICIAL, 13893703);
         potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/sturdy.png");
-        addAttributeModifier(Attributes.MOVEMENT_SPEED, "91AEAA56-123F-4498-935B-2F7F68070636", 0.2D, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        addAttributeModifier(Attributes.JUMP_STRENGTH, "AF8B6E3F-3328-4C0A-AA36-5BA2BB9DBEF3", 3D, AttributeModifier.Operation.ADDITION);
-    } 
+    }
     public String getName() {
-        return "effect.sugar_rush";
+        return "effect.energized";
     }
 
     @Override

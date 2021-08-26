@@ -6,6 +6,7 @@ import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -85,6 +86,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         } else {
                             player.setDeltaMovement(motX, 0.1976D, motX);
                         }
+
                     }
                     break;
             }
