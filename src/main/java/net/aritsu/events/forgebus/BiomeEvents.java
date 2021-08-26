@@ -15,7 +15,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BiomeEvents {
     @SubscribeEvent
     public static void onBiomesLoad(final BiomeLoadingEvent event) {
-        System.out.println("BIOME LOAD");
 
         Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
         if (biome == ForgeRegistries.BIOMES.getValue(Biomes.TAIGA.location()) ||
@@ -24,7 +23,6 @@ public class BiomeEvents {
                 biome == ForgeRegistries.BIOMES.getValue(Biomes.GIANT_TREE_TAIGA_HILLS.location()) ||
                 biome == ForgeRegistries.BIOMES.getValue(Biomes.GIANT_SPRUCE_TAIGA.location()) ||
                 biome == ForgeRegistries.BIOMES.getValue(Biomes.GIANT_SPRUCE_TAIGA_HILLS.location())) {
-            System.out.println("BIOME: " + biome.getRegistryName().toString());
             event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(AritsuEntities.GRIZZLY_BEAR.get(), 100, 2, 4));
         }
     }

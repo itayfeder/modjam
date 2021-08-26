@@ -38,46 +38,47 @@ public class TentRenderer implements BlockEntityRenderer<TentBlockEntity> {
         BlockState tentState = tentBlockEntity.getBlockState();
         BlockRenderDispatcher blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
         TentBlockEntity tent = TentUtils.getTentBlockEntityForInventory(tentBlockEntity.getBlockPos(), tentBlockEntity.getLevel());
+        if (tent != null) {
+            ItemStack tentSleepingBag = tent.getSleepingBag();
 
-        ItemStack tentSleepingBag = tent.getSleepingBag();
+            if (tentSleepingBag.getItem() instanceof SleepingBagItem item) {
+                BlockState sleepingBagState = item.getBlock().defaultBlockState().setValue(SleepingBagBlock.FACING, tentState.getValue(TentBlock.FACING)).setValue(SleepingBagBlock.PART, tentState.getValue(TentBlock.PART));
+                BakedModel bagModel = blockRenderDispatcher.getBlockModel(sleepingBagState);
+                stack.pushPose();
+                Direction facing = tentState.getValue(TentBlock.FACING);
+                BedPart part = tentState.getValue(TentBlock.PART);
+                float translateX = 0.0f;
+                float scaleX = 1.0f;
+                float translateZ = 0.0f;
+                float scaleZ = 0.0F;
+                boolean opposite = (facing == Direction.WEST || facing == Direction.NORTH);
+                if ((facing == Direction.EAST || facing == Direction.WEST)) {
+                    scaleX = 0.875f;
+                    if (part == (opposite ? BedPart.HEAD : BedPart.FOOT))
+                        translateX = 0.125f;
+                    scaleZ = 0.8f;
+                    translateZ = 0.1f;
+                }
 
-        if (tentSleepingBag.getItem() instanceof SleepingBagItem item) {
-            BlockState sleepingBagState = item.getBlock().defaultBlockState().setValue(SleepingBagBlock.FACING, tentState.getValue(TentBlock.FACING)).setValue(SleepingBagBlock.PART, tentState.getValue(TentBlock.PART));
-            BakedModel bagModel = blockRenderDispatcher.getBlockModel(sleepingBagState);
+                if ((facing == Direction.NORTH || facing == Direction.SOUTH)) {
+                    scaleZ = 0.875f;
+                    if (part == (opposite ? BedPart.HEAD : BedPart.FOOT))
+                        translateZ = 0.125f;
+                    scaleX = 0.8f;
+                    translateX = 0.1f;
+                }
+                stack.translate(translateX, 0.0f, translateZ);
+                stack.scale(scaleX, 1.0f, scaleZ);
+                blockRenderDispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)), sleepingBagState, bagModel, 0, 0, 0, light, overlay, EmptyModelData.INSTANCE);
+                stack.popPose();
+            }
+
+
+            BakedModel tentModel = blockRenderDispatcher.getBlockModel(tentState);
             stack.pushPose();
-            Direction facing = tentState.getValue(TentBlock.FACING);
-            BedPart part = tentState.getValue(TentBlock.PART);
-            float translateX = 0.0f;
-            float scaleX = 1.0f;
-            float translateZ = 0.0f;
-            float scaleZ = 0.0F;
-            boolean opposite = (facing == Direction.WEST || facing == Direction.NORTH);
-            if ((facing == Direction.EAST || facing == Direction.WEST)) {
-                scaleX = 0.875f;
-                if (part == (opposite ? BedPart.HEAD : BedPart.FOOT))
-                    translateX = 0.125f;
-                scaleZ = 0.8f;
-                translateZ = 0.1f;
-            }
-
-            if ((facing == Direction.NORTH || facing == Direction.SOUTH)) {
-                scaleZ = 0.875f;
-                if (part == (opposite ? BedPart.HEAD : BedPart.FOOT))
-                    translateZ = 0.125f;
-                scaleX = 0.8f;
-                translateX = 0.1f;
-            }
-            stack.translate(translateX, 0.0f, translateZ);
-            stack.scale(scaleX, 1.0f, scaleZ);
-            blockRenderDispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)), sleepingBagState, bagModel, 0, 0, 0, light, overlay, EmptyModelData.INSTANCE);
+            blockRenderDispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)), tentBlockEntity.getBlockState(), tentModel, 0, 0, 0, light, overlay, EmptyModelData.INSTANCE);
             stack.popPose();
         }
-
-
-        BakedModel tentModel = blockRenderDispatcher.getBlockModel(tentState);
-        stack.pushPose();
-        blockRenderDispatcher.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS)), tentBlockEntity.getBlockState(), tentModel, 0, 0, 0, light, overlay, EmptyModelData.INSTANCE);
-        stack.popPose();
 
     }
 }
