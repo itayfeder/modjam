@@ -1,6 +1,7 @@
 package net.aritsu.item;
 
 import net.aritsu.registry.AritsuItems;
+import net.aritsu.util.ConfigData;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +54,7 @@ public class MarshmallowOnAStickItem extends Item {
                 BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
                 if (level.getBlockState(result.getBlockPos()).getBlock() instanceof CampfireBlock
                         && isActuallyLookingAt(player, result.getBlockPos(), 4)
-                        && rnd.nextInt(15/*seconds*/ * 20/*one second aka 20ticks*/) == 0) {
+                        && rnd.nextInt(ConfigData.cookMarshmallows/*seconds*/ * 20/*one second aka 20ticks*/) == 0) {
                     ItemStack newStack = stage == Stage.NORMAL ? AritsuItems.ROASTED_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance() :
                             AritsuItems.BURNT_MARSHMALLOW_ON_A_STICK.get().getDefaultInstance();
                     if (hand != null)

@@ -13,6 +13,10 @@ public class ConfigData {
     public static boolean exampleClientBoolean = false;
     public static int exampleServerInteger = 0;
 
+
+    //server
+    public static int cookMarshmallows = 15;
+
     static {
         final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
         SERVER_SPEC = specPair.getRight();
@@ -31,6 +35,7 @@ public class ConfigData {
 
     public static void refreshServer() {
         exampleServerInteger = SERVER.intValue.get();
+        cookMarshmallows = SERVER.marshmallowCookTime.get();
 
     }
 
@@ -49,11 +54,13 @@ public class ConfigData {
 
     public static class ServerConfig {
         public final ForgeConfigSpec.IntValue intValue;
+        public final ForgeConfigSpec.IntValue marshmallowCookTime;
 
         ServerConfig(ForgeConfigSpec.Builder builder) {
 
             builder.push("general");
             intValue = builder.comment("a sample int value").translation("int.value.sample").defineInRange("sample_value", 0, -10, 100);
+            marshmallowCookTime = builder.comment("one chance in x to cook a marshmallow every second").translation("cook.marshmallow.timer").defineInRange("marshmallowCookTimer", 15, 1, 10000);
             builder.pop();
         }
     }
