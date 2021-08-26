@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 public class EnergizedEffect extends MobEffect {
     private final ResourceLocation potionIcon;
     public EnergizedEffect() {
-        super(MobEffectCategory.BENEFICIAL, 13893703);
+        super(MobEffectCategory.BENEFICIAL, 16776973);
         potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/energized.png");
     }
     public String getName() {

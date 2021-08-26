@@ -14,8 +14,7 @@ public class SugarRushEffect extends MobEffect {
     public SugarRushEffect() {
         super(MobEffectCategory.BENEFICIAL, 16423656);
         potionIcon = new ResourceLocation(AritsuMod.MODID,"textures/mob_effect/sugar_rush.png");
-        addAttributeModifier(Attributes.MOVEMENT_SPEED, "91AEAA56-123F-4498-935B-2F7F68070636", 0.2D, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        addAttributeModifier(Attributes.JUMP_STRENGTH, "AF8B6E3F-3328-4C0A-AA36-5BA2BB9DBEF3", 3D, AttributeModifier.Operation.ADDITION);
+        addAttributeModifier(Attributes.MOVEMENT_SPEED, "91AEAA56-123F-4498-935B-2F7F68070636", 0.4D, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
     public String getName() {
         return "effect.sugar_rush";
