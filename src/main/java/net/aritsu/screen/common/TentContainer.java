@@ -1,8 +1,6 @@
 package net.aritsu.screen.common;
 
-import net.aritsu.item.FlaskItem;
 import net.aritsu.item.SleepingBagItem;
-import net.aritsu.item.TentItem;
 import net.aritsu.registry.AritsuContainers;
 import net.aritsu.screen.slots.LanternSlot;
 import net.aritsu.screen.slots.SleepingBagSlot;
@@ -11,12 +9,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,13 +22,15 @@ import java.util.Optional;
 
 public class TentContainer extends AbstractContainerMenu {
 
-    public static final int RESULT_SLOT = 0;
-    private static final int CRAFT_SLOT_START = 1;
-    private static final int CRAFT_SLOT_END = 10;
-    private static final int INV_SLOT_START = 10;
-    private static final int INV_SLOT_END = 37;
-    private static final int USE_ROW_SLOT_START = 37;
-    private static final int USE_ROW_SLOT_END = 46;
+    private static final int TENTSIZE = 6;
+    private static final int CRAFTSIZE = 10;
+    private static final int INVENTORYSIZE = 27;
+    private static final int HOTBAR = 9;
+    private static final int TOTAL = TENTSIZE + INVENTORYSIZE + HOTBAR + CRAFTSIZE;
+    private static final int CRAFTSTART = TOTAL - CRAFTSIZE;
+    private static final int HOTBARSTART = CRAFTSTART - HOTBAR;
+    private static final int INVENTORYSTART = HOTBARSTART - INVENTORYSIZE;
+
     final ItemStackHandler tentInventory;
     private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
     private final ResultContainer resultSlots = new ResultContainer();
@@ -52,15 +50,7 @@ public class TentContainer extends AbstractContainerMenu {
         this.addSlot(new SleepingBagSlot(tentInventory, 0, 30, 81));
         this.addSlot(new LanternSlot(tentInventory, 1, 30 + 18, 81));
         for (int x = 0; x < 4; x++)
-            this.addSlot(new SlotItemHandler(tentInventory, x+2, 84 + 18*x, 81));
-
-        this.addSlot(new ResultSlot(player, this.craftSlots, this.resultSlots, 0, 124, 35));
-
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 3; ++x) {
-                this.addSlot(new Slot(this.craftSlots, x + y * 3, 30 + x * 18, 17 + y * 18));
-            }
-        }
+            this.addSlot(new SlotItemHandler(tentInventory, x + 2, 84 + 18 * x, 81));
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
@@ -70,6 +60,14 @@ public class TentContainer extends AbstractContainerMenu {
 
         for (int x = 0; x < 9; ++x) {
             this.addSlot(new Slot(playerInventory, x, 8 + x * 18, 142 + 27));
+        }
+
+        this.addSlot(new ResultSlot(player, this.craftSlots, this.resultSlots, 0, 124, 35));
+
+        for (int y = 0; y < 3; ++y) {
+            for (int x = 0; x < 3; ++x) {
+                this.addSlot(new Slot(this.craftSlots, x + y * 3, 30 + x * 18, 17 + y * 18));
+            }
         }
     }
 
@@ -117,64 +115,76 @@ public class TentContainer extends AbstractContainerMenu {
             ItemStack slotItem = clicked.getItem();
             copy = slotItem.copy();
 
-            //shift clicked inside backpack
-            if (slotnumber < tentInventory.getSlots()) {
-                //move to player inventory
-                if (!this.moveItemStackTo(slotItem, tentInventory.getSlots(), this.slots.size() - 9, false)) {
+            if (slotnumber == CRAFTSTART) {
+                this.access.execute((p_39378_, p_39379_) -> {
+                    slotItem.getItem().onCraftedBy(slotItem, p_39378_, player);
+                });
+                if (!this.moveItemStackTo(slotItem, TENTSIZE, CRAFTSTART, true)) {
                     return ItemStack.EMPTY;
-                } else if (!this.moveItemStackTo(slotItem, this.slots.size() - 9, this.slots.size(), false)) {
+                }
+
+                clicked.onQuickCraft(slotItem, copy);
+            }
+            //shift clicked inside tent
+            else if (slotnumber < TENTSIZE) {
+                //move to player inventory
+                if (!this.moveItemStackTo(slotItem, HOTBARSTART, CRAFTSTART, false)) {
+                    if (!this.moveItemStackTo(slotItem, TENTSIZE, HOTBARSTART, false)) {
+                        return ItemStack.EMPTY;
+                    }
                     return ItemStack.EMPTY;
                 }
             } else {
                 //check for specific item
-                if (slotItem.getItem() instanceof FlaskItem) {
+                if (slotItem.getItem() instanceof SleepingBagItem) {
                     //move to specific item slot
                     if (!this.moveItemStackTo(slotItem, 0, 1, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
-                } else if (slotItem.getItem().equals(Items.ENDER_CHEST)) {
+                } else if (slotItem.getItem().equals(Items.LANTERN)) {
                     if (!this.moveItemStackTo(slotItem, 1, 2, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (slotItem.getItem() instanceof SleepingBagItem) {
-                    if (!this.moveItemStackTo(slotItem, 2, 3, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (slotItem.getItem() instanceof TentItem) {
-                    if (!this.moveItemStackTo(slotItem, 3, 4, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
                 }
-
                 //move to extra slots
-                else if (!this.moveItemStackTo(slotItem, 4, tentInventory.getSlots(), false)) {
-                    return ItemStack.EMPTY;
+                else if (!this.moveItemStackTo(slotItem, 2, tentInventory.getSlots(), false)) {
+                    return switchBetweenPlayerInv(slotnumber, slotItem);
                 }
             }
             if (slotItem.isEmpty())
                 clicked.set(ItemStack.EMPTY);
             else clicked.setChanged();
+
+            if (slotItem.getCount() == copy.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            clicked.onTake(player, slotItem);
+            if (slotnumber == CRAFTSTART) {
+                player.drop(slotItem, false);
+            }
         }
         return copy;
     }
 
+    private ItemStack switchBetweenPlayerInv(int slotnumber, ItemStack slotItem) {
+        if (slotnumber < HOTBARSTART) {
+            if (!this.moveItemStackTo(slotItem, HOTBARSTART, CRAFTSTART, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (slotnumber < CRAFTSTART) {
+            if (!this.moveItemStackTo(slotItem, TENTSIZE, HOTBARSTART, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     public void slotsChanged(Container container) {
         this.access.execute((containerLambda, lambda) -> {
             slotChangedCraftingGrid(this, containerLambda, this.player, this.craftSlots, this.resultSlots);
         });
-    }
-
-    public void fillCraftSlotsStackedContents(StackedContents p_39374_) {
-        this.craftSlots.fillStackedContents(p_39374_);
-    }
-
-    public void clearCraftingContent() {
-        this.craftSlots.clearContent();
-        this.resultSlots.clearContent();
-    }
-
-    public boolean recipeMatches(Recipe<? super CraftingContainer> p_39384_) {
-        return p_39384_.matches(this.craftSlots, this.player.level);
     }
 
     public void removed(Player player) {

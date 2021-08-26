@@ -5,6 +5,7 @@ import com.mojang.math.Quaternion;
 import net.aritsu.capability.PlayerData;
 import net.aritsu.item.BackPackItem;
 import net.aritsu.registry.AritsuBlocks;
+import net.aritsu.util.BagTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -18,8 +19,11 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+
+    private ItemStackHandler fakeInventory = new ItemStackHandler(10);
 
     public BackPackLayer(PlayerRenderer renderer) {
         super(renderer);
@@ -33,8 +37,16 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
 
         } else {
             PlayerData.get(player).ifPresent(data -> {
-                if (!data.getBackPack().isEmpty())
+                if (!data.getBackPack().isEmpty()) {
                     renderPack(player, poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
+
+                    if (data.getBackPack().hasTag() && data.getBackPack().getTag().contains(BagTag.allItems)) {
+                        fakeInventory.deserializeNBT(data.getBackPack().getTag().getCompound(BagTag.allItems));
+                        if (!fakeInventory.getStackInSlot(2).isEmpty()) {
+                            //TODO render sleepingbag
+                        }
+                    }
+                }
             });
         }
     }

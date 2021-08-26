@@ -77,9 +77,10 @@ public class BackPackContainer extends AbstractContainerMenu {
             //shift clicked inside backpack
             if (slotnumber < backpackInventory.getSlots()) {
                 //move to player inventory
-                if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size()-9, false)) {
-                    return ItemStack.EMPTY;
-                }else if(!this.moveItemStackTo(slotItem, this.slots.size()-9, this.slots.size(), false)){
+                if (!this.moveItemStackTo(slotItem, this.slots.size() - 9, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size() - 9, false)) {
+                        return ItemStack.EMPTY;
+                    }
                     return ItemStack.EMPTY;
                 }
             } else {
@@ -87,25 +88,25 @@ public class BackPackContainer extends AbstractContainerMenu {
                 if (slotItem.getItem() instanceof FlaskItem) {
                     //move to specific item slot
                     if (!this.moveItemStackTo(slotItem, 0, 1, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
                 } else if (slotItem.getItem().equals(Items.ENDER_CHEST)) {
                     if (!this.moveItemStackTo(slotItem, 1, 2, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
                 } else if (slotItem.getItem() instanceof SleepingBagItem) {
                     if (!this.moveItemStackTo(slotItem, 2, 3, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
                 } else if (slotItem.getItem() instanceof TentItem) {
                     if (!this.moveItemStackTo(slotItem, 3, 4, false)) {
-                        return ItemStack.EMPTY;
+                        return switchBetweenPlayerInv(slotnumber, slotItem);
                     }
                 }
 
                 //move to extra slots
                 else if (!this.moveItemStackTo(slotItem, 4, backpackInventory.getSlots(), false)) {
-                    return ItemStack.EMPTY;
+                    return switchBetweenPlayerInv(slotnumber, slotItem);
                 }
             }
             if (slotItem.isEmpty())
@@ -113,5 +114,18 @@ public class BackPackContainer extends AbstractContainerMenu {
             else clicked.setChanged();
         }
         return copy;
+    }
+
+    private ItemStack switchBetweenPlayerInv(int slotnumber, ItemStack slotItem) {
+        if (slotnumber < this.slots.size() - 9) {
+            if (!this.moveItemStackTo(slotItem, this.slots.size() - 9, this.slots.size(), false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (slotnumber < this.slots.size()) {
+            if (!this.moveItemStackTo(slotItem, backpackInventory.getSlots(), this.slots.size() - 9, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        return ItemStack.EMPTY;
     }
 }

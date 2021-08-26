@@ -189,43 +189,44 @@ public class TentBlock extends BedBlock {
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.FAIL;
-            }
-
-
-            if (state.getValue(PART) != BedPart.HEAD) {
-                pos = pos.relative(state.getValue(FACING));
-                state = level.getBlockState(pos);
-                if (!state.is(this)) {
-                    return InteractionResult.CONSUME;
-                }
-            }
-
-            if (!canSetSpawn(level)) {
-                level.removeBlock(pos, false);
-                BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
-                if (level.getBlockState(blockpos).is(this)) {
-                    level.removeBlock(blockpos, false);
-                }
-
-                level.explode(null, DamageSource.badRespawnPointExplosion(), null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
-                return InteractionResult.SUCCESS;
-            } else if (state.getValue(OCCUPIED)) {
-                if (!this.kickVillagerOutOfBed(level, pos)) {
-                    player.displayClientMessage(new TranslatableComponent("block.minecraft.bed.occupied"), true);
-                }
-
-                return InteractionResult.SUCCESS;
             } else {
-                startSleepInBed(pos, player).ifLeft((sleepingPlayer) -> {
-                    if (sleepingPlayer != null) {
-                        player.displayClientMessage(sleepingPlayer.getMessage(), true);
+                if (state.getValue(PART) != BedPart.HEAD) {
+                    pos = pos.relative(state.getValue(FACING));
+                    state = level.getBlockState(pos);
+                    if (!state.is(this)) {
+                        return InteractionResult.CONSUME;
+                    }
+                }
+
+                if (!canSetSpawn(level)) {
+                    level.removeBlock(pos, false);
+                    BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+                    if (level.getBlockState(blockpos).is(this)) {
+                        level.removeBlock(blockpos, false);
                     }
 
-                });
-                return InteractionResult.SUCCESS;
-            }
+                    level.explode(null, DamageSource.badRespawnPointExplosion(), null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
+                    return InteractionResult.SUCCESS;
+                } else if (state.getValue(OCCUPIED)) {
+                    if (!this.kickVillagerOutOfBed(level, pos)) {
+                        player.displayClientMessage(new TranslatableComponent("block.minecraft.bed.occupied"), true);
+                    }
 
+                    return InteractionResult.SUCCESS;
+                } else {
+                    startSleepInBed(pos, player).ifLeft((sleepingPlayer) -> {
+                        if (sleepingPlayer != null) {
+                            player.displayClientMessage(sleepingPlayer.getMessage(), true);
+                        }
+
+                    });
+                    return InteractionResult.SUCCESS;
+                }
+
+            }
         }
+
+
         return InteractionResult.CONSUME;
     }
 
