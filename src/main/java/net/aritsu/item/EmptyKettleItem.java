@@ -2,10 +2,13 @@ package net.aritsu.item;
 
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -26,6 +29,4 @@ public class EmptyKettleItem extends Item {
             return super.useOn(p_40581_);
         }
     }
-
-
 }

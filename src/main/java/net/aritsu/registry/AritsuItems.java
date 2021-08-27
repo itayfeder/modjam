@@ -157,9 +157,9 @@ public class AritsuItems {
     public static final RegistryObject<Item> EMPTY_KETTLE = ITEMS.register("empty_kettle",
             () -> new EmptyKettleItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
     public static final RegistryObject<Item> WATER_KETTLE = ITEMS.register("water_kettle",
-            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
+            () -> new Item((new Item.Properties()).craftRemainder(EMPTY_KETTLE.get()).tab(ModTab.INSTANCE).stacksTo(1)));
     public static final RegistryObject<Item> BOILING_KETTLE = ITEMS.register("boiling_kettle",
-            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
+            () -> new BoilingKettleItem((new Item.Properties()).durability(4).tab(ModTab.INSTANCE)));
 
     public static final RegistryObject<Item> BEAR_TRAP = ITEMS.register("bear_trap",
             () -> new BlockItem(AritsuBlocks.BEAR_TRAP.get(), (new Item.Properties()).tab(ModTab.INSTANCE)));

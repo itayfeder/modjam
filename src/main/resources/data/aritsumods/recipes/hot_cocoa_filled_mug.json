@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "aritsumods:glass_mug"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "aritsumods:boiling_kettle"
+    }
+  ],
+  "result": {
+    "item": "aritsumods:hot_cocoa_filled_mug"
+  }
+}

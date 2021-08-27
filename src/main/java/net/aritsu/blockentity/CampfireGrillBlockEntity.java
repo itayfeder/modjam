@@ -218,7 +218,7 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
     }
 
     public boolean placeKettle(ItemStack p_59054_) {
-        if (this.items.get(4).isEmpty()) {
+        if (this.items.get(4).isEmpty() && p_59054_.is(AritsuItems.WATER_KETTLE.get())) {
             this.cookingProgress[4] = 0;
             this.items.set(4, p_59054_.split(1));
             this.markUpdated();
