@@ -5,6 +5,7 @@ import net.aritsu.client.renderer.GrizzlyBearRenderer;
 import net.aritsu.client.renderer.ReinforcedFishingHookRenderer;
 import net.aritsu.client.renderer.tile.CampfireGrillRenderer;
 import net.aritsu.client.renderer.tile.TentRenderer;
+import net.aritsu.item.BlueberryJamItem;
 import net.aritsu.item.FlaskItem;
 import net.aritsu.item.ReinforcedFishingRodItem;
 import net.aritsu.mod.AritsuMod;
@@ -57,6 +58,10 @@ public class ClientSetupEvent {
 
         ItemProperties.register(AritsuItems.FLASK.get(), new ResourceLocation("filled"), (p_174625_, p_174626_, p_174627_, p_174628_) -> {
             return FlaskItem.getFullnessDisplay(p_174625_);
+        });
+
+        ItemProperties.register(AritsuItems.BLUEBERRY_JAM.get(), new ResourceLocation("named"), (p_174625_, p_174626_, p_174627_, p_174628_) -> {
+            return BlueberryJamItem.getDisplay(p_174625_);
         });
 
         ItemBlockRenderTypes.setRenderLayer(AritsuBlocks.CAMPFIRE_GRILL.get(), RenderType.cutout());

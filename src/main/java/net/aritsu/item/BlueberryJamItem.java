@@ -15,12 +15,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
+import java.util.stream.StreamSupport;
+
 public class BlueberryJamItem extends Item {
     private static final int DRINK_DURATION = 40;
 
     public BlueberryJamItem(Item.Properties p_41346_) {
         super(p_41346_);
     }
+
+    public static float getDisplay(ItemStack itemStack) {
+        return itemStack.getDisplayName().getString().equals("[Secret Stuff]") ? 1 : 0;
+    }
+
 
     public ItemStack finishUsingItem(ItemStack p_41348_, Level p_41349_, LivingEntity p_41350_) {
         super.finishUsingItem(p_41348_, p_41349_, p_41350_);

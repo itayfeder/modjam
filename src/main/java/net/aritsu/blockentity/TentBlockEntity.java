@@ -2,12 +2,14 @@ package net.aritsu.blockentity;
 
 import net.aritsu.registry.AritsuBlockEntities;
 import net.aritsu.screen.common.TentInventory;
+import net.aritsu.util.TentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -25,6 +27,13 @@ public class TentBlockEntity extends BlockEntity {
 
     public TentBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(AritsuBlockEntities.TENT_BE.get(), blockPos, blockState);
+    }
+
+    public static void trapTick(Level level, BlockPos pos, BlockState state, TentBlockEntity be) {
+        if (!be.getLantern().isEmpty()) {
+            level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 2, 512);
+            level.getLightEngine().checkBlock(pos);
+        }
     }
 
     public TentInventory getInventory() {

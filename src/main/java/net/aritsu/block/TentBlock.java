@@ -1,8 +1,10 @@
 package net.aritsu.block;
 
 import com.mojang.datafixers.util.Either;
+import net.aritsu.blockentity.BearTrapBlockEntity;
 import net.aritsu.blockentity.TentBlockEntity;
 import net.aritsu.item.SleepingBagItem;
+import net.aritsu.registry.AritsuBlockEntities;
 import net.aritsu.screen.common.TentContainer;
 import net.aritsu.util.TentUtils;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -35,6 +37,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -55,6 +59,7 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class TentBlock extends BedBlock {
     public static final EnumProperty<BedPart> PART = BlockStateProperties.BED_PART;
@@ -81,20 +86,30 @@ public class TentBlock extends BedBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, BedPart.FOOT).setValue(OCCUPIED, false));
     }
 
-    public static ServerLevel getLevel(Player player) {
-        return (ServerLevel) player.level;
-    }
-
     @Override
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
-        TentBlockEntity tentBlockEntity = TentUtils.getTentBlockEntityForInventory(pos, world);
-        if (tentBlockEntity == null)
+        if (world.getBlockEntity(pos) instanceof TentBlockEntity blockEntity) {
+            if (!blockEntity.getLantern().isEmpty()) {
+                return 12;
+            }
             return 0;
-        if (!tentBlockEntity.getLantern().isEmpty()) {
-            tentBlockEntity.markUpdated();
-            return 12;
         }
         return 0;
+    }
+
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152755_, BlockState p_152756_, BlockEntityType<T> p_152757_) {
+        return createTickerHelper(p_152757_, AritsuBlockEntities.TENT_BE.get(), TentBlockEntity::trapTick);
+
+    }
+
+    @Nullable
+    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
+        return p_152134_ == p_152133_ ? (BlockEntityTicker<A>)p_152135_ : null;
+    }
+
+    public static ServerLevel getLevel(Player player) {
+        return (ServerLevel) player.level;
     }
 
     private static boolean bedInRange(BlockPos pos, Direction direction, Player player) {
@@ -180,6 +195,7 @@ public class TentBlock extends BedBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+        System.out.println(player.getName().getString());
         if (!level.isClientSide()) {
             TentBlockEntity tentBlockEntity = TentUtils.getTentBlockEntityForInventory(pos, level);
             if (tentBlockEntity == null)
