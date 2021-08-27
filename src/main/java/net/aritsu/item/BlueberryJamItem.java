@@ -19,29 +19,34 @@ import java.util.stream.StreamSupport;
 
 public class BlueberryJamItem extends Item {
     private static final int DRINK_DURATION = 40;
-
+    boolean isSecret;
     public BlueberryJamItem(Item.Properties p_41346_) {
         super(p_41346_);
     }
-
     public static float getDisplay(ItemStack itemStack) {
+
         return itemStack.getDisplayName().getString().equals("[Secret Stuff]") ? 1 : 0;
     }
 
 
-    public ItemStack finishUsingItem(ItemStack p_41348_, Level p_41349_, LivingEntity p_41350_) {
-        super.finishUsingItem(p_41348_, p_41349_, p_41350_);
+    public ItemStack finishUsingItem(ItemStack itemStack, Level p_41349_, LivingEntity p_41350_) {
+        super.finishUsingItem(itemStack, p_41349_, p_41350_);
         if (p_41350_ instanceof ServerPlayer) {
             ServerPlayer serverplayer = (ServerPlayer)p_41350_;
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, p_41348_);
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, itemStack);
             serverplayer.awardStat(Stats.ITEM_USED.get(this));
         }
 
         if (!p_41349_.isClientSide) {
+            if (!itemStack.getDisplayName().getString().equals("[Secret Stuff]"))
             p_41350_.addEffect(new MobEffectInstance(AritsuEffects.SUGAR_RUSH.get(), 2400, 0));
+            else {
+                p_41350_.addEffect(new MobEffectInstance(AritsuEffects.SUGAR_RUSH.get(), 400, 1));
+                p_41350_.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 400, 1));
+            }
         }
 
-        if (p_41348_.isEmpty()) {
+        if (itemStack.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
         } else {
             if (p_41350_ instanceof Player && !((Player)p_41350_).getAbilities().instabuild) {
@@ -52,7 +57,7 @@ public class BlueberryJamItem extends Item {
                 }
             }
 
-            return p_41348_;
+            return itemStack;
         }
     }
 
