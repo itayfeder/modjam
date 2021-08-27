@@ -75,16 +75,6 @@ public class TentBlock extends BedBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, BedPart.FOOT).setValue(OCCUPIED, false).setValue(LANTERN, false));
     }
 
-    @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
-        if (world.getBlockEntity(pos) instanceof TentBlockEntity blockEntity) {
-            if (!blockEntity.getLantern().isEmpty()) {
-                return 12;
-            }
-        }
-        return 0;
-    }
-
     public static ServerLevel getLevel(Player player) {
         return (ServerLevel) player.level;
     }
