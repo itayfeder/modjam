@@ -136,7 +136,7 @@ public class AritsuItems {
             () -> new Item((new Item.Properties().tab(ModTab.INSTANCE)
                     .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.3F).build()))));
     public static final RegistryObject<Item> BLUEBERRY_JAM = ITEMS.register("blueberry_jam",
-            () -> new BlueberryJamItem((new Item.Properties().tab(ModTab.INSTANCE).craftRemainder(Items.GLASS_BOTTLE)
+            () -> new BlueberryJamItem((new Item.Properties().tab(ModTab.INSTANCE).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)
                     .food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.3F).build()))));
 
     public static final RegistryObject<Item> SMORE = ITEMS.register("smore",
