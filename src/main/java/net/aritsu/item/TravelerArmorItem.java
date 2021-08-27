@@ -23,13 +23,13 @@ import java.util.Random;
 
 public class TravelerArmorItem extends ArmorItem implements IItemRenderProperties {
 
-    private static final Item.Properties armorProps = new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200).tab(ModTab.INSTANCE);
+    public static final Item.Properties armorProps = new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).durability(200).defaultDurability(200).tab(ModTab.INSTANCE);
     Random rnd = new Random();
     int soundChance = 0;
     double pitch = 0;
 
-    public TravelerArmorItem(EquipmentSlot slot) {
-        super(new TravelerArmorItem.TravelerMaterial(), slot, armorProps);
+    public TravelerArmorItem(EquipmentSlot slot, Item.Properties props) {
+        super(new TravelerArmorItem.TravelerMaterial(), slot, props);
     }
 
     @Override

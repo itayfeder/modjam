@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/get_backpack",
+  "display": {
+    "icon": {
+      "item": "aritsumods:backpack"
+    },
+    "title": {
+      "translate": "advancements.camping.fully_packed.title"
+    },
+    "description": {
+      "translate": "advancements.camping.fully_packed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fully_packed": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "fully_packed"
+    ]
+  ]
+}

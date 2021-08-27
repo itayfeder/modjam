@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/get_blueberry",
+  "display": {
+    "icon": {
+      "item": "aritsumods:blueberry_pie"
+    },
+    "title": {
+      "translate": "advancements.camping.get_blueberry_pie.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_blueberry_pie.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "blueberry_pie": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:blueberry_pie" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "blueberry_pie"
+    ]
+  ]
+}

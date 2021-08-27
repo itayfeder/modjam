@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/get_grill",
+  "display": {
+    "icon": {
+      "item": "aritsumods:boiling_kettle"
+    },
+    "title": {
+      "translate": "advancements.camping.boil_kettle.title"
+    },
+    "description": {
+      "translate": "advancements.camping.boil_kettle.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "boil_kettle": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "boil_kettle"
+    ]
+  ]
+}

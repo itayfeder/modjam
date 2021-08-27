@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/root",
+  "display": {
+    "icon": {
+      "item": "aritsumods:backpack"
+    },
+    "title": {
+      "translate": "advancements.camping.get_backpack.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_backpack.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "backpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:backpack" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "backpack"
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/get_tent",
+  "display": {
+    "icon": {
+      "item": "aritsumods:blueberry"
+    },
+    "title": {
+      "translate": "advancements.camping.get_blueberry.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_blueberry.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "blueberry": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:blueberry" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "blueberry"
+    ]
+  ]
+}

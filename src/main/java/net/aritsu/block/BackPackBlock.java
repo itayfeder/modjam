@@ -2,16 +2,19 @@ package net.aritsu.block;
 
 import net.aritsu.blockentity.BackPackBlockEntity;
 import net.aritsu.capability.PlayerData;
+import net.aritsu.mod.AritsuMod;
 import net.aritsu.network.NetworkHandler;
 import net.aritsu.network.client.ClientPacketSetBackPack;
 import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.aritsu.registry.AritsuItems;
 import net.aritsu.screen.common.BackPackContainer;
+import net.aritsu.screen.common.BackPackInventory;
 import net.aritsu.util.BagTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -59,6 +62,7 @@ public class BackPackBlock extends BaseEntityBlock {
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
             if (player.isCrouching()) {
                 PlayerData.get(player).ifPresent(data -> {
+                    if (IsBackpackFilled(backpack.getBackPackInventory())) serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/fully_packed")), "fully_packed");
                     ItemStack pack = createBackPackStack(backpack);
                     data.addBackpack(pack);
                     level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
@@ -139,5 +143,12 @@ public class BackPackBlock extends BaseEntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext placeContext) {
         return this.defaultBlockState().setValue(FACING, placeContext.getHorizontalDirection().getOpposite());
+    }
+
+    public static boolean IsBackpackFilled(BackPackInventory inv) {
+        for (ItemStack stack : inv.getAllItems()) {
+            if (stack.isEmpty()) return false;
+        }
+        return true;
     }
 }

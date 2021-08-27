@@ -85,6 +85,18 @@ public class TentBlock extends BedBlock {
         return (ServerLevel) player.level;
     }
 
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+        TentBlockEntity tentBlockEntity = TentUtils.getTentBlockEntityForInventory(pos, world);
+        if (tentBlockEntity == null)
+            return 0;
+        if (!tentBlockEntity.getLantern().isEmpty()) {
+            tentBlockEntity.markUpdated();
+            return 12;
+        }
+        return 0;
+    }
+
     private static boolean bedInRange(BlockPos pos, Direction direction, Player player) {
         if (direction == null) return false;
         return isReachableBedBlock(pos, player) || isReachableBedBlock(pos.relative(direction.getOpposite()), player);

@@ -1,8 +1,8 @@
 package net.aritsu.registry;
 
 
-import net.aritsu.effcts.EnergizedEffect;
-import net.aritsu.effcts.SugarRushEffect;
+import net.aritsu.effects.EnergizedEffect;
+import net.aritsu.effects.SugarRushEffect;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.fmllegacy.RegistryObject;

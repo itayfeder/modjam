@@ -1,9 +1,15 @@
 package net.aritsu.block;
 
 import net.aritsu.blockentity.CampfireGrillBlockEntity;
+import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.AritsuBlockEntities;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.data.advancements.AdventureAdvancements;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -54,6 +60,8 @@ public class CampfireGrillBlock extends BaseEntityBlock {
             }
             if (!p_51275_.isClientSide && campfireblockentity.placeKettle(p_51277_.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
                 p_51277_.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
+                ServerPlayer serverPlayer = (ServerPlayer)p_51277_;
+                serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/boil_kettle")), "boil_kettle");
                 return InteractionResult.SUCCESS;
             }
         }

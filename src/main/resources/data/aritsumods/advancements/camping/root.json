@@ -1,0 +1,69 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:campfire"
+    },
+    "title": {
+      "translate": "advancements.camping.root.title"
+    },
+    "description": {
+      "translate": "advancements.camping.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/spruce_log.png"
+  },
+  "criteria": {
+    "boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "aritsumods:hiker_boots"
+          }
+        ]
+      }
+    },
+	"legs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "aritsumods:hiker_legs"
+          }
+        ]
+      }
+    },
+	"chest": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "aritsumods:hiker_chest"
+          }
+        ]
+      }
+    },
+	"helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "aritsumods:hiker_helmet"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boots",
+	  "legs",
+	  "chest",
+	  "helmet"
+	  
+    ]
+  ]
+}

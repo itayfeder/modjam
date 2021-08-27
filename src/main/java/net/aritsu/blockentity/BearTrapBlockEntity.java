@@ -1,9 +1,12 @@
 package net.aritsu.blockentity;
 
 import net.aritsu.block.BearTrapBlock;
+import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.AritsuBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,6 +35,12 @@ public class BearTrapBlockEntity extends BlockEntity {
                 if (!level.isClientSide) {
                     entity.hurt(DamageSource.GENERIC, 8.0F);
                     level.setBlock(pos, state.setValue(BearTrapBlock.TRIGGERED, true), 3);
+
+                    if (entity instanceof ServerPlayer) {
+                        ServerPlayer player = (ServerPlayer) entity;
+                        player.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_trapped")), "bear_trapped");
+
+                    }
                 } else {
                     Random rnd = new Random();
                     level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F, false);

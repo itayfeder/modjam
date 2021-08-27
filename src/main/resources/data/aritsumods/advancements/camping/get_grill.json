@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/get_tent",
+  "display": {
+    "icon": {
+      "item": "aritsumods:campfire_grill"
+    },
+    "title": {
+      "translate": "advancements.camping.get_grill.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_grill.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "campfire_grill": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:campfire_grill" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "campfire_grill"
+    ]
+  ]
+}

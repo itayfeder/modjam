@@ -35,6 +35,10 @@ public class TentBlockEntity extends BlockEntity {
         return getInventory().getStackInSlot(SLEEPINGBAG);
     }
 
+    public ItemStack getLantern() {
+        return getInventory().getStackInSlot(LANTERN);
+    }
+
     public void setSleepingBag(ItemStack stack) {
         getInventory().setStackInSlot(SLEEPINGBAG, stack);
 

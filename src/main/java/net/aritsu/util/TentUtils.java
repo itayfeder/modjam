@@ -3,6 +3,7 @@ package net.aritsu.util;
 import net.aritsu.block.TentBlock;
 import net.aritsu.blockentity.TentBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -13,12 +14,12 @@ import java.util.Objects;
 public class TentUtils {
 
     @Nonnull
-    public static BlockState getTentNeighbourState(BlockPos pos, Level level) {
+    public static BlockState getTentNeighbourState(BlockPos pos, BlockGetter level) {
         return level.getBlockState(Objects.requireNonNull(getTentNeighbourPos(pos, level)));
     }
 
     @Nonnull
-    public static BlockPos getTentNeighbourPos(BlockPos currentPos, Level level) {
+    public static BlockPos getTentNeighbourPos(BlockPos currentPos, BlockGetter level) {
 
         BlockState current = level.getBlockState(currentPos);
         BlockPos neighbour = BlockPos.ZERO;
@@ -48,12 +49,12 @@ public class TentUtils {
         return BlockPos.ZERO;
     }
 
-    public static boolean tentHasSleepingBag(BlockPos current, Level level) {
+    public static boolean tentHasSleepingBag(BlockPos current, BlockGetter level) {
         TentBlockEntity tent = getTentBlockEntityForInventory(current, level);
         return tent != null && !tent.getInventory().getStackInSlot(0).isEmpty();
     }
 
-    public static TentBlockEntity getTentBlockEntityForInventory(BlockPos current, Level level) {
+    public static TentBlockEntity getTentBlockEntityForInventory(BlockPos current, BlockGetter level) {
         if (level.getBlockState(current).hasProperty(TentBlock.PART) && level.getBlockState(current).getValue(TentBlock.PART) == BedPart.FOOT) {
             if (level.getBlockEntity(current) instanceof TentBlockEntity tent)
                 return tent;

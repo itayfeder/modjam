@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/get_tent",
+  "display": {
+    "icon": {
+      "item": "aritsumods:bear_trap"
+    },
+    "title": {
+      "translate": "advancements.camping.bear_trapped.title"
+    },
+    "description": {
+      "translate": "advancements.camping.bear_trapped.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "bear_trapped": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "bear_trapped"
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/get_backpack",
+  "display": {
+    "icon": {
+      "item": "aritsumods:flask"
+    },
+    "title": {
+      "translate": "advancements.camping.get_flask.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_flask.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "flask": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:flask" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "flask"
+    ]
+  ]
+}

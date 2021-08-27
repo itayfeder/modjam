@@ -1,0 +1,200 @@
+{
+  "parent": "aritsumods:camping/get_backpack",
+  "display": {
+    "icon": {
+      "item": "aritsumods:magenta_sleeping_bag"
+    },
+    "title": {
+      "translate": "advancements.camping.get_sleeping_bag.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_sleeping_bag.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "white": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:white_sleeping_bag"  ]
+          }
+        ]
+      }
+    },
+	"orange": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:orange_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"magenta": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:magenta_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"light_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:light_blue_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"yellow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:yellow_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"lime": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:lime_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"pink": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:pink_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"gray": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:gray_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"light_gray": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:light_gray_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"cyan": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:cyan_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"purple": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:purple_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:blue_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"brown": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:brown_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:green_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:red_sleeping_bag" ]
+          }
+        ]
+      }
+    },
+	"black": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:black_sleeping_bag" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "white",
+	  "orange",
+	  "magenta",
+	  "light_blue",
+	  "yellow",
+	  "lime",
+	  "pink",
+	  "gray",
+	  "light_gray",
+	  "cyan",
+	  "purple",
+	  "blue",
+	  "brown",
+	  "green",
+	  "red",
+	  "black"
+    ]
+  ]
+}

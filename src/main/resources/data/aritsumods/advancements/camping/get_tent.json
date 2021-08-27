@@ -1,0 +1,200 @@
+{
+  "parent": "aritsumods:camping/get_backpack",
+  "display": {
+    "icon": {
+      "item": "aritsumods:white_tent"
+    },
+    "title": {
+      "translate": "advancements.camping.get_tent.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_tent.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "white": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:white_tent" ]
+          }
+        ]
+      }
+    },
+	"orange": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:orange_tent" ]
+          }
+        ]
+      }
+    },
+	"magenta": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:magenta_tent" ]
+          }
+        ]
+      }
+    },
+	"light_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:light_blue_tent" ]
+          }
+        ]
+      }
+    },
+	"yellow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:yellow_tent" ]
+          }
+        ]
+      }
+    },
+	"lime": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:lime_tent" ]
+          }
+        ]
+      }
+    },
+	"pink": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:pink_tent" ]
+          }
+        ]
+      }
+    },
+	"gray": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:gray_tent" ]
+          }
+        ]
+      }
+    },
+	"light_gray": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:light_gray_tent" ]
+          }
+        ]
+      }
+    },
+	"cyan": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:cyan_tent" ]
+          }
+        ]
+      }
+    },
+	"purple": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:purple_tent" ]
+          }
+        ]
+      }
+    },
+	"blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:blue_tent" ]
+          }
+        ]
+      }
+    },
+	"brown": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:brown_tent" ]
+          }
+        ]
+      }
+    },
+	"green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:green_tent" ]
+          }
+        ]
+      }
+    },
+	"red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:red_tent" ]
+          }
+        ]
+      }
+    },
+	"black": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:black_tent" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "white",
+	  "orange",
+	  "magenta",
+	  "light_blue",
+	  "yellow",
+	  "lime",
+	  "pink",
+	  "gray",
+	  "light_gray",
+	  "cyan",
+	  "purple",
+	  "blue",
+	  "brown",
+	  "green",
+	  "red",
+	  "black"
+    ]
+  ]
+}

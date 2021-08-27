@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/boil_kettle",
+  "display": {
+    "icon": {
+      "item": "aritsumods:coffee_filled_mug"
+    },
+    "title": {
+      "translate": "advancements.camping.get_coffee_mug.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_coffee_mug.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "coffee_filled_mug": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:coffee_filled_mug" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "coffee_filled_mug"
+    ]
+  ]
+}

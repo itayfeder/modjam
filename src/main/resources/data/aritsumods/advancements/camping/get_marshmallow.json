@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/get_tent",
+  "display": {
+    "icon": {
+      "item": "aritsumods:marshmallow"
+    },
+    "title": {
+      "translate": "advancements.camping.get_marshmallow.title"
+    },
+    "description": {
+      "translate": "advancements.camping.get_marshmallow.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "marshmallow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:marshmallow" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "marshmallow"
+    ]
+  ]
+}

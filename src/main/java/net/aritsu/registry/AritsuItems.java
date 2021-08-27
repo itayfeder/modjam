@@ -68,7 +68,7 @@ public class AritsuItems {
             () -> new TentItem(AritsuBlocks.ORANGE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> MAGENTA_TENT = ITEMS.register("magenta_tent",
             () -> new TentItem(AritsuBlocks.MAGENTA_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
-    public static final RegistryObject<Item> LIGHT_BLUE_tent = ITEMS.register("light_blue_tent",
+    public static final RegistryObject<Item> LIGHT_BLUE_TENT = ITEMS.register("light_blue_tent",
             () -> new TentItem(AritsuBlocks.LIGHT_BLUE_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
     public static final RegistryObject<Item> YELLOW_TENT = ITEMS.register("yellow_tent",
             () -> new TentItem(AritsuBlocks.YELLOW_TENT.get(), (new Item.Properties()).stacksTo(1).tab(ModTab.INSTANCE)));
@@ -100,9 +100,9 @@ public class AritsuItems {
     public static final RegistryObject<Item> HIKER_ARMOR_CHEST = ITEMS.register("hiker_chest", () -> new HikerArmorItem(EquipmentSlot.CHEST));
     public static final RegistryObject<Item> HIKER_ARMOR_HELMET = ITEMS.register("hiker_helmet", () -> new HikerArmorItem(EquipmentSlot.HEAD));
 
-    public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new TravelerArmorItem(EquipmentSlot.FEET));
-    public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new TravelerArmorItem(EquipmentSlot.LEGS));
-    public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new TravelerArmorItem(EquipmentSlot.CHEST));
+    public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new TravelerArmorItem(EquipmentSlot.FEET, TravelerArmorItem.armorProps));
+    public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new TravelerArmorItem(EquipmentSlot.LEGS, TravelerArmorItem.armorProps));
+    public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new TravelerArmorItem(EquipmentSlot.CHEST, TravelerArmorItem.armorProps));
 
 
     public static final RegistryObject<Item> BAIT = ITEMS.register("bait",
@@ -134,11 +134,14 @@ public class AritsuItems {
                     .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6F).build()))));
     public static final RegistryObject<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
             () -> new Item((new Item.Properties().tab(ModTab.INSTANCE)
-                    .food(new FoodProperties.Builder().nutrition(10).saturationMod(20F).build()))));
+                    .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.3F).build()))));
+    public static final RegistryObject<Item> BLUEBERRY_JAM = ITEMS.register("blueberry_jam",
+            () -> new BlueberryJamItem((new Item.Properties().tab(ModTab.INSTANCE).craftRemainder(Items.GLASS_BOTTLE)
+                    .food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.3F).build()))));
 
     public static final RegistryObject<Item> SMORE = ITEMS.register("smore",
             () -> new SmoreItem((new Item.Properties().tab(ModTab.INSTANCE)
-                    .food(new FoodProperties.Builder().nutrition(4).saturationMod(5F).build()))));
+                    .food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8F).build()))));
 
     public static final RegistryObject<BlockItem> COFFEE_BERRY = ITEMS.register("coffee_berry",
             () -> new ItemNameBlockItem(AritsuBlocks.COFFEE_BUSH.get(), (new Item.Properties().tab(ModTab.INSTANCE))));

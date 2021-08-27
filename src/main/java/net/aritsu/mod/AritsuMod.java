@@ -27,6 +27,8 @@ public class AritsuMod {
         AritsuBlockEntities.TILEENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuContainers.CONTAINER.register(FMLJavaModLoadingContext.get().getModEventBus());
         AritsuEffects.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuVillagers.POI_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        AritsuVillagers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 }

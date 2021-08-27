@@ -1,0 +1,35 @@
+{
+  "parent": "aritsumods:camping/roast_marshmallow",
+  "display": {
+    "icon": {
+      "item": "aritsumods:burnt_marshmallow_on_a_stick"
+    },
+    "title": {
+      "translate": "advancements.camping.burn_marshmallow.title"
+    },
+    "description": {
+      "translate": "advancements.camping.burn_marshmallow.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "burn_marshmallow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [ "aritsumods:burnt_marshmallow_on_a_stick" ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "burn_marshmallow"
+    ]
+  ]
+}

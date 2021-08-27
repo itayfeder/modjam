@@ -29,21 +29,28 @@
   "block.aritsumods.campfire_grill": "Campfire Grill",
   "block.aritsumods.bear_trap": "Bear Trap",
   "block.aritsumods.blueberry_bush": "Blueberries",
+
   "item.aritsumods.hiker_boots": "Hiker's Boots",
   "item.aritsumods.hiker_chest": "Hiker's Flanel",
   "item.aritsumods.hiker_legs": "Hiker's Pants",
   "item.aritsumods.hiker_helmet": "Hiker's Cap",
+
+  "item.aritsumods.climber_boots": "Climber Boots",
+  "item.aritsumods.swimmer_trunks": "Swimmer Trunks",
+  "item.aritsumods.bear_chestplate": "Bear Chestplate",
+
   "item.aritsumods.bait": "Bait",
   "item.aritsumods.reinforced_fishing_rod": "Reinforced Fishing Rod",
-  "item.aritsumods.flask": "Flask",
+
   "item.aritsumods.flask": "Flask",
 
   "item.aritsumods.blueberry": "Blueberries",
   "item.aritsumods.blueberry_pie": "Blueberry Pie",
+  "item.aritsumods.blueberry_jam": "Blueberry Jam",
+
   "item.aritsumods.glass_mug": "Glass Mug",
   "item.aritsumods.coffee_filled_mug": "Coffee Mug",
   "item.aritsumods.hot_cocoa_filled_mug": "Hot Cocoa Mug",
-  "item.aritsumods.coffee_beans": "Coffee Beans",
   "item.aritsumods.empty_kettle": "Empty Kettle",
   "item.aritsumods.water_kettle": "Water Kettle",
   "item.aritsumods.boiling_kettle": "Boiling Kettle",
@@ -55,10 +62,14 @@
   "item.aritsumods.marshmallow_on_a_stick": "Marshmallow on a Stick",
   "item.aritsumods.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
   "item.aritsumods.burnt_marshmallow_on_a_stick": "Burnt Marshmallow on a Stick",
+  "item.aritsumods.smore": "S'more",
+
   "item.aritsumods.grizzly_bear_spawn_egg": "Grizzly Bear Spawn Egg",
   "entity.aritsumods.grizzly_bear": "Grizzly Bear",
+  "item.aritsumods.bear_fur": "Bear Fur",
 
   "container.aritsumods.backpack": "Camper's Backpack",
+  "container.aritsumods.tent": "Tent",
 
   "block.aritsumods.white_tent": "White Tent",
   "block.aritsumods.orange_tent": "Orange Tent",
@@ -78,5 +89,42 @@
   "block.aritsumods.black_tent": "Black Tent",
 
   "effect.aritsumods.sugar_rush": "Sugar Rush",
-  "effect.aritsumods.energized": "Energized"
+  "effect.aritsumods.energized": "Energized",
+
+  "entity.minecraft.villager.aritsumods.camber": "Camper",
+
+  "advancements.camping.root.title": "Camping Craze",
+  "advancements.camping.root.description": "Now get up and get out there!",
+  "advancements.camping.get_backpack.title": "Wait, That's Illegal!",
+  "advancements.camping.get_backpack.description": "Get a Backpack",
+  "advancements.camping.get_tent.title": "In-Tents Camping",
+  "advancements.camping.get_tent.description": "Get a Tent",
+  "advancements.camping.get_flask.title": "Potion Storage",
+  "advancements.camping.get_flask.description": "Get a Flask, useful for storing potions!",
+  "advancements.camping.get_sleeping_bag.title": "Shhhhh, It's Sleeping!",
+  "advancements.camping.get_sleeping_bag.description": "Get a Sleeping Bag",
+  "advancements.camping.get_grill.title": "It's Bloody Raw!",
+  "advancements.camping.get_grill.description": "Acquire a Campfire Grill",
+  "advancements.camping.boil_kettle.title": "Boil It Up!",
+  "advancements.camping.boil_kettle.description": "Place a Water Kettle on a Campfire Grill",
+  "advancements.camping.get_coffee_mug.title": "Starting The Day",
+  "advancements.camping.get_coffee_mug.description": "Make some Coffee Mugs",
+  "advancements.camping.get_cocoa_mug.title": "Cozy Time",
+  "advancements.camping.get_cocoa_mug.description": "Make some Hot Cocoa Mugs",
+  "advancements.camping.bear_trapped.title": "Watch Your Step!",
+  "advancements.camping.bear_trapped.description": "Accidentally step on a Bear Trap",
+  "advancements.camping.get_marshmallow.title": "Camper's Delight",
+  "advancements.camping.get_marshmallow.description": "Get some Marshmallows",
+  "advancements.camping.roast_marshmallow.title": "Roasted Just Right",
+  "advancements.camping.roast_marshmallow.description": "Roast some Marshmallow on a stick",
+  "advancements.camping.burn_marshmallow.title": "Maybe Too Roasted",
+  "advancements.camping.burn_marshmallow.description": "Burn some Marshmallow on a stick",
+  "advancements.camping.fully_packed.title": "Fully Packed",
+  "advancements.camping.fully_packed.description": "Fill up an entire Backpack",
+  "advancements.camping.get_blueberry.title": "Berry Good",
+  "advancements.camping.get_blueberry.description": "Acquire some Blueberries",
+  "advancements.camping.get_blueberry_pie.title": "Oh Boy, What Flavor?",
+  "advancements.camping.get_blueberry_pie.description": "Create some delicious Blueberry Pie",
+  "advancements.camping.get_blueberry_jam.title": "Come On And Slam",
+  "advancements.camping.get_blueberry_jam.description": "Create some Blueberry Jam"
 }
