@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/itayfeder/modjam/issues" #optional
 [[mods]] #mandatory
 modId="aritsumods" #mandatory
 version="${file.jarVersion}" #mandatory
-displayName="Example Mod" #mandatory
+displayName="Camping Craze" #mandatory
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 logoFile="examplemod.png" #optional
 credits="" #optional
