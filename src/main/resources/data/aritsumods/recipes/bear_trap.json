@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "i i",
+    "IsI"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "s": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "aritsumods:bear_trap",
+    "count": 5
+  }
+}

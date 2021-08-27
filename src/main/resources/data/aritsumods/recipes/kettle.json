@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "i i",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "aritsumods:empty_kettle",
+    "count": 1
+  }
+}
