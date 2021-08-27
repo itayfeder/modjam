@@ -242,7 +242,7 @@ public class TentBlock extends BedBlock {
 
                     return InteractionResult.SUCCESS;
                 } else {
-                    startSleepInBed(pos, player).ifLeft((sleepingPlayer) -> {
+                    player.startSleepInBed(pos).ifLeft((sleepingPlayer) -> {
                         if (sleepingPlayer != null) {
                             player.displayClientMessage(sleepingPlayer.getMessage(), true);
                         }
@@ -266,57 +266,6 @@ public class TentBlock extends BedBlock {
             list.get(0).stopSleeping();
             return true;
         }
-    }
-
-    public Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos pos, Player player) {
-        Optional<BlockPos> optAt = Optional.of(pos);
-        Player.BedSleepingProblem ret = net.minecraftforge.event.ForgeEventFactory.onPlayerSleepInBed(player, optAt);
-        if (ret != null) return Either.left(ret);
-        Direction direction = player.level.getBlockState(pos).getValue(HorizontalDirectionalBlock.FACING);
-        if (!player.isSleeping() && player.isAlive()) {
-            if (!player.level.dimensionType().natural()) {
-                return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_HERE);
-            } else if (!bedInRange(pos, direction, player)) {
-                return Either.left(Player.BedSleepingProblem.TOO_FAR_AWAY);
-            } else if (bedBlocked(pos, direction, player)) {
-                return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
-            } else {
-                if (!net.minecraftforge.event.ForgeEventFactory.fireSleepingTimeCheck(player, optAt)) {
-                    return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
-                } else {
-                    if (!player.isCreative()) {
-                        double d0 = 8.0D;
-                        double d1 = 5.0D;
-                        Vec3 vec3 = Vec3.atBottomCenterOf(pos);
-                        List<Monster> list = player.level.getEntitiesOfClass(Monster.class, new AABB(vec3.x() - 8.0D, vec3.y() - 5.0D, vec3.z() - 8.0D, vec3.x() + 8.0D, vec3.y() + 5.0D, vec3.z() + 8.0D), (p_9062_) -> {
-                            return p_9062_.isPreventingPlayerRest(player);
-                        });
-                        if (!list.isEmpty()) {
-                            return Either.left(Player.BedSleepingProblem.NOT_SAFE);
-                        }
-                    }
-
-                    Either<Player.BedSleepingProblem, Unit> either = playerStartSleepInBed(pos, player).ifRight((p_9029_) -> {
-                        player.awardStat(Stats.SLEEP_IN_BED);
-                        CriteriaTriggers.SLEPT_IN_BED.trigger((ServerPlayer) player);
-                    });
-                    if (!getLevel(player).canSleepThroughNights()) {
-                        player.displayClientMessage(new TranslatableComponent("sleep.not_possible"), true);
-                    }
-
-                    ((ServerLevel) player.level).updateSleepingPlayerList();
-                    return either;
-                }
-            }
-        } else {
-            return Either.left(Player.BedSleepingProblem.OTHER_PROBLEM);
-        }
-    }
-
-    public Either<Player.BedSleepingProblem, Unit> playerStartSleepInBed(BlockPos pos, Player player) {
-        player.startSleeping(pos);
-        ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "sleepCounter");
-        return Either.right(Unit.INSTANCE);
     }
 
     @Override
