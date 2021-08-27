@@ -121,6 +121,6 @@ public class AritsuBlocks {
     private static Block createTent(DyeColor color) {
         return new TentBlock(color, BlockBehaviour.Properties.of(Material.WOOL, (blockState) -> {
             return blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMaterialColor() : MaterialColor.WOOL;
-        }).sound(SoundType.WOOL).strength(0.5F).noOcclusion());
+        }).sound(SoundType.WOOL).strength(0.5F).lightLevel(state -> state.getValue(TentBlock.LANTERN) ? 12 : 0).noOcclusion());
     }
 }

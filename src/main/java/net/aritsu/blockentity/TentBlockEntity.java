@@ -1,5 +1,6 @@
 package net.aritsu.blockentity;
 
+import net.aritsu.block.TentBlock;
 import net.aritsu.registry.AritsuBlockEntities;
 import net.aritsu.screen.common.TentInventory;
 import net.aritsu.util.TentUtils;
@@ -9,7 +10,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -29,13 +30,6 @@ public class TentBlockEntity extends BlockEntity {
         super(AritsuBlockEntities.TENT_BE.get(), blockPos, blockState);
     }
 
-    public static void trapTick(Level level, BlockPos pos, BlockState state, TentBlockEntity be) {
-        if (!be.getLantern().isEmpty()) {
-            level.markAndNotifyBlock(pos, level.getChunkAt(pos), state, state, 2, 512);
-            level.getLightEngine().checkBlock(pos);
-        }
-    }
-
     public TentInventory getInventory() {
         return tentInventory;
     }
@@ -44,13 +38,13 @@ public class TentBlockEntity extends BlockEntity {
         return getInventory().getStackInSlot(SLEEPINGBAG);
     }
 
-    public ItemStack getLantern() {
-        return getInventory().getStackInSlot(LANTERN);
-    }
-
     public void setSleepingBag(ItemStack stack) {
         getInventory().setStackInSlot(SLEEPINGBAG, stack);
 
+    }
+
+    public ItemStack getLantern() {
+        return getInventory().getStackInSlot(LANTERN);
     }
 
     ///////////////// 4 METHODS ABSOLUTELY NEEDED FOR CLIENT/SERVER
@@ -97,5 +91,14 @@ public class TentBlockEntity extends BlockEntity {
     public void markUpdated() {
         this.setChanged();
         this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+    }
+
+    public void updateLighting() {
+        boolean flag = !getInventory().getStackInSlot(1).isEmpty();
+        BlockPos headPart = TentUtils.getTentNeighbourPos(getBlockPos(), getLevel());
+        BlockState state = getBlockState().setValue(TentBlock.LANTERN, flag);
+        BlockState neighbour = level.getBlockState(headPart).setValue(TentBlock.LANTERN, flag);
+        level.setBlock(getBlockPos(), state, Block.UPDATE_ALL);
+        level.setBlock(headPart, neighbour, Block.UPDATE_ALL);
     }
 }

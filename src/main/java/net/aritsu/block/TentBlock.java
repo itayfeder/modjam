@@ -2,7 +2,6 @@ package net.aritsu.block;
 
 import net.aritsu.blockentity.TentBlockEntity;
 import net.aritsu.item.SleepingBagItem;
-import net.aritsu.registry.AritsuBlockEntities;
 import net.aritsu.screen.common.TentContainer;
 import net.aritsu.util.TentUtils;
 import net.minecraft.core.BlockPos;
@@ -30,8 +29,6 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -57,6 +54,7 @@ public class TentBlock extends BedBlock {
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
     private static final VoxelShape common = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     private static final VoxelShape base = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 0.5D, 16.0D);
+    public static final BooleanProperty LANTERN = BooleanProperty.create("lantern_in_tent");
 
     private static final VoxelShape shapeNS2 = Block.box(2.0D, 4.0D, 0.0D, 14.0D, 8.0D, 16.0D);
     private static final VoxelShape shapeNS3 = Block.box(4.0D, 8.0D, 0.0D, 12.0D, 12.0D, 16.0D);
@@ -74,7 +72,7 @@ public class TentBlock extends BedBlock {
     public TentBlock(DyeColor color, Properties properties) {
         super(color, properties);
         this.color = color;
-        this.registerDefaultState(this.stateDefinition.any().setValue(PART, BedPart.FOOT).setValue(OCCUPIED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PART, BedPart.FOOT).setValue(OCCUPIED, false).setValue(LANTERN, false));
     }
 
     @Override
@@ -85,17 +83,6 @@ public class TentBlock extends BedBlock {
             }
         }
         return 0;
-    }
-
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152755_, BlockState p_152756_, BlockEntityType<T> p_152757_) {
-        return createTickerHelper(p_152757_, AritsuBlockEntities.TENT_BE.get(), TentBlockEntity::trapTick);
-
-    }
-
-    @Nullable
-    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
-        return p_152134_ == p_152133_ ? (BlockEntityTicker<A>)p_152135_ : null;
     }
 
     public static ServerLevel getLevel(Player player) {
@@ -128,7 +115,7 @@ public class TentBlock extends BedBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, PART, OCCUPIED);
+        builder.add(FACING, PART, OCCUPIED, LANTERN);
     }
 
     @Override

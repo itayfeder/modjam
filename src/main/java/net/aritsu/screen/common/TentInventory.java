@@ -26,6 +26,8 @@ public class TentInventory extends ItemStackHandler {
     @Override
     protected void onContentsChanged(int slot) {
         super.onContentsChanged(slot);
+        if(slot == 1) //lantern
+            be.updateLighting();
         be.markUpdated();
     }
 }
