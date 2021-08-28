@@ -3,11 +3,8 @@ package net.aritsu.block;
 import net.aritsu.blockentity.CampfireGrillBlockEntity;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.AritsuBlockEntities;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.advancements.AdventureAdvancements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -40,27 +37,28 @@ public class CampfireGrillBlock extends BaseEntityBlock {
         super(p_49795_);
     }
 
-    public VoxelShape getShape(BlockState p_56620_, BlockGetter p_56621_, BlockPos p_56622_, CollisionContext p_56623_) {
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return LAYER;
     }
 
-    public InteractionResult use(BlockState p_51274_, Level p_51275_, BlockPos p_51276_, Player p_51277_, InteractionHand p_51278_, BlockHitResult p_51279_) {
-        BlockEntity blockentity = p_51275_.getBlockEntity(p_51276_);
+    @Override
+    public InteractionResult use(BlockState blockState, Level p_51275_, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
+        BlockEntity blockentity = p_51275_.getBlockEntity(blockPos);
         if (blockentity instanceof CampfireGrillBlockEntity) {
             CampfireGrillBlockEntity campfireblockentity = (CampfireGrillBlockEntity) blockentity;
-            ItemStack itemstack = p_51277_.getItemInHand(p_51278_);
+            ItemStack itemstack = player.getItemInHand(hand);
             Optional<CampfireCookingRecipe> optional = campfireblockentity.getCookableRecipe(itemstack);
             if (optional.isPresent()) {
-                if (!p_51275_.isClientSide && campfireblockentity.placeFood(p_51277_.getAbilities().instabuild ? itemstack.copy() : itemstack, optional.get().getCookingTime())) {
-                    p_51277_.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
+                if (!p_51275_.isClientSide && campfireblockentity.placeFood(player.getAbilities().instabuild ? itemstack.copy() : itemstack, optional.get().getCookingTime())) {
+                    player.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
                     return InteractionResult.SUCCESS;
                 }
 
                 return InteractionResult.CONSUME;
             }
-            if (!p_51275_.isClientSide && campfireblockentity.placeKettle(p_51277_.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
-                p_51277_.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
-                ServerPlayer serverPlayer = (ServerPlayer)p_51277_;
+            if (!p_51275_.isClientSide && campfireblockentity.placeKettle(player.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
+                player.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
+                ServerPlayer serverPlayer = (ServerPlayer) player;
                 serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/boil_kettle")), "boil_kettle");
                 return InteractionResult.SUCCESS;
             }
@@ -69,45 +67,51 @@ public class CampfireGrillBlock extends BaseEntityBlock {
         return InteractionResult.PASS;
     }
 
-    public boolean canSurvive(BlockState p_56109_, LevelReader p_56110_, BlockPos p_56111_) {
-        BlockPos blockpos = p_56111_.below();
-        return p_56110_.getBlockState(blockpos).getBlock() instanceof CampfireBlock;
+    @Override
+    public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        BlockPos blockpos = blockPos.below();
+        return levelReader.getBlockState(blockpos).getBlock() instanceof CampfireBlock;
     }
 
-    public BlockState updateShape(BlockState p_56113_, Direction p_56114_, BlockState p_56115_, LevelAccessor p_56116_, BlockPos p_56117_, BlockPos p_56118_) {
-        if (!p_56113_.canSurvive(p_56116_, p_56117_)) {
+    @Override
+    public BlockState updateShape(BlockState fromState, Direction direction, BlockState toState, LevelAccessor levelAccessor, BlockPos fromPos, BlockPos toPos) {
+        if (!fromState.canSurvive(levelAccessor, fromPos)) {
             return Blocks.AIR.defaultBlockState();
         } else {
 
-            return super.updateShape(p_56113_, p_56114_, p_56115_, p_56116_, p_56117_, p_56118_);
+            return super.updateShape(fromState, direction, toState, levelAccessor, fromPos, toPos);
         }
     }
 
-    public void onRemove(BlockState p_51281_, Level p_51282_, BlockPos p_51283_, BlockState p_51284_, boolean p_51285_) {
-        if (!p_51281_.is(p_51284_.getBlock())) {
-            BlockEntity blockentity = p_51282_.getBlockEntity(p_51283_);
+    @Override
+    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState state, boolean flagf) {
+        if (!blockState.is(state.getBlock())) {
+            BlockEntity blockentity = level.getBlockEntity(blockPos);
             if (blockentity instanceof CampfireGrillBlockEntity) {
-                Containers.dropContents(p_51282_, p_51283_, ((CampfireGrillBlockEntity) blockentity).getItems());
+                Containers.dropContents(level, blockPos, ((CampfireGrillBlockEntity) blockentity).getItems());
             }
 
-            super.onRemove(p_51281_, p_51282_, p_51283_, p_51284_, p_51285_);
+            super.onRemove(blockState, level, blockPos, state, flagf);
         }
     }
 
-    public BlockEntity newBlockEntity(BlockPos p_152759_, BlockState p_152760_) {
-        return new CampfireGrillBlockEntity(p_152759_, p_152760_);
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new CampfireGrillBlockEntity(blockPos, blockState);
     }
 
+    @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152755_, BlockState p_152756_, BlockEntityType<T> p_152757_) {
-        if (p_152755_.isClientSide) {
-            return createTickerHelper(p_152757_, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::particleTick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide) {
+            return createTickerHelper(blockEntityType, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::particleTick);
         } else {
-            return createTickerHelper(p_152757_, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::cookTick);
+            return createTickerHelper(blockEntityType, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::cookTick);
         }
     }
 
-    public RenderShape getRenderShape(BlockState p_49545_) {
+    @Override
+    public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
 
