@@ -50,11 +50,22 @@ public class SitDummyEntity extends Entity {
         //passenger (player) gets set imediatly on spawn.
         //so when this is empty, the player has unmounted.
         if (this.getPassengers().isEmpty()) {
-            this.kill(); //remvoe this entity
             //set log block to unoccupied so we can spawn a new entity and sit back down
             if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
                 level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
             }
+            this.kill(); //remvoe this entity
+
         }
     }
+
+    @Override
+    public void onRemovedFromWorld() {
+        if (this.level.getBlockState(logPos).getBlock() instanceof LogSeatBlock) {
+            level.setBlock(logPos, level.getBlockState(logPos).setValue(LogSeatBlock.OCCUPIED, false), 3);
+        }
+        super.onRemovedFromWorld();
+    }
+
+
 }

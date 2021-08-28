@@ -70,6 +70,15 @@ public class LogSeatBlock extends Block {
                         (pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                 if (entities.size() == 1) {
                     player.startRiding(entities.get(0));
+                    return InteractionResult.SUCCESS;
+                }
+
+                if (entities.size() == 0) {
+                    SitDummyEntity seat = new SitDummyEntity(level, pos);
+                    level.addFreshEntity(seat);
+                    player.startRiding(seat);
+                    return InteractionResult.SUCCESS;
+
                 }
             }
         }
