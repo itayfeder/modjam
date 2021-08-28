@@ -132,7 +132,7 @@ public class TentBlock extends BedBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter p_49548_, BlockPos p_49549_, CollisionContext p_49550_) {
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 
         switch (state.getValue(FACING)) {
             case NORTH, SOUTH -> {
@@ -152,7 +152,7 @@ public class TentBlock extends BedBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState p_49545_) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
@@ -225,8 +225,8 @@ public class TentBlock extends BedBlock {
         return InteractionResult.CONSUME;
     }
 
-    private boolean kickVillagerOutOfBed(Level p_49491_, BlockPos p_49492_) {
-        List<Villager> list = p_49491_.getEntitiesOfClass(Villager.class, new AABB(p_49492_), LivingEntity::isSleeping);
+    private boolean kickVillagerOutOfBed(Level level, BlockPos blockPos) {
+        List<Villager> list = level.getEntitiesOfClass(Villager.class, new AABB(blockPos), LivingEntity::isSleeping);
         if (list.isEmpty()) {
             return false;
         } else {

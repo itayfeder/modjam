@@ -37,61 +37,70 @@ public class CoffeeBushBlock extends BushBlock implements BonemealableBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(AGE, Integer.valueOf(0)));
     }
 
-    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos blockPos, BlockState blockState) {
         return new ItemStack(AritsuItems.COFFEE_BERRY.get());
     }
 
-    public VoxelShape getShape(BlockState voxelShape, BlockGetter p_57292_, BlockPos p_57293_, CollisionContext p_57294_) {
+    @Override
+    public VoxelShape getShape(BlockState voxelShape, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         if (voxelShape.getValue(AGE) == 0) {
             return SAPLING_SHAPE;
         } else {
-            return voxelShape.getValue(AGE) <= 2 ? MID_GROWTH_SHAPE : super.getShape(voxelShape, p_57292_, p_57293_, p_57294_);
+            return voxelShape.getValue(AGE) <= 2 ? MID_GROWTH_SHAPE : super.getShape(voxelShape, blockGetter, blockPos, collisionContext);
         }
     }
 
-    public boolean isRandomlyTicking(BlockState p_57284_) {
-        return p_57284_.getValue(AGE) < 2;
+    @Override
+    public boolean isRandomlyTicking(BlockState blockState) {
+        return blockState.getValue(AGE) < 2;
     }
 
-    public void randomTick(BlockState p_57286_, ServerLevel p_57287_, BlockPos p_57288_, Random p_57289_) {
-        int i = p_57286_.getValue(AGE);
-        if (i < 2 && p_57287_.getRawBrightness(p_57288_.above(), 0) >= 9 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(p_57287_, p_57288_, p_57286_, p_57289_.nextInt(5) == 0)) {
-            p_57287_.setBlock(p_57288_, p_57286_.setValue(AGE, Integer.valueOf(i + 1)), 2);
-            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(p_57287_, p_57288_, p_57286_);
+    @Override
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        int i = blockState.getValue(AGE);
+        if (i < 2 && serverLevel.getRawBrightness(blockPos.above(), 0) >= 9 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(serverLevel, blockPos, blockState, random.nextInt(5) == 0)) {
+            serverLevel.setBlock(blockPos, blockState.setValue(AGE, Integer.valueOf(i + 1)), 2);
+            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(serverLevel, blockPos, blockState);
         }
 
     }
 
-    public InteractionResult use(BlockState p_57275_, Level p_57276_, BlockPos p_57277_, Player p_57278_, InteractionHand p_57279_, BlockHitResult p_57280_) {
-        int i = p_57275_.getValue(AGE);
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        int i = blockState.getValue(AGE);
         boolean flag = i == 2;
-        if (!flag && p_57278_.getItemInHand(p_57279_).is(Items.BONE_MEAL)) {
+        if (!flag && player.getItemInHand(hand).is(Items.BONE_MEAL)) {
             return InteractionResult.PASS;
         } else if (i > 1) {
-            int j = 1 + p_57276_.random.nextInt(2);
-            popResource(p_57276_, p_57277_, new ItemStack(AritsuItems.COFFEE_BERRY.get(), j + (flag ? 1 : 0)));
-            p_57276_.playSound(null, p_57277_, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + p_57276_.random.nextFloat() * 0.4F);
-            p_57276_.setBlock(p_57277_, p_57275_.setValue(AGE, Integer.valueOf(1)), 2);
-            return InteractionResult.sidedSuccess(p_57276_.isClientSide);
+            int j = 1 + level.random.nextInt(2);
+            popResource(level, blockPos, new ItemStack(AritsuItems.COFFEE_BERRY.get(), j + (flag ? 1 : 0)));
+            level.playSound(null, blockPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            level.setBlock(blockPos, blockState.setValue(AGE, Integer.valueOf(1)), 2);
+            return InteractionResult.sidedSuccess(level.isClientSide);
         } else {
-            return super.use(p_57275_, p_57276_, p_57277_, p_57278_, p_57279_, p_57280_);
+            return super.use(blockState, level, blockPos, player, hand, hitResult);
         }
     }
 
-    public boolean isValidBonemealTarget(BlockGetter p_57260_, BlockPos p_57261_, BlockState p_57262_, boolean p_57263_) {
-        return p_57262_.getValue(AGE) < 2;
+    @Override
+    public boolean isValidBonemealTarget(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, boolean flag) {
+        return blockState.getValue(AGE) < 2;
     }
 
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_57282_) {
-        p_57282_.add(AGE);
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
+        stateBuilder.add(AGE);
     }
 
-    public boolean isBonemealSuccess(Level p_57265_, Random p_57266_, BlockPos p_57267_, BlockState p_57268_) {
+    @Override
+    public boolean isBonemealSuccess(Level level, Random random, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
-    public void performBonemeal(ServerLevel p_57251_, Random p_57252_, BlockPos p_57253_, BlockState p_57254_) {
-        int i = Math.min(2, p_57254_.getValue(AGE) + 1);
-        p_57251_.setBlock(p_57253_, p_57254_.setValue(AGE, Integer.valueOf(i)), 2);
+    @Override
+    public void performBonemeal(ServerLevel serverLevel, Random random, BlockPos blockPos, BlockState blockState) {
+        int i = Math.min(2, blockState.getValue(AGE) + 1);
+        serverLevel.setBlock(blockPos, blockState.setValue(AGE, Integer.valueOf(i)), 2);
     }
 }

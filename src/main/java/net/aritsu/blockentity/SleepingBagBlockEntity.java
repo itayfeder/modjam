@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public class SleepingBagBlockEntity extends BlockEntity {
     private DyeColor color;
 
-    public SleepingBagBlockEntity(BlockPos p_155229_, BlockState p_155230_, DyeColor color) {
-        this(p_155229_, p_155230_);
+    public SleepingBagBlockEntity(BlockPos pos, BlockState state, DyeColor color) {
+        this(pos, state);
         this.color = color;
     }
 

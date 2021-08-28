@@ -103,11 +103,9 @@ public class CampfireGrillBlock extends BaseEntityBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        if (level.isClientSide) {
-            return createTickerHelper(blockEntityType, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::particleTick);
-        } else {
-            return createTickerHelper(blockEntityType, AritsuBlockEntities.CAMPFIRE_GRILL.get(), CampfireGrillBlockEntity::cookTick);
-        }
+        return blockEntityType == AritsuBlockEntities.CAMPFIRE_GRILL.get() ?
+                (level.isClientSide ? (BlockEntityTicker<T>) CampfireGrillBlockEntity.CLIENTTICKER : (BlockEntityTicker<T>) CampfireGrillBlockEntity.SERVERTICKER)
+                : super.getTicker(level, blockState, blockEntityType);
     }
 
     @Override

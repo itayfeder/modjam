@@ -40,11 +40,11 @@ public class LogSeatBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext p_57070_) {
-        return this.defaultBlockState().setValue(FACING, p_57070_.getHorizontalDirection().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext placeContext) {
+        return this.defaultBlockState().setValue(FACING, placeContext.getHorizontalDirection().getOpposite());
     }
-
-    public VoxelShape getShape(BlockState state, BlockGetter p_57101_, BlockPos p_57102_, CollisionContext p_57103_) {
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         switch (state.getValue(FACING)) {
             case NORTH:
             case SOUTH:
@@ -57,7 +57,7 @@ public class LogSeatBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_60508_) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide && level.getBlockState(pos.above()).isAir()) {
             if (!state.getValue(OCCUPIED)) {
                 SitDummyEntity seat = new SitDummyEntity(level, pos);
@@ -83,43 +83,43 @@ public class LogSeatBlock extends Block {
             }
         }
 
-        return super.use(state, level, pos, player, hand, p_60508_);
+        return super.use(state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public void destroy(LevelAccessor p_49860_, BlockPos p_49861_, BlockState p_49862_) {
-        List<SitDummyEntity> entities = p_49860_.getEntitiesOfClass(SitDummyEntity.class, new AABB
-                (p_49861_.getX(), p_49861_.getY(), p_49861_.getZ(), p_49861_.getX() + 1, p_49861_.getY() + 1, p_49861_.getZ() + 1));
+    public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) {
+        List<SitDummyEntity> entities = accessor.getEntitiesOfClass(SitDummyEntity.class, new AABB
+                (pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
         for (SitDummyEntity entity : entities) {
             entity.kill();
         }
-        super.destroy(p_49860_, p_49861_, p_49862_);
+        super.destroy(accessor, pos, state);
     }
 
-    public boolean useShapeForLightOcclusion(BlockState p_57109_) {
+    public boolean useShapeForLightOcclusion(BlockState blockState) {
         return true;
     }
 
-    public RenderShape getRenderShape(BlockState p_57098_) {
+    public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public BlockState rotate(BlockState p_57093_, Rotation p_57094_) {
-        return p_57093_.setValue(FACING, p_57094_.rotate(p_57093_.getValue(FACING)));
+    public BlockState rotate(BlockState blockState, Rotation rotation) {
+        return blockState.setValue(FACING, rotation.rotate(blockState.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState p_57090_, Mirror p_57091_) {
-        return p_57090_.rotate(p_57091_.getRotation(p_57090_.getValue(FACING)));
+    public BlockState mirror(BlockState blockState, Mirror mirror) {
+        return blockState.rotate(mirror.getRotation(blockState.getValue(FACING)));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_49915_) {
-        p_49915_.add(FACING, OCCUPIED);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
+        stateBuilder.add(FACING, OCCUPIED);
     }
 
-    public boolean isPathfindable(BlockState p_57078_, BlockGetter p_57079_, BlockPos p_57080_, PathComputationType p_57081_) {
+    public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType type) {
         return false;
     }
 

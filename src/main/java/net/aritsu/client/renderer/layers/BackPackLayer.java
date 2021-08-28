@@ -33,12 +33,12 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, AbstractClientPlayer player, float p_117353_, float p_117354_, float p_117355_, float p_117356_, float p_117357_, float p_117358_) {
 
         if (!(player.getInventory().getArmor(2).isEmpty()) && player.getInventory().getArmor(2).getItem() instanceof BackPackItem) {
-            renderPack(player, poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
+            renderPack(poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
 
         } else {
             PlayerData.get(player).ifPresent(data -> {
                 if (!data.getBackPack().isEmpty()) {
-                    renderPack(player, poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
+                    renderPack(poseStack, multiBufferSource, packedLight, OverlayTexture.NO_OVERLAY, -0.5f, 0.435f, 0.25f);
 
                     if (data.getBackPack().hasTag() && data.getBackPack().getTag().contains(BagTag.allItems)) {
                         fakeInventory.deserializeNBT(data.getBackPack().getTag().getCompound(BagTag.allItems));
@@ -51,7 +51,7 @@ public class BackPackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         }
     }
 
-    private void renderPack(AbstractClientPlayer player, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, double offsetX, double offsetY, double offsetZ) {
+    private void renderPack(PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, double offsetX, double offsetY, double offsetZ) {
 
         poseStack.pushPose();
         this.getParentModel().body.translateAndRotate(poseStack);

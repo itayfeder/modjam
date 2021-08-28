@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -24,115 +25,114 @@ import java.util.Optional;
 import java.util.Random;
 
 public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
+    public static final BlockEntityTicker<CampfireGrillBlockEntity> CLIENTTICKER = (level, pos, state, be) -> be.clientTick(level, pos, state, be);
+    public static final BlockEntityTicker<CampfireGrillBlockEntity> SERVERTICKER = (level, pos, state, be) -> be.serverTick(level, pos, state, be);
     private final NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
     private final int[] cookingProgress = new int[5];
     private final int[] cookingTime = new int[4];
 
-    public CampfireGrillBlockEntity(BlockPos p_155229_, BlockState p_155230_) {
-        super(AritsuBlockEntities.CAMPFIRE_GRILL.get(), p_155229_, p_155230_);
+    public CampfireGrillBlockEntity(BlockPos pos, BlockState state) {
+        super(AritsuBlockEntities.CAMPFIRE_GRILL.get(), pos, state);
     }
 
-    public static void cookTick(Level p_155307_, BlockPos p_155308_, BlockState p_155309_, CampfireGrillBlockEntity p_155310_) {
-        if (p_155307_.getBlockState(p_155308_.below()).getBlock() instanceof CampfireBlock) {
-            if (p_155307_.getBlockState(p_155308_.below()).getValue(CampfireBlock.LIT)) {
-                cook(p_155307_, p_155308_, p_155309_, p_155310_);
+    public void serverTick(Level level, BlockPos pos, BlockState state, CampfireGrillBlockEntity grillBlockEntity) {
+        if (level.getBlockState(pos.below()).getBlock() instanceof CampfireBlock) {
+            if (level.getBlockState(pos.below()).getValue(CampfireBlock.LIT)) {
+                cook(level, pos, state, grillBlockEntity);
             } else {
-                cooldown(p_155307_, p_155308_, p_155309_, p_155310_);
+                cooldown(level, pos, state, grillBlockEntity);
             }
         }
 
     }
 
-    public static void cook(Level p_155307_, BlockPos p_155308_, BlockState p_155309_, CampfireGrillBlockEntity p_155310_) {
+    public void cook(Level level, BlockPos pos, BlockState state, CampfireGrillBlockEntity grillBlockEntity) {
         boolean flag = false;
 
-        for (int i = 0; i < p_155310_.items.size() - 1; ++i) {
-            ItemStack itemstack = p_155310_.items.get(i);
+        for (int i = 0; i < grillBlockEntity.items.size() - 1; ++i) {
+            ItemStack itemstack = grillBlockEntity.items.get(i);
             if (!itemstack.isEmpty()) {
                 flag = true;
-                int j = p_155310_.cookingProgress[i]++;
-                if (p_155310_.cookingProgress[i] >= p_155310_.cookingTime[i]) {
+                int cookTimer = grillBlockEntity.cookingProgress[i]++;
+                if (cookTimer >= grillBlockEntity.cookingTime[i]) {
                     Container container = new SimpleContainer(itemstack);
-                    ItemStack itemstack1 = p_155307_.getRecipeManager().getRecipeFor(RecipeType.CAMPFIRE_COOKING, container, p_155307_).map((p_155305_) -> {
-                        return p_155305_.assemble(container);
-                    }).orElse(itemstack);
-                    Containers.dropItemStack(p_155307_, p_155308_.getX(), p_155308_.getY(), p_155308_.getZ(), itemstack1);
-                    p_155310_.items.set(i, ItemStack.EMPTY);
-                    p_155307_.sendBlockUpdated(p_155308_, p_155309_, p_155309_, 3);
+                    ItemStack cookedItem = level.getRecipeManager().getRecipeFor(RecipeType.CAMPFIRE_COOKING, container, level).map((p_155305_) -> p_155305_.assemble(container)).orElse(itemstack);
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cookedItem);
+                    grillBlockEntity.items.set(i, ItemStack.EMPTY);
+                    level.sendBlockUpdated(pos, state, state, 3);
                 }
             }
         }
 
-        ItemStack itemstack = p_155310_.items.get(4);
-        if (!itemstack.isEmpty()) {
+        ItemStack kettleSlotItem = grillBlockEntity.items.get(4);
+        if (!kettleSlotItem.isEmpty()) {
             flag = true;
-            int j = p_155310_.cookingProgress[4]++;
-            if (p_155310_.cookingProgress[4] >= 600) {
-                Container container = new SimpleContainer(itemstack);
-                ItemStack itemstack1 = AritsuItems.BOILING_KETTLE.get().getDefaultInstance();
-                Containers.dropItemStack(p_155307_, p_155308_.getX(), p_155308_.getY(), p_155308_.getZ(), itemstack1);
-                p_155310_.items.set(4, ItemStack.EMPTY);
-                p_155307_.sendBlockUpdated(p_155308_, p_155309_, p_155309_, 3);
+            int timer = grillBlockEntity.cookingProgress[4]++;
+            if (timer >= 600) {
+                ItemStack hotKettle = AritsuItems.BOILING_KETTLE.get().getDefaultInstance();
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), hotKettle);
+                grillBlockEntity.items.set(4, ItemStack.EMPTY);
+                level.sendBlockUpdated(pos, state, state, 3);
             }
         }
 
         if (flag) {
-            setChanged(p_155307_, p_155308_, p_155309_);
+            setChanged(level, pos, state);
         }
     }
 
 
-    public static void cooldown(Level p_155314_, BlockPos p_155315_, BlockState p_155316_, CampfireGrillBlockEntity p_155317_) {
+    public void cooldown(Level level, BlockPos pos, BlockState state, CampfireGrillBlockEntity grillBlockEntity) {
         boolean flag = false;
 
-        for (int i = 0; i < p_155317_.items.size() - 1; ++i) {
-            if (p_155317_.cookingProgress[i] > 0) {
+        for (int i = 0; i < grillBlockEntity.items.size() - 1; ++i) {
+            if (grillBlockEntity.cookingProgress[i] > 0) {
                 flag = true;
-                p_155317_.cookingProgress[i] = Mth.clamp(p_155317_.cookingProgress[i] - 2, 0, p_155317_.cookingTime[i]);
+                grillBlockEntity.cookingProgress[i] = Mth.clamp(grillBlockEntity.cookingProgress[i] - 2, 0, grillBlockEntity.cookingTime[i]);
             }
         }
 
-        if (p_155317_.cookingProgress[4] > 0) {
+        if (grillBlockEntity.cookingProgress[4] > 0) {
             flag = true;
-            p_155317_.cookingProgress[4] = Mth.clamp(p_155317_.cookingProgress[4] - 2, 0, 600);
+            grillBlockEntity.cookingProgress[4] = Mth.clamp(grillBlockEntity.cookingProgress[4] - 2, 0, 600);
         }
 
         if (flag) {
-            setChanged(p_155314_, p_155315_, p_155316_);
+            setChanged(level, pos, state);
         }
 
     }
 
-    public static void particleTick(Level p_155319_, BlockPos p_155320_, BlockState p_155321_, CampfireGrillBlockEntity p_155322_) {
-        if (p_155319_.getBlockState(p_155320_.below()).getBlock() instanceof CampfireBlock) {
-            if (p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.LIT)) {
-                Random random = p_155319_.random;
+    public void clientTick(Level level, BlockPos pos, BlockState state, CampfireGrillBlockEntity grillBlockEntity) {
+        if (level.getBlockState(pos.below()).getBlock() instanceof CampfireBlock) {
+            if (level.getBlockState(pos.below()).getValue(CampfireBlock.LIT)) {
+                Random random = level.random;
                 if (random.nextFloat() < 0.11F) {
                     for (int i = 0; i < random.nextInt(2) + 2; ++i) {
-                        CampfireBlock.makeParticles(p_155319_, p_155320_, p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.SIGNAL_FIRE), false);
+                        CampfireBlock.makeParticles(level, pos, level.getBlockState(pos.below()).getValue(CampfireBlock.SIGNAL_FIRE), false);
                     }
                 }
 
-                int l = p_155319_.getBlockState(p_155320_.below()).getValue(CampfireBlock.FACING).get2DDataValue();
+                int l = level.getBlockState(pos.below()).getValue(CampfireBlock.FACING).get2DDataValue();
 
-                for (int j = 0; j < p_155322_.items.size() - 1; ++j) {
-                    if (!p_155322_.items.get(j).isEmpty() && random.nextFloat() < 0.2F) {
+                for (int j = 0; j < grillBlockEntity.items.size() - 1; ++j) {
+                    if (!grillBlockEntity.items.get(j).isEmpty() && random.nextFloat() < 0.2F) {
                         Direction direction = Direction.from2DDataValue(Math.floorMod(j + l, 4));
                         float f = 0.3125F;
-                        double d0 = (double) p_155320_.getX() + 0.5D - (double) ((float) direction.getStepX() * 0.3125F) + (double) ((float) direction.getClockWise().getStepX() * 0.3125F);
-                        double d1 = (double) p_155320_.getY() + 0.0234375D;
-                        double d2 = (double) p_155320_.getZ() + 0.5D - (double) ((float) direction.getStepZ() * 0.3125F) + (double) ((float) direction.getClockWise().getStepZ() * 0.3125F);
+                        double d0 = (double) pos.getX() + 0.5D - (double) ((float) direction.getStepX() * 0.3125F) + (double) ((float) direction.getClockWise().getStepX() * 0.3125F);
+                        double d1 = (double) pos.getY() + 0.0234375D;
+                        double d2 = (double) pos.getZ() + 0.5D - (double) ((float) direction.getStepZ() * 0.3125F) + (double) ((float) direction.getClockWise().getStepZ() * 0.3125F);
 
                         for (int k = 0; k < 4; ++k) {
-                            p_155319_.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+                            level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
                         }
                     }
                 }
 
-                if (!p_155322_.items.get(4).isEmpty() && random.nextFloat() < 0.2F) {
+                if (!grillBlockEntity.items.get(4).isEmpty() && random.nextFloat() < 0.2F) {
 
                     for (int k = 0; k < 4; ++k) {
-                        p_155319_.addParticle(ParticleTypes.CLOUD, 0.45D, 0.30D, 0.5D, 0.0D, 5.0E-4D, 0.0D);
+                        level.addParticle(ParticleTypes.CLOUD, 0.45D, 0.30D, 0.5D, 0.0D, 5.0E-4D, 0.0D);
                     }
                 }
             }
@@ -144,34 +144,34 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
         return this.items;
     }
 
-    public void load(CompoundTag p_155312_) {
-        super.load(p_155312_);
+    public void load(CompoundTag compoundTag) {
+        super.load(compoundTag);
         this.items.clear();
-        ContainerHelper.loadAllItems(p_155312_, this.items);
-        if (p_155312_.contains("CookingTimes", 11)) {
-            int[] aint = p_155312_.getIntArray("CookingTimes");
-            System.arraycopy(aint, 0, this.cookingProgress, 0, Math.min(this.cookingTime.length, aint.length));
+        ContainerHelper.loadAllItems(compoundTag, this.items);
+        if (compoundTag.contains("CookingTimes", 11)) {
+            int[] allItems = compoundTag.getIntArray("CookingTimes");
+            System.arraycopy(allItems, 0, this.cookingProgress, 0, Math.min(this.cookingTime.length, allItems.length));
         }
 
-        if (p_155312_.contains("CookingTotalTimes", 11)) {
-            int[] aint1 = p_155312_.getIntArray("CookingTotalTimes");
-            System.arraycopy(aint1, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, aint1.length));
+        if (compoundTag.contains("CookingTotalTimes", 11)) {
+            int[] allItems = compoundTag.getIntArray("CookingTotalTimes");
+            System.arraycopy(allItems, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, allItems.length));
         }
 
     }
 
-    public CompoundTag save(CompoundTag p_59060_) {
-        this.saveMetadataAndItems(p_59060_);
-        p_59060_.putIntArray("CookingTimes", this.cookingProgress);
-        p_59060_.putIntArray("CookingTotalTimes", this.cookingTime);
-        return p_59060_;
+    public CompoundTag save(CompoundTag compoundTag) {
+        this.saveMetadataAndItems(compoundTag);
+        compoundTag.putIntArray("CookingTimes", this.cookingProgress);
+        compoundTag.putIntArray("CookingTotalTimes", this.cookingTime);
+        return compoundTag;
     }
 
 
-    private CompoundTag saveMetadataAndItems(CompoundTag p_59064_) {
-        super.save(p_59064_);
-        ContainerHelper.saveAllItems(p_59064_, this.items, true);
-        return p_59064_;
+    private CompoundTag saveMetadataAndItems(CompoundTag compoundTag) {
+        super.save(compoundTag);
+        ContainerHelper.saveAllItems(compoundTag, this.items, true);
+        return compoundTag;
     }
 
     @Nullable
@@ -202,13 +202,13 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
         return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.level.getRecipeManager().getRecipeFor(RecipeType.CAMPFIRE_COOKING, new SimpleContainer(p_59052_), this.level);
     }
 
-    public boolean placeFood(ItemStack p_59054_, int p_59055_) {
+    public boolean placeFood(ItemStack stack, int cookingTime) {
         for (int i = 0; i < this.items.size() - 1; ++i) {
             ItemStack itemstack = this.items.get(i);
             if (itemstack.isEmpty()) {
-                this.cookingTime[i] = p_59055_;
+                this.cookingTime[i] = cookingTime;
                 this.cookingProgress[i] = 0;
-                this.items.set(i, p_59054_.split(1));
+                this.items.set(i, stack.split(1));
                 this.markUpdated();
                 return true;
             }
@@ -217,10 +217,10 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
         return false;
     }
 
-    public boolean placeKettle(ItemStack p_59054_) {
-        if (this.items.get(4).isEmpty() && p_59054_.is(AritsuItems.WATER_KETTLE.get())) {
+    public boolean placeKettle(ItemStack stack) {
+        if (this.items.get(4).isEmpty() && stack.is(AritsuItems.WATER_KETTLE.get())) {
             this.cookingProgress[4] = 0;
-            this.items.set(4, p_59054_.split(1));
+            this.items.set(4, stack.split(1));
             this.markUpdated();
             return true;
         }
@@ -235,12 +235,5 @@ public class CampfireGrillBlockEntity extends BlockEntity implements Clearable {
 
     public void clearContent() {
         this.items.clear();
-    }
-
-    public void dowse() {
-        if (this.level != null) {
-            this.markUpdated();
-        }
-
     }
 }

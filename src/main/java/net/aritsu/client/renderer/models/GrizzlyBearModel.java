@@ -29,7 +29,6 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
                 .texOffs(13, 50).addBox(-9.0F, -26.0F, -11.0F, 0.0F, 10.0F, 4.0F)
                 .texOffs(9, 45).addBox(-9.0F, 4.0F, -11.0F, 14.0F, 0.0F, 4.0F)
                 .texOffs(18, 0).addBox(-9.0F, -26.0F, -11.0F, 14.0F, 0.0F, 4.0F), PartPose.offsetAndRotation(2.0F, 9.0F, 12.0F, ((float) Math.PI / 2F), 0.0F, 0.0F));
-        int i = 10;
         CubeListBuilder cubelistbuilder = CubeListBuilder.create().texOffs(42, 47).addBox(-2.0F, 0.0F, 1.5F, 4.0F, 10.0F, 7.0F);
         partdefinition.addOrReplaceChild("right_hind_leg", cubelistbuilder, PartPose.offset(-4.5F, 14.0F, 6.0F));
         partdefinition.addOrReplaceChild("left_hind_leg", cubelistbuilder, PartPose.offset(4.5F, 14.0F, 6.0F));
@@ -39,10 +38,10 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
         return LayerDefinition.create(meshdefinition, 128, 64);
     }
 
-    public void setupAnim(T p_103429_, float p_103430_, float p_103431_, float p_103432_, float p_103433_, float p_103434_) {
-        super.setupAnim(p_103429_, p_103430_, p_103431_, p_103432_, p_103433_, p_103434_);
-        float f = p_103432_ - (float) p_103429_.tickCount;
-        float f1 = p_103429_.getStandingAnimationScale(f);
+    public void setupAnim(T entity, float p_103430_, float p_103431_, float p_103432_, float p_103433_, float p_103434_) {
+        super.setupAnim(entity, p_103430_, p_103431_, p_103432_, p_103433_, p_103434_);
+        float f = p_103432_ - (float) entity.tickCount;
+        float f1 = entity.getStandingAnimationScale(f);
         f1 = f1 * f1;
         float f2 = 1.0F - f1;
         this.body.xRot = ((float) Math.PI / 2F) - f1 * (float) Math.PI * 0.35F;

@@ -36,10 +36,8 @@ public class BearTrapBlockEntity extends BlockEntity {
                     entity.hurt(DamageSource.GENERIC, 8.0F);
                     level.setBlock(pos, state.setValue(BearTrapBlock.TRIGGERED, true), 3);
 
-                    if (entity instanceof ServerPlayer) {
-                        ServerPlayer player = (ServerPlayer) entity;
-                        player.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_trapped")), "bear_trapped");
-
+                    if (entity instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_trapped")), "bear_trapped");
                     }
                 } else {
                     Random rnd = new Random();

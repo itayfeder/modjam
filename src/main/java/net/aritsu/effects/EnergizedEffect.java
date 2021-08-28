@@ -1,7 +1,6 @@
 package net.aritsu.effects;
 
 import net.aritsu.mod.AritsuMod;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -20,26 +19,6 @@ public class EnergizedEffect extends MobEffect {
 
     @Override
     public boolean isBeneficial() {
-        return true;
-    }
-
-    public boolean isInstant() {
-        return false;
-    }
-
-    public boolean shouldRenderInvText(EffectInstance effect) {
-        return true;
-    }
-
-    public boolean shouldRender(EffectInstance effect) {
-        return true;
-    }
-
-    public boolean shouldRenderHUD(EffectInstance effect) {
-        return true;
-    }
-
-    public boolean isReady(int duration, int amplifier) {
         return true;
     }
 }

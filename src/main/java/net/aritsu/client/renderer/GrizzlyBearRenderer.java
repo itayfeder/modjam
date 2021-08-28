@@ -12,16 +12,16 @@ import net.minecraft.resources.ResourceLocation;
 public class GrizzlyBearRenderer extends MobRenderer<GrizzlyBear, GrizzlyBearModel<GrizzlyBear>> {
     private static final ResourceLocation BEAR_LOCATION = new ResourceLocation(AritsuMod.MODID, "textures/entity/bear/grizzlybear.png");
 
-    public GrizzlyBearRenderer(EntityRendererProvider.Context p_174356_) {
-        super(p_174356_, new GrizzlyBearModel<>(p_174356_.bakeLayer(AritsuModels.GRIZZLY_BEAR_LOCATION)), 0.9F);
+    public GrizzlyBearRenderer(EntityRendererProvider.Context context) {
+        super(context, new GrizzlyBearModel<>(context.bakeLayer(AritsuModels.GRIZZLY_BEAR_LOCATION)), 0.9F);
     }
 
-    public ResourceLocation getTextureLocation(GrizzlyBear p_115732_) {
+    public ResourceLocation getTextureLocation(GrizzlyBear grizzlyBear) {
         return BEAR_LOCATION;
     }
 
-    protected void scale(GrizzlyBear p_115734_, PoseStack p_115735_, float p_115736_) {
-        p_115735_.scale(1.2F, 1.2F, 1.2F);
-        super.scale(p_115734_, p_115735_, p_115736_);
+    protected void scale(GrizzlyBear grizzlyBear, PoseStack poseStack, float aFloat) {
+        poseStack.scale(1.2F, 1.2F, 1.2F);
+        super.scale(grizzlyBear, poseStack, aFloat);
     }
 }

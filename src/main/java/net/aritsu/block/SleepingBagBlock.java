@@ -1,22 +1,15 @@
 package net.aritsu.block;
 
-import com.mojang.datafixers.util.Either;
 import net.aritsu.blockentity.SleepingBagBlockEntity;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -27,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,7 +34,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -65,28 +56,9 @@ public class SleepingBagBlock extends BedBlock {
         return (ServerLevel) player.level;
     }
 
-    private static boolean bedInRange(BlockPos p_9117_, Direction p_9118_, Player player) {
-        if (p_9118_ == null) return false;
-        return isReachableBedBlock(p_9117_, player) || isReachableBedBlock(p_9117_.relative(p_9118_.getOpposite()), player);
-    }
-
-    private static boolean isReachableBedBlock(BlockPos p_9223_, Player player) {
-        Vec3 vec3 = Vec3.atBottomCenterOf(p_9223_);
-        return Math.abs(player.getX() - vec3.x()) <= 3.0D && Math.abs(player.getY() - vec3.y()) <= 2.0D && Math.abs(player.getZ() - vec3.z()) <= 3.0D;
-    }
-
-    private static boolean bedBlocked(BlockPos p_9192_, Direction p_9193_, Player player) {
-        BlockPos blockpos = p_9192_.above();
-        return !freeAt(blockpos, player) || !freeAt(blockpos.relative(p_9193_.getOpposite()), player);
-    }
-
-    protected static boolean freeAt(BlockPos p_36351_, Player player) {
-        return !player.level.getBlockState(p_36351_).isSuffocating(player.level, p_36351_);
-    }
-
     @Override
-    public BlockEntity newBlockEntity(BlockPos p_152175_, BlockState p_152176_) {
-        return new SleepingBagBlockEntity(p_152175_, p_152176_, this.color);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new SleepingBagBlockEntity(pos, state, this.color);
     }
 
     @Override
@@ -95,68 +67,68 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public void fallOn(Level p_152169_, BlockState p_152170_, BlockPos p_152171_, Entity p_152172_, float p_152173_) {
-        super.fallOn(p_152169_, p_152170_, p_152171_, p_152172_, p_152173_ * 0.25F);
+    public void fallOn(Level level, BlockState blockState, BlockPos pos, Entity entity, float fallAmount) {
+        super.fallOn(level, blockState, pos, entity, fallAmount * 0.25F);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext p_49479_) {
-        BlockPos blockpos = p_49479_.getClickedPos();
-        BlockPos otherpos = blockpos.relative(p_49479_.getHorizontalDirection());
-        return p_49479_.getLevel().getBlockState(otherpos).canBeReplaced(p_49479_) ? this.defaultBlockState().setValue(FACING, p_49479_.getHorizontalDirection()) : null;
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        BlockPos blockpos = blockPlaceContext.getClickedPos();
+        BlockPos otherpos = blockpos.relative(blockPlaceContext.getHorizontalDirection());
+        return blockPlaceContext.getLevel().getBlockState(otherpos).canBeReplaced(blockPlaceContext) ? this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection()) : null;
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_49547_, BlockGetter p_49548_, BlockPos p_49549_, CollisionContext p_49550_) {
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
-
+    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState p_49545_) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
-
+    @Override
     public DyeColor getColor() {
         return this.color;
     }
 
     @Override
-    public InteractionResult use(BlockState p_49515_, Level p_49516_, BlockPos p_49517_, Player p_49518_, InteractionHand p_49519_, BlockHitResult p_49520_) {
-        if (p_49516_.isClientSide) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
+        if (level.isClientSide) {
             return InteractionResult.CONSUME;
         } else {
-            if (p_49515_.getValue(PART) != BedPart.HEAD) {
-                p_49517_ = p_49517_.relative(p_49515_.getValue(FACING));
-                p_49515_ = p_49516_.getBlockState(p_49517_);
-                if (!p_49515_.is(this)) {
+            if (state.getValue(PART) != BedPart.HEAD) {
+                pos = pos.relative(state.getValue(FACING));
+                state = level.getBlockState(pos);
+                if (!state.is(this)) {
                     return InteractionResult.CONSUME;
                 }
             }
 
-            if (!canSetSpawn(p_49516_)) {
-                p_49516_.removeBlock(p_49517_, false);
-                BlockPos blockpos = p_49517_.relative(p_49515_.getValue(FACING).getOpposite());
-                if (p_49516_.getBlockState(blockpos).is(this)) {
-                    p_49516_.removeBlock(blockpos, false);
+            if (!canSetSpawn(level)) {
+                level.removeBlock(pos, false);
+                BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+                if (level.getBlockState(blockpos).is(this)) {
+                    level.removeBlock(blockpos, false);
                 }
 
-                p_49516_.explode(null, DamageSource.badRespawnPointExplosion(), null, (double) p_49517_.getX() + 0.5D, (double) p_49517_.getY() + 0.5D, (double) p_49517_.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
+                level.explode(null, DamageSource.badRespawnPointExplosion(), null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, Explosion.BlockInteraction.DESTROY);
                 return InteractionResult.SUCCESS;
-            } else if (p_49515_.getValue(OCCUPIED)) {
-                if (!this.kickVillagerOutOfBed(p_49516_, p_49517_)) {
-                    p_49518_.displayClientMessage(new TranslatableComponent("block.minecraft.bed.occupied"), true);
+            } else if (state.getValue(OCCUPIED)) {
+                if (!this.kickVillagerOutOfBed(level, pos)) {
+                    player.displayClientMessage(new TranslatableComponent("block.minecraft.bed.occupied"), true);
                 }
 
                 return InteractionResult.SUCCESS;
             } else {
-                p_49518_.startSleepInBed(p_49517_).ifLeft((p_49477_) -> {
+                player.startSleepInBed(pos).ifLeft((p_49477_) -> {
                     if (p_49477_ != null) {
-                        p_49518_.displayClientMessage(p_49477_.getMessage(), true);
+                        player.displayClientMessage(p_49477_.getMessage(), true);
                     }
 
                 });
@@ -165,8 +137,8 @@ public class SleepingBagBlock extends BedBlock {
         }
     }
 
-    private boolean kickVillagerOutOfBed(Level p_49491_, BlockPos p_49492_) {
-        List<Villager> list = p_49491_.getEntitiesOfClass(Villager.class, new AABB(p_49492_), LivingEntity::isSleeping);
+    private boolean kickVillagerOutOfBed(Level level, BlockPos pos) {
+        List<Villager> list = level.getEntitiesOfClass(Villager.class, new AABB(pos), LivingEntity::isSleeping);
         if (list.isEmpty()) {
             return false;
         } else {

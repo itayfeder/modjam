@@ -26,16 +26,16 @@ public class ReinforcedFishingHookRenderer extends EntityRenderer<ReinforcedFish
     private static final RenderType RENDER_TYPE = RenderType.entityCutout(TEXTURE_LOCATION);
     private static final double VIEW_BOBBING_SCALE = 960.0D;
 
-    public ReinforcedFishingHookRenderer(EntityRendererProvider.Context p_174117_) {
-        super(p_174117_);
+    public ReinforcedFishingHookRenderer(EntityRendererProvider.Context context) {
+        super(context);
     }
 
-    private static float fraction(int p_114691_, int p_114692_) {
-        return (float) p_114691_ / (float) p_114692_;
+    private static float fraction(int divided, int divider) {
+        return (float) divided / (float) divider;
     }
 
-    private static void vertex(VertexConsumer p_114712_, Matrix4f p_114713_, Matrix3f p_114714_, int p_114715_, float p_114716_, int p_114717_, int p_114718_, int p_114719_) {
-        p_114712_.vertex(p_114713_, p_114716_ - 0.5F, (float) p_114717_ - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float) p_114718_, (float) p_114719_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_114715_).normal(p_114714_, 0.0F, 1.0F, 0.0F).endVertex();
+    private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int p_114715_, float x, int z, int u, int v) {
+        vertexConsumer.vertex(matrix4f, x - 0.5F, (float) z - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float) u, (float) v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_114715_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     private static void stringVertex(float p_174119_, float p_174120_, float p_174121_, VertexConsumer p_174122_, PoseStack.Pose p_174123_, float p_174124_, float p_174125_) {
@@ -52,23 +52,23 @@ public class ReinforcedFishingHookRenderer extends EntityRenderer<ReinforcedFish
         p_174122_.vertex(p_174123_.pose(), f, f1, f2).color(0, 0, 0, 255).normal(p_174123_.normal(), f3, f4, f5).endVertex();
     }
 
-    public void render(ReinforcedFishingHookEntity p_114705_, float p_114706_, float p_114707_, PoseStack p_114708_, MultiBufferSource p_114709_, int p_114710_) {
-        Player player = p_114705_.getPlayerOwner();
+    public void render(ReinforcedFishingHookEntity fishingHookEntity, float p_114706_, float p_114707_, PoseStack poseStack, MultiBufferSource multiBufferSource, int p_114710_) {
+        Player player = fishingHookEntity.getPlayerOwner();
         if (player != null) {
-            p_114708_.pushPose();
-            p_114708_.pushPose();
-            p_114708_.scale(0.5F, 0.5F, 0.5F);
-            p_114708_.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            p_114708_.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-            PoseStack.Pose posestack$pose = p_114708_.last();
+            poseStack.pushPose();
+            poseStack.pushPose();
+            poseStack.scale(0.5F, 0.5F, 0.5F);
+            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+            PoseStack.Pose posestack$pose = poseStack.last();
             Matrix4f matrix4f = posestack$pose.pose();
             Matrix3f matrix3f = posestack$pose.normal();
-            VertexConsumer vertexconsumer = p_114709_.getBuffer(RENDER_TYPE);
+            VertexConsumer vertexconsumer = multiBufferSource.getBuffer(RENDER_TYPE);
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 0.0F, 0, 0, 1);
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 1.0F, 0, 1, 1);
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 1.0F, 1, 1, 0);
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 0.0F, 1, 0, 0);
-            p_114708_.popPose();
+            poseStack.popPose();
             int i = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
             ItemStack itemstack = player.getMainHandItem();
             if (!itemstack.is(AritsuItems.REINFORCED_FISHING_ROD.get())) {
@@ -103,26 +103,26 @@ public class ReinforcedFishingHookRenderer extends EntityRenderer<ReinforcedFish
                 f3 = player.isCrouching() ? -0.1875F : 0.0F;
             }
 
-            double d9 = Mth.lerp(p_114707_, p_114705_.xo, p_114705_.getX());
-            double d10 = Mth.lerp(p_114707_, p_114705_.yo, p_114705_.getY()) + 0.25D;
-            double d8 = Mth.lerp(p_114707_, p_114705_.zo, p_114705_.getZ());
+            double d9 = Mth.lerp(p_114707_, fishingHookEntity.xo, fishingHookEntity.getX());
+            double d10 = Mth.lerp(p_114707_, fishingHookEntity.yo, fishingHookEntity.getY()) + 0.25D;
+            double d8 = Mth.lerp(p_114707_, fishingHookEntity.zo, fishingHookEntity.getZ());
             float f4 = (float) (d4 - d9);
             float f5 = (float) (d5 - d10) + f3;
             float f6 = (float) (d6 - d8);
-            VertexConsumer vertexconsumer1 = p_114709_.getBuffer(RenderType.lineStrip());
-            PoseStack.Pose posestack$pose1 = p_114708_.last();
+            VertexConsumer vertexconsumer1 = multiBufferSource.getBuffer(RenderType.lineStrip());
+            PoseStack.Pose posestack$pose1 = poseStack.last();
             int j = 16;
 
             for (int k = 0; k <= 16; ++k) {
                 stringVertex(f4, f5, f6, vertexconsumer1, posestack$pose1, fraction(k, 16), fraction(k + 1, 16));
             }
 
-            p_114708_.popPose();
-            super.render(p_114705_, p_114706_, p_114707_, p_114708_, p_114709_, p_114710_);
+            poseStack.popPose();
+            super.render(fishingHookEntity, p_114706_, p_114707_, poseStack, multiBufferSource, p_114710_);
         }
     }
 
-    public ResourceLocation getTextureLocation(ReinforcedFishingHookEntity p_114703_) {
+    public ResourceLocation getTextureLocation(ReinforcedFishingHookEntity hookEntity) {
         return TEXTURE_LOCATION;
     }
 }
