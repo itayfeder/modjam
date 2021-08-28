@@ -1,6 +1,7 @@
 package net.aritsu.item;
 
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.registry.AritsuEffects;
 import net.aritsu.util.ClientReferences;
 import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
@@ -87,8 +88,14 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         if (player.isCrouching()) {
                             player.setDeltaMovement(motX, 0.0D, motX);
                         } else {
-                            if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
-                            else player.setDeltaMovement(motX, motY + 0.1D, motX);
+                            //climb
+                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null)
+                                player.setDeltaMovement(motX, 0.19D, motX);
+                            else {
+                                if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
+                                else player.setDeltaMovement(motX, motY + 0.1D, motX);
+                                if (player.getDeltaMovement().y <= 0) player.setDeltaMovement(motX, 0.1D, motX);
+                            }
                             soundChance++;
                             pitch = rnd.nextDouble();
                             if (soundChance % 7 == 0) player.playSound(SoundEvents.STONE_STEP, (float) pitch, 1);
