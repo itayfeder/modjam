@@ -59,6 +59,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                             world.setBlock(player.blockPosition().above(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
                         else  if (world.getBlockState(player.blockPosition().above(2)).isAir())
                             world.setBlock(player.blockPosition().above(2), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
+
                     break;
                 case CHEST:
                     if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
