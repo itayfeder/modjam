@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.aritsu.events.forgebus.ModelLoadingEvent;
-import net.aritsu.item.HeadLightGear;
+import net.aritsu.item.TravelerArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.extensions.IForgeBakedModel;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -32,21 +33,23 @@ public class HeadLightLayer extends RenderLayer<AbstractClientPlayer, PlayerMode
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
-        if (!(player.getInventory().getArmor(3).isEmpty()) && player.getInventory().getArmor(3).getItem() instanceof HeadLightGear) {
-            poseStack.pushPose();
-            getParentModel().getHead().translateAndRotate(poseStack);
+        if (!(player.getInventory().getArmor(3).isEmpty()) && player.getInventory().getArmor(3).getItem() instanceof TravelerArmorItem item) {
+            if (item.getSlot()==EquipmentSlot.HEAD) {
+                poseStack.pushPose();
+                getParentModel().getHead().translateAndRotate(poseStack);
 
-            // pixel scale * pixel offset = 16 pixels is one block
-            float scale = 0.0625f * (16 + 1);
-            poseStack.scale(scale, scale, scale);
+                // pixel scale * pixel offset = 16 pixels is one block
+                float scale = 0.0625f * (16 + 1);
+                poseStack.scale(scale, scale, scale);
 
-            poseStack.mulPose(Vector3f.XP.rotationDegrees(180));
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(180));
+                poseStack.mulPose(Vector3f.XP.rotationDegrees(180));
+                poseStack.mulPose(Vector3f.YP.rotationDegrees(180));
 
-            poseStack.translate(-(0.0625f * 8), (0.0625f * 3), -(0.0625f * 7));
-            IForgeBakedModel model = Minecraft.getInstance().getModelManager().getModel(ModelLoadingEvent.HEADLIGHT);
-            render(model, multiBufferSource, RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS), poseStack, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-            poseStack.popPose();
+                poseStack.translate(-(0.0625f * 8), (0.0625f * 3), -(0.0625f * 7));
+                IForgeBakedModel model = Minecraft.getInstance().getModelManager().getModel(ModelLoadingEvent.HEADLIGHT);
+                render(model, multiBufferSource, RenderType.entityCutoutNoCull(InventoryMenu.BLOCK_ATLAS), poseStack, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                poseStack.popPose();
+            }
         }
     }
 

@@ -103,7 +103,7 @@ public class AritsuItems {
     public static final RegistryObject<Item> CLIMBER_BOOTS = ITEMS.register("climber_boots", () -> new TravelerArmorItem(EquipmentSlot.FEET, TravelerArmorItem.armorProps));
     public static final RegistryObject<Item> SWIMMER_TRUNKS = ITEMS.register("swimmer_trunks", () -> new TravelerArmorItem(EquipmentSlot.LEGS, TravelerArmorItem.armorProps));
     public static final RegistryObject<Item> BEAR_CHESTPLATE = ITEMS.register("bear_chestplate", () -> new TravelerArmorItem(EquipmentSlot.CHEST, TravelerArmorItem.armorProps));
-
+    public static final RegistryObject<Item> HEADLIGHTGEAR = ITEMS.register("headlight", () -> new TravelerArmorItem(EquipmentSlot.HEAD, TravelerArmorItem.armorProps));
 
     public static final RegistryObject<Item> BAIT = ITEMS.register("bait",
             () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
@@ -173,7 +173,6 @@ public class AritsuItems {
     public static final RegistryObject<Item> GRIZZLY_BEAR_SPAWN_EGG = ITEMS.register("grizzly_bear_spawn_egg",
             () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR, 8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
 
-    public static final RegistryObject<Item> HEADLIGHTGEAR = ITEMS.register("headlight",
-            () -> new HeadLightGear(new Item.Properties().tab(ModTab.INSTANCE).stacksTo(1)));
+
 
 }

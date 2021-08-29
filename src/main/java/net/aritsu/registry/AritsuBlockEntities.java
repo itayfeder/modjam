@@ -55,6 +55,9 @@ public class AritsuBlockEntities {
     public static final RegistryObject<BlockEntityType<BackPackBlockEntity>> BACKPACK_BE = TILEENTITIES.register("backpack_be", () ->
             BlockEntityType.Builder.of(BackPackBlockEntity::new,
                     AritsuBlocks.BACKPACK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<LightAirBlockEntity>> LIGHT_AIR_BE = TILEENTITIES.register("light_air_be", () ->
+            BlockEntityType.Builder.of(LightAirBlockEntity::new,
+                    AritsuBlocks.LIGHT_AIR.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BearTrapBlockEntity>> BEAR_TRAP = TILEENTITIES.register("bear_trap", () ->
             BlockEntityType.Builder.of(BearTrapBlockEntity::new,

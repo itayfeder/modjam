@@ -3,6 +3,7 @@ package net.aritsu.registry;
 import net.aritsu.block.*;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -117,6 +118,8 @@ public class AritsuBlocks {
             return p_152613_.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMaterialColor() : MaterialColor.WOOL;
         }).sound(SoundType.WOOL).strength(0.2F).noOcclusion());
     }
+    public static final RegistryObject<Block> LIGHT_AIR = BLOCKS.register("light_air",
+            ()-> new LightAirBlock(BlockBehaviour.Properties.of(Material.AIR).noCollission().noDrops().air()));
 
     private static Block createTent(DyeColor color) {
         return new TentBlock(color, BlockBehaviour.Properties.of(Material.WOOL, (blockState) -> {
