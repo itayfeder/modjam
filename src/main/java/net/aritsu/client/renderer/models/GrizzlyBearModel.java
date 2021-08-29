@@ -1,5 +1,6 @@
 package net.aritsu.client.renderer.models;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.aritsu.entity.grizzly_bear.GrizzlyBear;
 import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -38,6 +39,11 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
         return LayerDefinition.create(meshdefinition, 128, 64);
     }
 
+    @Override
+    public void prepareMobModel(T entity, float p_102615_, float p_102616_, float p_102617_) {
+        super.prepareMobModel(entity, p_102615_, p_102616_, p_102617_);
+    }
+
     public void setupAnim(T entity, float p_103430_, float p_103431_, float p_103432_, float p_103433_, float p_103434_) {
         super.setupAnim(entity, p_103430_, p_103431_, p_103432_, p_103433_, p_103434_);
         float f = p_103432_ - (float) entity.tickCount;
@@ -61,5 +67,12 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
         }
 
         this.head.xRot += f1 * (float) Math.PI * 0.15F;
+
+
+    }
+
+    public void translateToFrontRightLeg(PoseStack stack)
+    {
+        rightFrontLeg.translateAndRotate(stack);
     }
 }
