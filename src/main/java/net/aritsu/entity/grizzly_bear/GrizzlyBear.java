@@ -3,6 +3,7 @@ package net.aritsu.entity.grizzly_bear;
 import net.aritsu.registry.AritsuEntities;
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -216,6 +218,22 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
             } else {
                 this.clientSideStandAnimation = Mth.clamp(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
             }
+
+            if (this.isInSittingPose()) {
+                if (random.nextInt(5) == 0)
+                    level.playLocalSound(blockPosition().getX(), blockPosition().getY(), blockPosition().getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1f, 1f, true);
+
+                for(int i = 0; i < 4; ++i) {
+                    Vec3 vec3 = new Vec3(((double)this.random.nextFloat() - 0.9D) * 0.1D, Math.random() * 0.2D + 0.1D, ((double)this.random.nextFloat() - 0.9D) * 0.1D);
+                    vec3 = vec3.xRot(-this.getXRot() * ((float)Math.PI / 180F));
+                    vec3 = vec3.yRot(-this.getYRot() * ((float)Math.PI / 180F));
+                    double d0 = (double)(-this.random.nextFloat()) ;
+                    Vec3 vec31 = new Vec3(((double)this.random.nextFloat() - 0.7D), d0, 1.0D + ((double)this.random.nextFloat() - 0.9D) );
+                    vec31 = vec31.yRot(-this.yBodyRot * ((float)Math.PI / 180F));
+                    vec31 = vec31.add(this.getX(), this.getEyeY() + 1.0D, this.getZ());
+                    this.level.addParticle(ParticleTypes.FALLING_HONEY, vec31.x, vec31.y, vec31.z, vec3.x, vec3.y + 0.05D, vec3.z);
+                }
+            }
         }
 
         if (this.warningSoundTicks > 0) {
@@ -223,6 +241,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         }
 
         if (!this.level.isClientSide) {
+
             this.updatePersistentAnger((ServerLevel) this.level, true);
             if (this.getShearTimer() <= 0) {
                 this.setSheared(false);
@@ -346,32 +365,34 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
             this.bear = bear;
         }
 
+
         @Override
         public void start() {
-            bear.setInSittingPose(true);
             eatTick = 0;
+            bear.setInSittingPose(true);
         }
 
         @Override
         public void stop() {
             bear.setInSittingPose(false);
+            bear.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
 
         @Override
         public void tick() {
-            eatTick++;
-            if (eatTick < 15 * 20) {
-                bear.level.playLocalSound(bear.blockPosition().getX(), bear.blockPosition().getY(), bear.blockPosition().getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1f, 1f, true);
-            } else {
+            if (eatTick > 15 * 20)
                 stop();
-                bear.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                //TODO set honey skin
-            }
+            eatTick++;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return bear.isInSittingPose() && !bear.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
         }
 
         @Override
         public boolean canUse() {
-            return bear.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
+            return !bear.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && bear.random.nextInt(200) == 0;
         }
     }
 

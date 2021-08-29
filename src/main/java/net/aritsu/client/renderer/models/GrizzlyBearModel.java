@@ -2,6 +2,7 @@ package net.aritsu.client.renderer.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.aritsu.entity.grizzly_bear.GrizzlyBear;
+import net.minecraft.client.model.ModelUtils;
 import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -45,7 +46,14 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
     }
 
     public void setupAnim(T entity, float p_103430_, float p_103431_, float p_103432_, float p_103433_, float p_103434_) {
+        this.leftHindLeg.setRotation(0,0,0);
+        this.rightHindLeg.setRotation(0,0,0);
+        this.leftFrontLeg.setRotation(0,0,0);
+        this.rightFrontLeg.setRotation(0,0,0);
+
         super.setupAnim(entity, p_103430_, p_103431_, p_103432_, p_103433_, p_103434_);
+
+
         float f = p_103432_ - (float) entity.tickCount;
         float f1 = entity.getStandingAnimationScale(f);
         f1 = f1 * f1;
@@ -68,7 +76,32 @@ public class GrizzlyBearModel<T extends GrizzlyBear> extends QuadrupedModel<T> {
 
         this.head.xRot += f1 * (float) Math.PI * 0.15F;
 
+        if (entity.isInSittingPose()) {
 
+            this.body.xRot = ModelUtils.rotlerpRad(this.body.xRot, 0.25f, 1.0f);
+            this.body.y = 18;
+            //this.head.xRot = ModelUtils.rotlerpRad(this.head.xRot, ((float)Math.PI / 2F), 1.0f);
+            this.rightHindLeg.xRot = -1.5f;
+            this.leftHindLeg.xRot = -1.5f;
+            this.rightHindLeg.yRot = 0.4f;
+            this.leftHindLeg.yRot = -0.4f;
+
+            this.rightFrontLeg.y = 1.0F;
+            this.leftFrontLeg.y = 1.0F;
+            this.rightFrontLeg.z = 1.0F;
+            this.leftFrontLeg.z = 1.0F;
+            this.rightFrontLeg.x = -5.0F;
+            this.leftFrontLeg.x = 3.0F;
+            this.rightFrontLeg.xRot = -1.5F;
+            this.leftFrontLeg.xRot = -1.5F;
+            this.rightFrontLeg.zRot = -0.1f;
+            this.leftFrontLeg.zRot = 0.1f;
+            this.rightFrontLeg.yRot = -0.15f;
+            this.leftFrontLeg.yRot = 0.15f;
+            this.head.y = -9f;
+            this.head.z = 0f;
+
+        }
     }
 
     public void translateToFrontRightLeg(PoseStack stack)
