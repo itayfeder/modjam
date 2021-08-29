@@ -18,7 +18,7 @@ public class LightAirBlockEntity extends BlockEntity {
     }
     public static void lightAirTick(Level level, BlockPos pos, BlockState state, LightAirBlockEntity be) {
 
-        AABB aabb =new AABB(pos.getX(),pos.getY(),pos.getZ(),pos.getX()+1,pos.getY()+1,pos.getZ()+1);
+        AABB aabb =new AABB(pos.getX(),pos.getY()-1,pos.getZ(),pos.getX()+1,pos.getY()+2,pos.getZ()+1);
         List<Player> playersList = level.getEntitiesOfClass(Player.class,aabb);
         if (playersList.isEmpty())
         {
