@@ -1,6 +1,7 @@
 package net.aritsu.item;
 
 import net.aritsu.mod.AritsuMod;
+import net.aritsu.registry.AritsuBlocks;
 import net.aritsu.registry.AritsuEffects;
 import net.aritsu.util.ClientReferences;
 import net.aritsu.util.ModTab;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.Tags;
 
@@ -50,6 +52,10 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
         if (stack.getItem() instanceof TravelerArmorItem armorItem) {
             //TODO these could be events instead of potion effects
             switch (armorItem.getSlot()) {
+                case HEAD:
+                        if (world.getBlockState(player.blockPosition()).isAir())
+                            world.setBlock(player.blockPosition(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
+                    break;
                 case CHEST:
                     if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
                         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
@@ -122,7 +128,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                 case LEGS -> {
                     return 15;
                 }
-                case FEET -> {
+                case FEET, HEAD -> {
                     return 10;
                 }
             }
@@ -132,13 +138,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
         @Override
         public int getDefenseForSlot(EquipmentSlot slot) {
             switch (slot) {
-                case CHEST -> {
-                    return 5;
-                }
-                case LEGS -> {
-                    return 5;
-                }
-                case FEET -> {
+                case CHEST, LEGS, FEET,HEAD -> {
                     return 5;
                 }
             }
