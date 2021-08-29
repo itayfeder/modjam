@@ -1,6 +1,7 @@
 package net.aritsu.events.modbus;
 
 import net.aritsu.client.renderer.layers.BackPackLayer;
+import net.aritsu.client.renderer.layers.HeadLightLayer;
 import net.aritsu.mod.AritsuMod;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,8 +16,11 @@ public class AddLayersToPlayerEvent {
     public static void layers(EntityRenderersEvent.AddLayers event) {
 
         event.getSkins().forEach(skinTypeName -> { //default , slim
-            if (event.getSkin(skinTypeName) instanceof PlayerRenderer renderer)
+            if (event.getSkin(skinTypeName) instanceof PlayerRenderer renderer) {
                 renderer.addLayer(new BackPackLayer(renderer));
+                renderer.addLayer(new HeadLightLayer(renderer));
+            }
+
         });
     }
 }

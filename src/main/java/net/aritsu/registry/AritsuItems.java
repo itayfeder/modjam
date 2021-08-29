@@ -173,4 +173,7 @@ public class AritsuItems {
     public static final RegistryObject<Item> GRIZZLY_BEAR_SPAWN_EGG = ITEMS.register("grizzly_bear_spawn_egg",
             () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR, 8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
 
+    public static final RegistryObject<Item> HEADLIGHTGEAR = ITEMS.register("headlight",
+            () -> new HeadLightGear(new Item.Properties().tab(ModTab.INSTANCE).stacksTo(1)));
+
 }
