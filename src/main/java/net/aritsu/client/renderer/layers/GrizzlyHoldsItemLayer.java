@@ -19,16 +19,18 @@ public class GrizzlyHoldsItemLayer extends RenderLayer<GrizzlyBear, GrizzlyBearM
 
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int p_117282_, GrizzlyBear grizzlyBear, float p_117284_, float p_117285_, float p_117286_, float p_117287_, float p_117288_, float p_117289_) {
         ItemStack itemstack = grizzlyBear.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (grizzlyBear.isInSittingPose() ) {
-            float f = -0.6F;
-            float f1 = 1.4F;
+        if (grizzlyBear.isInSittingPose()) {
 
             poseStack.pushPose();
-            getParentModel().translateToFrontRightLeg(poseStack);
-            poseStack.translate(0.2f,0.55f,-0.4f);
-            poseStack.mulPose(new Quaternion(90,10,0,true));
+            if (this.getParentModel().young) {
+                poseStack.translate(0.0D, 0.75D, 0.0D);
+                poseStack.scale(0.5F, 0.5F, 0.5F);
+            }
 
-            //poseStack.translate((double)0.1F, (double)f1, (double)f);
+            getParentModel().translateToFrontRightLeg(poseStack);
+            poseStack.mulPose(new Quaternion(90, 0, 0, true));
+            poseStack.translate(0.25, -0.3, -0.6f);
+
             Minecraft.getInstance().getItemInHandRenderer().renderItem(grizzlyBear, itemstack, ItemTransforms.TransformType.GROUND, false, poseStack, multiBufferSource, p_117282_);
             poseStack.popPose();
         }

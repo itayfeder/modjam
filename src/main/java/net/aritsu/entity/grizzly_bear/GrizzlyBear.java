@@ -3,6 +3,7 @@ package net.aritsu.entity.grizzly_bear;
 import net.aritsu.registry.AritsuEntities;
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -56,6 +57,8 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
     private static final EntityDataAccessor<Boolean> DATA_STANDING_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_SHEARED_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_SHEAR_TIMER_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_HONEY_TIMER_ID = SynchedEntityData.defineId(GrizzlyBear.class, EntityDataSerializers.INT);
+
     private static final float STAND_ANIMATION_TICKS = 6.0F;
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     private float clientSideStandAnimationO;
@@ -63,6 +66,9 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
     private int warningSoundTicks;
     private int remainingPersistentAngerTime;
     private UUID persistentAngerTarget;
+
+    private float sitAmount;
+    private float sitAmountOld;
 
     public GrizzlyBear(EntityType<? extends GrizzlyBear> p_29519_, Level p_29520_) {
         super(p_29519_, p_29520_);
@@ -84,6 +90,20 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         } else {
             return p_29551_.getRawBrightness(p_29553_, 0) > 8 && p_29551_.getBlockState(p_29553_.below()).is(Blocks.GRASS_BLOCK);
         }
+    }
+
+    private void updateSitAmount() {
+        this.sitAmountOld = this.sitAmount;
+        if (this.isInSittingPose()) {
+            this.sitAmount = Math.min(1.0F, this.sitAmount + 0.15F);
+        } else {
+            this.sitAmount = Math.max(0.0F, this.sitAmount - 0.19F);
+        }
+
+    }
+
+    public float getSitAmount(float afloat) {
+        return Mth.lerp(afloat, this.sitAmountOld, this.sitAmount);
     }
 
     @Override
@@ -201,6 +221,8 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         this.entityData.define(DATA_SHEARED_ID, false);
         this.entityData.define(DATA_SHEAR_TIMER_ID, 0);
         this.entityData.define(DATA_SITTING_ID, false);
+        this.entityData.define(DATA_HONEY_TIMER_ID, 0);
+
     }
 
     @Override
@@ -213,7 +235,7 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
             }
 
             this.clientSideStandAnimationO = this.clientSideStandAnimation;
-            if (this.isStanding()) {
+            if (this.isStanding() || isInSittingPose()) {
                 this.clientSideStandAnimation = Mth.clamp(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
             } else {
                 this.clientSideStandAnimation = Mth.clamp(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
@@ -223,15 +245,19 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
                 if (random.nextInt(5) == 0)
                     level.playLocalSound(blockPosition().getX(), blockPosition().getY(), blockPosition().getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1f, 1f, true);
 
-                for(int i = 0; i < 4; ++i) {
-                    Vec3 vec3 = new Vec3(((double)this.random.nextFloat() - 0.9D) * 0.1D, Math.random() * 0.2D + 0.1D, ((double)this.random.nextFloat() - 0.9D) * 0.1D);
-                    vec3 = vec3.xRot(-this.getXRot() * ((float)Math.PI / 180F));
-                    vec3 = vec3.yRot(-this.getYRot() * ((float)Math.PI / 180F));
-                    double d0 = (double)(-this.random.nextFloat()) ;
-                    Vec3 vec31 = new Vec3(((double)this.random.nextFloat() - 0.7D), d0, 1.0D + ((double)this.random.nextFloat() - 0.9D) );
-                    vec31 = vec31.yRot(-this.yBodyRot * ((float)Math.PI / 180F));
+                for (int i = 0; i < 2; ++i) {
+                    Vec3 vec3 = new Vec3(((double) this.random.nextFloat() - 0.9D) * 0.1D, Math.random() * 0.2D + 0.1D, ((double) this.random.nextFloat() - 0.9D) * 0.1D);
+                    vec3 = vec3.xRot(-this.getXRot() * ((float) Math.PI / 180F));
+                    vec3 = vec3.yRot(-this.getYRot() * ((float) Math.PI / 180F));
+                    double d0 = -this.random.nextFloat();
+                    Vec3 vec31 = new Vec3(((double) this.random.nextFloat() - 0.7D), d0, 1.0D + ((double) this.random.nextFloat() - 0.9D));
+                    vec31 = vec31.yRot(-this.yBodyRot * ((float) Math.PI / 180F));
                     vec31 = vec31.add(this.getX(), this.getEyeY() + 1.0D, this.getZ());
-                    this.level.addParticle(ParticleTypes.FALLING_HONEY, vec31.x, vec31.y, vec31.z, vec3.x, vec3.y + 0.05D, vec3.z);
+                    if (i == 0)
+                        this.level.addParticle(ParticleTypes.FALLING_HONEY, vec31.x, vec31.y, vec31.z, vec3.x, vec3.y + 0.05D, vec3.z);
+                    else
+                        this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, getItemInHand(InteractionHand.MAIN_HAND)), vec31.x, vec31.y, vec31.z, vec3.x / 2, vec3.y / 2, vec3.z / 2);
+
                 }
             }
         }
@@ -249,6 +275,37 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
             this.setShearTimer(Math.max(0, this.getShearTimer() - 1));
         }
 
+        updateSitAmount();
+        updateHoneyClatteredTimer();
+    }
+
+    public void startHoneyClattered() {
+        this.entityData.set(DATA_HONEY_TIMER_ID, 20 * 60);
+    }
+
+    public void resetHoneyClattered() {
+        this.entityData.set(DATA_HONEY_TIMER_ID, 0);
+    }
+
+    public int getHoneyClattered() {
+        return this.entityData.get(DATA_HONEY_TIMER_ID);
+    }
+
+    public void setHoneyClattered(int i) {
+        this.entityData.set(DATA_HONEY_TIMER_ID, i);
+    }
+
+    public void updateHoneyClatteredTimer() {
+        if (hasHoneyClatteredAllOverThem()) {
+            int timer = getHoneyClattered();
+            setHoneyClattered(timer--);
+            if (this.isInWater())
+                resetHoneyClattered();
+        }
+    }
+
+    public boolean hasHoneyClatteredAllOverThem() {
+        return getHoneyClattered() > 0;
     }
 
     @Override
@@ -356,45 +413,6 @@ public class GrizzlyBear extends Animal implements NeutralMob, Shearable, net.mi
         return java.util.Collections.emptyList();
     }
 
-    private class EatHoneyCombGoal extends Goal {
-
-        private int eatTick = 0;
-        private GrizzlyBear bear;
-
-        public EatHoneyCombGoal(GrizzlyBear bear) {
-            this.bear = bear;
-        }
-
-
-        @Override
-        public void start() {
-            eatTick = 0;
-            bear.setInSittingPose(true);
-        }
-
-        @Override
-        public void stop() {
-            bear.setInSittingPose(false);
-            bear.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-        }
-
-        @Override
-        public void tick() {
-            if (eatTick > 15 * 20)
-                stop();
-            eatTick++;
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return bear.isInSittingPose() && !bear.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
-        }
-
-        @Override
-        public boolean canUse() {
-            return !bear.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && bear.random.nextInt(200) == 0;
-        }
-    }
 
     class GrizzlyBearAttackPlayersGoal extends NearestAttackableTargetGoal<Player> {
         public GrizzlyBearAttackPlayersGoal() {

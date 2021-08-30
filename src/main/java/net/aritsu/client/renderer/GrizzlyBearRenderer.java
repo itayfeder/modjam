@@ -20,7 +20,7 @@ public class GrizzlyBearRenderer extends MobRenderer<GrizzlyBear, GrizzlyBearMod
     }
 
     public ResourceLocation getTextureLocation(GrizzlyBear grizzlyBear) {
-        return grizzlyBear.isInSittingPose() ? HONEY_LOCATION : BEAR_LOCATION;
+        return grizzlyBear.hasHoneyClatteredAllOverThem() ? HONEY_LOCATION : BEAR_LOCATION;
     }
 
     protected void scale(GrizzlyBear grizzlyBear, PoseStack poseStack, float aFloat) {
