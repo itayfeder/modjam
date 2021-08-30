@@ -80,12 +80,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                     addHeadlight = true;
                     break;
                 case CHEST:
-                    if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
-                    } else {
-                        if (player.getEffect(MobEffects.DAMAGE_BOOST).getDuration() <= 200)
-                            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 2));
-                    }
+                    //moved to Playertracker#attackLivingEvent
                     break;
                 case LEGS:
                     if (player.getEffect(MobEffects.DOLPHINS_GRACE) == null) {

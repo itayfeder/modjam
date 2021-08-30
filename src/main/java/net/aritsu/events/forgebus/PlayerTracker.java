@@ -24,6 +24,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -155,13 +156,22 @@ public class PlayerTracker {
     }
 
     @SubscribeEvent
-    public static void PlayerAttackEntityEvent(AttackEntityEvent event) {
+    public static void playerAttackEntityEvent(AttackEntityEvent event) {
         if (event.getTarget() instanceof LivingEntity) {
             Player player = event.getPlayer();
             if (player.getItemBySlot(EquipmentSlot.CHEST).is(AritsuItems.BEAR_CHESTPLATE.get()))
                 if (player instanceof ServerPlayer serverPlayer) {
                     serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_chestplate")), "bear_chestplate");
                 }
+        }
+    }
+
+    @SubscribeEvent
+    public static void attackLivingEvent(LivingHurtEvent event) {
+        if (event.getSource().getEntity() instanceof Player player) {
+            if (player.getItemBySlot(EquipmentSlot.CHEST).is(AritsuItems.BEAR_CHESTPLATE.get())) {
+                event.setAmount(event.getAmount()+6); //6 being equivalent to a potion of strength level 2
+            }
         }
     }
 }
