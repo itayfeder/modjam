@@ -21,7 +21,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.IItemRenderProperties;
-import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -32,7 +31,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     Random rnd = new Random();
     int soundChance = 0;
     double pitch = 0;
-    boolean addClimber1 = false, addClimber2 = false, addSwimmer = false, addHeadlight = false;
+    boolean addClimber1, addClimber2, addSwimmer, addHeadlight;
     private double tempClimbCache = 0.0D;
 
     public TravelerArmorItem(EquipmentSlot slot, Item.Properties props) {
@@ -114,43 +113,15 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                             if (player.isCrouching())
                                 d2 = 0.0D;
                             player.setDeltaMovement(new Vec3(player.getDeltaMovement().x, d2, player.getDeltaMovement().z));
+                            addClimber1 = !sugarFlag;
+                            addClimber2 = sugarFlag;
 
+                            if (player.getRandom().nextInt(7) == 0)
+                                player.playSound(SoundEvents.STONE_STEP, player.getRandom().nextFloat(), 1);
                         } else {
                             tempClimbCache = 0.0d;
                         }
                     break;
-//                    if (player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
-//                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
-//                    } else {
-//                        if (player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 200)
-//                            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
-//                    }
-//                    if (player.horizontalCollision) {
-//                        double motX = player.getDeltaMovement().x;
-//                        player.getDeltaMovement();
-//                        motX = player.getDeltaMovement().z;
-//                        double motY = player.getDeltaMovement().y;
-//                        player.fallDistance = 0.0F;
-//                        if (player.isCrouching()) {
-//                            player.setDeltaMovement(motX, 0.0D, motX);
-//                        } else {
-//                            //climb
-//                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null) {
-//                                addClimber1 = true;
-//                                player.setDeltaMovement(motX, 0.19D, motX);
-//                            } else {
-//                                addClimber2 = true;
-//                                if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
-//                                else player.setDeltaMovement(motX, motY + 0.1D, motX);
-//                                if (player.getDeltaMovement().y <= 0) player.setDeltaMovement(motX, 0.1D, motX);
-//                            }
-//                            soundChance++;
-//                            pitch = rnd.nextDouble();
-//                            if (soundChance % 7 == 0) player.playSound(SoundEvents.STONE_STEP, (float) pitch, 1);
-//                        }
-//
-//                    }
-
             }
         }
     }
