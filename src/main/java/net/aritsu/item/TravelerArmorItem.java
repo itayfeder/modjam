@@ -85,7 +85,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
                     } else {
                         if (player.getEffect(MobEffects.DAMAGE_BOOST).getDuration() <= 200)
-                            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 0));
+                            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 2));
                     }
                     break;
                 case LEGS:

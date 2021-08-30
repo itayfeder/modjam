@@ -64,6 +64,7 @@
   "item.aritsumods.burnt_marshmallow_on_a_stick": "Burnt Marshmallow on a Stick",
   "item.aritsumods.smore": "S'more",
   "item.aritsumods.headlight": "Headlight",
+  "item.aritsumods.ender_reflector": "Ender Reflector",
 
   "item.aritsumods.grizzly_bear_spawn_egg": "Grizzly Bear Spawn Egg",
   "entity.aritsumods.grizzly_bear": "Grizzly Bear",
@@ -143,5 +144,7 @@
   "advancements.camping.headlight.title": "Vanquish the Darkness",
   "advancements.camping.headlight.description": "use the headlight to.. Vanquish the Darkness..",
   "advancements.camping.full_traveler.title": "Unstoppable Super Soldier",
-  "advancements.camping.full_traveler.description": "Rip and Tear, Jog and Swim.. and headlight.. \n\nConquer any terrain, and dominate your foes using the traveler gear"
+  "advancements.camping.full_traveler.description": "Rip and Tear, Jog and Swim.. and headlight.. \n\nConquer any terrain, and dominate your foes using the traveler gear",
+  "advancements.camping.reinforced_fishing_rod.title": "Even More Tactical Fishing",
+  "advancements.camping.reinforced_fishing_rod.description": "get a reinforced fishing rod"
 }

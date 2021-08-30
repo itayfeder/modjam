@@ -170,6 +170,9 @@ public class AritsuItems {
     public static final RegistryObject<Item> FLASK = ITEMS.register("flask",
             () -> new FlaskItem((new Item.Properties()).tab(ModTab.INSTANCE).stacksTo(1)));
 
+    public static final RegistryObject<Item> ENDER_REFLECTOR = ITEMS.register("ender_reflector",
+            () -> new Item((new Item.Properties()).tab(ModTab.INSTANCE)));
+
     public static final RegistryObject<Item> GRIZZLY_BEAR_SPAWN_EGG = ITEMS.register("grizzly_bear_spawn_egg",
             () -> new ModSpawnEggItem(AritsuEntities.GRIZZLY_BEAR, 8534052, 10510395, (new Item.Properties()).tab(ModTab.INSTANCE)));
 

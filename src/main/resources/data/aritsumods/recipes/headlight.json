@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "er ",
+    "css",
+    "rsr"
+  ],
+  "key": {
+    "e": {
+      "item": "aritsumods:ender_reflector"
+    },
+    "r": {
+      "item": "minecraft:rabbit_hide"
+    },
+    "c": {
+      "item": "minecraft:candle"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "aritsumods:headlight",
+    "count": 1
+  }
+}
