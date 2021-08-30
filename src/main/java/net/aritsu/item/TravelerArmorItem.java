@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.Tags;
 
@@ -32,6 +32,8 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     Random rnd = new Random();
     int soundChance = 0;
     double pitch = 0;
+    boolean addClimber1 = false, addClimber2 = false, addSwimmer = false, addHeadlight = false;
+    private double tempClimbCache = 0.0D;
 
     public TravelerArmorItem(EquipmentSlot slot, Item.Properties props) {
         super(new TravelerArmorItem.TravelerMaterial(), slot, props);
@@ -48,8 +50,6 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
         return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/traveler_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
     }
 
-    boolean addClimber1 = false, addClimber2 = false, addSwimmer=false, addHeadlight= false;
-
     @Override
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
@@ -62,10 +62,10 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                 if (addClimber2) {
                     serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/climbing_boots_2")), "climbing_boots_2");
                 }
-                if (addSwimmer){
+                if (addSwimmer) {
                     serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/swimmer_trunk")), "swimmer_trunk");
                 }
-                if (addHeadlight){
+                if (addHeadlight) {
                     serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/headlight")), "headlight");
                 }
             }
@@ -78,7 +78,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         world.setBlock(player.blockPosition().above(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(), 512);
                     else if (world.getBlockState(player.blockPosition().above(2)).isAir())
                         world.setBlock(player.blockPosition().above(2), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(), 512);
-                    addHeadlight=true;
+                    addHeadlight = true;
                     break;
                 case CHEST:
                     if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
@@ -102,41 +102,55 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                             player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
                     }
                     if (player.isSwimming())
-                        addSwimmer=true;
+                        addSwimmer = true;
                     break;
                 case FEET:
-                    if (player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
-                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
-                    } else {
-                        if (player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 200)
-                            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
-                    }
-                    if (player.horizontalCollision) {
-                        double motX = player.getDeltaMovement().x;
-                        player.getDeltaMovement();
-                        motX = player.getDeltaMovement().z;
-                        double motY = player.getDeltaMovement().y;
-                        player.fallDistance = 0.0F;
-                        if (player.isCrouching()) {
-                            player.setDeltaMovement(motX, 0.0D, motX);
-                        } else {
-                            //climb
-                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null) {
-                                addClimber1 = true;
-                                player.setDeltaMovement(motX, 0.19D, motX);
-                            } else {
-                                addClimber2 = true;
-                                if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
-                                else player.setDeltaMovement(motX, motY + 0.1D, motX);
-                                if (player.getDeltaMovement().y <= 0) player.setDeltaMovement(motX, 0.1D, motX);
-                            }
-                            soundChance++;
-                            pitch = rnd.nextDouble();
-                            if (soundChance % 7 == 0) player.playSound(SoundEvents.STONE_STEP, (float) pitch, 1);
-                        }
+                    if (world.isClientSide)
+                        if (player.horizontalCollision) {
+                            player.fallDistance = 0.0F;
+                            tempClimbCache += 0.01d;
+                            boolean sugarFlag = player.hasEffect(AritsuEffects.SUGAR_RUSH.get());
+                            double d2 = sugarFlag ? Math.min(tempClimbCache, 2.0d) : 0.19d;
+                            if (player.isCrouching())
+                                d2 = 0.0D;
+                            player.setDeltaMovement(new Vec3(player.getDeltaMovement().x, d2, player.getDeltaMovement().z));
 
-                    }
+                        } else {
+                            tempClimbCache = 0.0d;
+                        }
                     break;
+//                    if (player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
+//                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
+//                    } else {
+//                        if (player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 200)
+//                            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 0));
+//                    }
+//                    if (player.horizontalCollision) {
+//                        double motX = player.getDeltaMovement().x;
+//                        player.getDeltaMovement();
+//                        motX = player.getDeltaMovement().z;
+//                        double motY = player.getDeltaMovement().y;
+//                        player.fallDistance = 0.0F;
+//                        if (player.isCrouching()) {
+//                            player.setDeltaMovement(motX, 0.0D, motX);
+//                        } else {
+//                            //climb
+//                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null) {
+//                                addClimber1 = true;
+//                                player.setDeltaMovement(motX, 0.19D, motX);
+//                            } else {
+//                                addClimber2 = true;
+//                                if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
+//                                else player.setDeltaMovement(motX, motY + 0.1D, motX);
+//                                if (player.getDeltaMovement().y <= 0) player.setDeltaMovement(motX, 0.1D, motX);
+//                            }
+//                            soundChance++;
+//                            pitch = rnd.nextDouble();
+//                            if (soundChance % 7 == 0) player.playSound(SoundEvents.STONE_STEP, (float) pitch, 1);
+//                        }
+//
+//                    }
+
             }
         }
     }

@@ -1,6 +1,7 @@
 package net.aritsu.events.forgebus;
 
 import net.aritsu.capability.PlayerData;
+import net.aritsu.item.TravelerArmorItem;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.network.NetworkHandler;
 import net.aritsu.network.client.ClientPacketSetBackPack;
@@ -14,6 +15,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -28,11 +31,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = AritsuMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerTracker {
 
     private static final Random random = new Random();
+    private static final UUID SPEED_BOOTS_MODIFIER_UUID = UUID.fromString("5bc8125c-597f-4084-948d-b9b73b245cee");
+    private static final AttributeModifier SPEED_BOOTS_MODIFIER = new AttributeModifier(SPEED_BOOTS_MODIFIER_UUID, "Boots speed boost", 0.3D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
@@ -97,6 +103,15 @@ public class PlayerTracker {
     @SubscribeEvent
     public static void playerUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof Player player) {
+            if (!player.level.isClientSide) {
+                if (player.getInventory().getArmor(0).getItem() instanceof TravelerArmorItem armor && armor.getSlot() == EquipmentSlot.FEET) {
+                    if (!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(SPEED_BOOTS_MODIFIER))
+                        player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(SPEED_BOOTS_MODIFIER);
+                } else if (player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(SPEED_BOOTS_MODIFIER)) {
+                    player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SPEED_BOOTS_MODIFIER);
+
+                }
+            }
             PlayerData.get(player).ifPresent(data -> {
                 if (data.isHiker) {
                     float exhaustionLevel = player.getFoodData().getExhaustionLevel();
