@@ -1,14 +1,14 @@
 {
-  "parent": "aritsumods:camping/get_backpack",
+  "parent": "aritsumods:camping/climbing_boots_1",
   "display": {
     "icon": {
-      "item": "aritsumods:backpack"
+      "item": "aritsumods:climber_boots"
     },
     "title": {
-      "translate": "advancements.camping.fully_packed.title"
+      "translate": "advancements.camping.climbing_boots_2.title"
     },
     "description": {
-      "translate": "advancements.camping.fully_packed.description"
+      "translate": "advancements.camping.climbing_boots_2.description"
     },
     "frame": "challenge",
     "show_toast": true,
@@ -16,13 +16,13 @@
     "hidden": false
   },
   "criteria": {
-    "fully_packed": {
+    "climbing_boots_2": {
       "trigger": "minecraft:impossible"
     }
   },
   "requirements": [
     [
-      "fully_packed"
+      "climbing_boots_2"
     ]
   ]
 }

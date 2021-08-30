@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/traveler",
+  "display": {
+    "icon": {
+      "item": "aritsumods:swimmer_trunks"
+    },
+    "title": {
+      "translate": "advancements.camping.swimmer_trunk.title"
+    },
+    "description": {
+      "translate": "advancements.camping.swimmer_trunk.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "swimmer_trunk": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "swimmer_trunk"
+    ]
+  ]
+}

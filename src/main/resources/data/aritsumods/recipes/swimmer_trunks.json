@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "php",
-    "p p",
+    "pdp",
     "p p"
   ],
   "key": {
@@ -11,10 +11,13 @@
     },
     "p": {
       "item": "minecraft:prismarine_shard"
+    },
+    "d": {
+      "item": "minecraft:diamond_leggings"
     }
   },
   "result": {
     "item": "aritsumods:swimmer_trunks",
     "count": 1
   }
-}
+}t

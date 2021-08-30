@@ -6,6 +6,8 @@ import net.aritsu.registry.AritsuEffects;
 import net.aritsu.util.ClientReferences;
 import net.aritsu.util.ModTab;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -46,20 +48,37 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
         return AritsuMod.MODID + ":" + (slot == EquipmentSlot.LEGS ? "textures/models/armor/traveler_layer_2.png" : "textures/models/armor/traveler_layer_1.png");
     }
 
+    boolean addClimber1 = false, addClimber2 = false, addSwimmer=false, addHeadlight= false;
+
     @Override
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
         if (stack.getItem() instanceof TravelerArmorItem armorItem) {
             //TODO these could be events instead of potion effects
+            if (player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/traveler")), "traveler");
+                if (addClimber1)
+                    serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/climbing_boots_1")), "climbing_boots_1");
+                if (addClimber2) {
+                    serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/climbing_boots_2")), "climbing_boots_2");
+                }
+                if (addSwimmer){
+                    serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/swimmer_trunk")), "swimmer_trunk");
+                }
+                if (addHeadlight){
+                    serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/headlight")), "headlight");
+                }
+            }
+
             switch (armorItem.getSlot()) {
                 case HEAD:
-                        if (world.getBlockState(player.blockPosition()).isAir())
-                            world.setBlock(player.blockPosition(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
-                        else if (world.getBlockState(player.blockPosition().above()).isAir())
-                            world.setBlock(player.blockPosition().above(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
-                        else  if (world.getBlockState(player.blockPosition().above(2)).isAir())
-                            world.setBlock(player.blockPosition().above(2), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(),512);
-
+                    if (world.getBlockState(player.blockPosition()).isAir())
+                        world.setBlock(player.blockPosition(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(), 512);
+                    else if (world.getBlockState(player.blockPosition().above()).isAir())
+                        world.setBlock(player.blockPosition().above(), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(), 512);
+                    else if (world.getBlockState(player.blockPosition().above(2)).isAir())
+                        world.setBlock(player.blockPosition().above(2), AritsuBlocks.LIGHT_AIR.get().defaultBlockState(), 512);
+                    addHeadlight=true;
                     break;
                 case CHEST:
                     if (player.getEffect(MobEffects.DAMAGE_BOOST) == null) {
@@ -82,6 +101,8 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                         if (player.getEffect(MobEffects.CONDUIT_POWER).getDuration() <= 200)
                             player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
                     }
+                    if (player.isSwimming())
+                        addSwimmer=true;
                     break;
                 case FEET:
                     if (player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
@@ -100,9 +121,11 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                             player.setDeltaMovement(motX, 0.0D, motX);
                         } else {
                             //climb
-                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null)
+                            if (player.getEffect(AritsuEffects.SUGAR_RUSH.get()) == null) {
+                                addClimber1 = true;
                                 player.setDeltaMovement(motX, 0.19D, motX);
-                            else {
+                            } else {
+                                addClimber2 = true;
                                 if (motY >= 2) player.setDeltaMovement(motX, 2D, motX);
                                 else player.setDeltaMovement(motX, motY + 0.1D, motX);
                                 if (player.getDeltaMovement().y <= 0) player.setDeltaMovement(motX, 0.1D, motX);
@@ -143,7 +166,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
         @Override
         public int getDefenseForSlot(EquipmentSlot slot) {
             switch (slot) {
-                case CHEST, LEGS, FEET,HEAD -> {
+                case CHEST, LEGS, FEET, HEAD -> {
                     return 5;
                 }
             }

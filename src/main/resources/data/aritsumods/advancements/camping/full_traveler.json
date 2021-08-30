@@ -1,0 +1,41 @@
+{
+  "parent": "aritsumods:camping/traveler",
+  "display": {
+    "icon": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "title": {
+      "translate": "advancements.camping.full_traveler.title"
+    },
+    "description": {
+      "translate": "advancements.camping.full_traveler.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_traveler": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": {
+          "player": {
+            "advancements": {
+              "aritsumods:camping/climbing_boots_1": true,
+              "aritsumods:camping/climbing_boots_2": true,
+              "aritsumods:camping/bear_chestplate": true,
+              "aritsumods:camping/swimmer_trunk": true,
+              "aritsumods:camping/headlight": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "full_traveler"
+    ]
+  ]
+}

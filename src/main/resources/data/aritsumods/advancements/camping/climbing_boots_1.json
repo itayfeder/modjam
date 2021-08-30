@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/traveler",
+  "display": {
+    "icon": {
+      "item": "aritsumods:climber_boots"
+    },
+    "title": {
+      "translate": "advancements.camping.climbing_boots_1.title"
+    },
+    "description": {
+      "translate": "advancements.camping.climbing_boots_1.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "climbing_boots_1": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "climbing_boots_1"
+    ]
+  ]
+}

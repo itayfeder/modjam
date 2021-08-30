@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/traveler",
+  "display": {
+    "icon": {
+      "item": "aritsumods:headlight"
+    },
+    "title": {
+      "translate": "advancements.camping.headlight.title"
+    },
+    "description": {
+      "translate": "advancements.camping.headlight.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "headlight": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "headlight"
+    ]
+  ]
+}

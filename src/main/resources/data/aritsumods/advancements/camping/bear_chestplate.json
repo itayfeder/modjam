@@ -1,0 +1,28 @@
+{
+  "parent": "aritsumods:camping/traveler",
+  "display": {
+    "icon": {
+      "item": "aritsumods:bear_chestplate"
+    },
+    "title": {
+      "translate": "advancements.camping.bear_chestplate.title"
+    },
+    "description": {
+      "translate": "advancements.camping.bear_chestplate.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "bear_chestplate": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "bear_chestplate"
+    ]
+  ]
+}

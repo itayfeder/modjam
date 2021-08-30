@@ -2,12 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "b b",
-    "bbb",
+    "bcb",
     "bbb"
   ],
   "key": {
     "b": {
       "item": "aritsumods:bear_fur"
+    },
+    "c": {
+      "item": "minecraft:chainmail_chestplate"
     }
   },
   "result": {

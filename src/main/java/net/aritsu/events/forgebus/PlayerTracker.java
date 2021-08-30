@@ -8,9 +8,11 @@ import net.aritsu.network.client.ClientReceiveOtherBackPack;
 import net.aritsu.registry.AritsuEffects;
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -133,6 +136,17 @@ public class PlayerTracker {
                 double motX = player.getDeltaMovement().x, motY = player.getDeltaMovement().y, motZ = player.getDeltaMovement().z;
                 player.setDeltaMovement(motX, motY + 0.3D, motZ);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void PlayerAttackEntityEvent(AttackEntityEvent event) {
+        if (event.getTarget() instanceof LivingEntity) {
+            Player player = event.getPlayer();
+            if (player.getItemBySlot(EquipmentSlot.CHEST).is(AritsuItems.BEAR_CHESTPLATE.get()))
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_chestplate")), "bear_chestplate");
+                }
         }
     }
 }
