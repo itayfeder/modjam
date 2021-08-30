@@ -185,7 +185,7 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
 
         @Override
         public Ingredient getRepairIngredient() {
-            return Ingredient.of(Tags.Items.LEATHER);
+            return Ingredient.of(ItemStack.EMPTY);
         }
 
         @Override
