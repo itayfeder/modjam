@@ -1,9 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "er ",
-    "css",
-    "rsr"
+    "ce ",
+    "rrr"
   ],
   "key": {
     "e": {
@@ -14,9 +13,6 @@
     },
     "c": {
       "item": "minecraft:candle"
-    },
-    "s": {
-      "item": "minecraft:string"
     }
   },
   "result": {
