@@ -6,11 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class PlayerCapability implements ICapabilitySerializable<CompoundTag> {
     /**
@@ -31,11 +28,6 @@ public class PlayerCapability implements ICapabilitySerializable<CompoundTag> {
     public PlayerCapability(Player player) {
 
         playerData.setPlayer(player);
-    }
-
-    @SubscribeEvent
-    public static void startCommonSetup(FMLCommonSetupEvent event) {
-        CapabilityManager.INSTANCE.register(PlayerData.class);
     }
 
     @Override
