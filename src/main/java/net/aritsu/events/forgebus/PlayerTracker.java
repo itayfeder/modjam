@@ -170,7 +170,7 @@ public class PlayerTracker {
     public static void attackLivingEvent(LivingHurtEvent event) {
         if (event.getSource().getEntity() instanceof Player player) {
             if (player.getItemBySlot(EquipmentSlot.CHEST).is(AritsuItems.BEAR_CHESTPLATE.get())) {
-                event.setAmount(event.getAmount()+6); //6 being equivalent to a potion of strength level 2
+                event.setAmount(event.getAmount()+9); //6 being equivalent to a potion of strength level 2
             }
         }
     }
