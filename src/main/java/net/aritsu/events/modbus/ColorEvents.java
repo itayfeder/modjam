@@ -1,5 +1,6 @@
 package net.aritsu.events.modbus;
 
+import net.aritsu.item.FlaskItem;
 import net.aritsu.mod.AritsuMod;
 import net.aritsu.registry.AritsuItems;
 import net.minecraft.client.color.item.ItemColor;
@@ -13,8 +14,11 @@ import net.minecraftforge.fml.common.Mod;
 public class ColorEvents {
     @SubscribeEvent
     public static void registerColorHandlers(ColorHandlerEvent.Item event) {
-        final ItemColor flaskColorHandler = (anInt, itemStack) -> {
-            return itemStack > 0 ? -1 : PotionUtils.getColor(anInt);
+        final ItemColor flaskColorHandler = (itemStack, color) ->
+        {
+            if (itemStack.getTag() != null && itemStack.getTag().contains(FlaskItem.MILKTAG))
+                return 0xffffff;
+            else return color > 0 ? -1 : PotionUtils.getColor(itemStack);
         };
 
         event.getItemColors().register(flaskColorHandler, AritsuItems.FLASK.get());
