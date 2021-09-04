@@ -62,14 +62,16 @@ public class BackPackBlock extends BaseEntityBlock {
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
             if (player.isCrouching()) {
                 PlayerData.get(player).ifPresent(data -> {
-                    if (IsBackpackFilled(backpack.getBackPackInventory())) serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/fully_packed")), "fully_packed");
-                    ItemStack pack = createBackPackStack(backpack);
-                    data.addBackpack(pack);
-                    level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
-                    level.removeBlockEntity(blockPos);
-                    NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(pack));
-                    NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> serverPlayer), new ClientReceiveOtherBackPack(serverPlayer.getUUID(), data.getBackPack()));
-
+                    if (data.getBackPack().isEmpty()) {
+                        if (this.isBackpackFilled(backpack.getBackPackInventory()))
+                            serverPlayer.getAdvancements().award(serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/fully_packed")), "fully_packed");
+                        ItemStack pack = createBackPackStack(backpack);
+                        data.addBackpack(pack);
+                        level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+                        level.removeBlockEntity(blockPos);
+                        NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(pack));
+                        NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> serverPlayer), new ClientReceiveOtherBackPack(serverPlayer.getUUID(), data.getBackPack()));
+                    }
                 });
             } else {
                 MenuConstructor provider = BackPackContainer.getServerContainerProvider(backpack.getBackPackInventory());
@@ -145,7 +147,7 @@ public class BackPackBlock extends BaseEntityBlock {
         return this.defaultBlockState().setValue(FACING, placeContext.getHorizontalDirection().getOpposite());
     }
 
-    public static boolean IsBackpackFilled(BackPackInventory inv) {
+    public boolean isBackpackFilled(BackPackInventory inv) {
         for (ItemStack stack : inv.getAllItems()) {
             if (stack.isEmpty()) return false;
         }
