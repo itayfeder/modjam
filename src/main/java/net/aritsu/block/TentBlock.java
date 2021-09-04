@@ -52,10 +52,9 @@ import java.util.Optional;
 public class TentBlock extends BedBlock {
     public static final EnumProperty<BedPart> PART = BlockStateProperties.BED_PART;
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
+    public static final BooleanProperty LANTERN = BooleanProperty.create("lantern_in_tent");
     private static final VoxelShape common = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     private static final VoxelShape base = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 0.5D, 16.0D);
-    public static final BooleanProperty LANTERN = BooleanProperty.create("lantern_in_tent");
-
     private static final VoxelShape shapeNS2 = Block.box(2.0D, 4.0D, 0.0D, 14.0D, 8.0D, 16.0D);
     private static final VoxelShape shapeNS3 = Block.box(4.0D, 8.0D, 0.0D, 12.0D, 12.0D, 16.0D);
     private static final VoxelShape shapeNS4 = Block.box(6.0D, 12.0D, 0.0D, 10.0D, 15.0D, 16.0D);
@@ -162,7 +161,6 @@ public class TentBlock extends BedBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        System.out.println(player.getName().getString());
         if (!level.isClientSide()) {
             TentBlockEntity tentBlockEntity = TentUtils.getTentBlockEntityForInventory(pos, level);
             if (tentBlockEntity == null)
