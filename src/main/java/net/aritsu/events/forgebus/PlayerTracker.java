@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,18 +55,29 @@ public class PlayerTracker {
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
+        //isWasDeath is true if this is a clone because the player died
+        //if isWasDeath is false, the player is cloned to another dimension and the contents need to be passed over too
+
         Player newPlayer = event.getPlayer();
         Player original = event.getOriginal();
 
-        //isWasDeath is true if this is a clone because the player died
-        //if isWasDeath is false, the player is cloned to another dimension and the contents need to be passed over too
-        if (newPlayer.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && event.isWasDeath() || !event.isWasDeath()) {
-            PlayerData.get(original).ifPresent(dataOriginal -> {
-                PlayerData.get(newPlayer).ifPresent(dataNew -> {
-                    dataNew.addBackpack(dataOriginal.getBackPack());
-                });
+        PlayerData.get(original).ifPresent(originalData -> {
+            boolean loggedIn = originalData.hasLoggedInBefore;
+            ItemStack stack = originalData.getBackPack();
+
+            PlayerData.get(newPlayer).ifPresent(newData -> {
+                newData.hasLoggedInBefore = loggedIn;
+                System.out.println(loggedIn);
+                if (newPlayer.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && event.isWasDeath() || !event.isWasDeath()) {
+                    newData.addBackpack(stack);
+                    System.out.println("copied backpack");
+                } else {
+                    ItemEntity drop = new ItemEntity(original.level, original.getX(), original.getY() + 1, original.getZ(), stack);
+                    original.level.addFreshEntity(drop);
+                    System.out.println("dropped backpack");
+                }
             });
-        }
+        });
     }
 
     @SubscribeEvent
@@ -74,7 +85,7 @@ public class PlayerTracker {
         if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
             PlayerData.get(serverPlayer).ifPresent(data -> {
                 NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(data.getBackPack()));
-                if (data.loggedInForTheFirstTime) {
+                if (!data.hasLoggedInBefore) {
                     ItemStack[] hiker = new ItemStack[]{new ItemStack(AritsuItems.HIKER_ARMOR_HELMET.get()), new ItemStack(AritsuItems.HIKER_ARMOR_CHEST.get()), new ItemStack(AritsuItems.HIKER_ARMOR_LEGS.get()), new ItemStack(AritsuItems.HIKER_ARMOR_BOOTS.get())};
                     for (ItemStack armorStack : hiker) {
                         if (armorStack.getItem() instanceof ArmorItem armorItem) {
@@ -84,8 +95,8 @@ public class PlayerTracker {
                             else
                                 serverPlayer.getInventory().add(armorStack);
                         }
-                        data.loggedInForTheFirstTime = false;
                     }
+                    data.hasLoggedInBefore = true;
                 }
             });
         }
@@ -102,7 +113,7 @@ public class PlayerTracker {
     }
 
     @SubscribeEvent
-    public static void playerUpdate(LivingEvent.LivingUpdateEvent event) {
+    public static void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof Player player) {
             if (!player.level.isClientSide) {
                 if (player.getInventory().getArmor(0).getItem() instanceof TravelerArmorItem armor && armor.getSlot() == EquipmentSlot.FEET) {
@@ -130,7 +141,7 @@ public class PlayerTracker {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdateEvent(TickEvent.PlayerTickEvent event) {
+    public static void playerUpdate(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         //moved update tick to player data so it's player specific
         PlayerData.get(player).ifPresent(data -> {
@@ -139,7 +150,7 @@ public class PlayerTracker {
                 data.customEffectTick++;
                 if (data.customEffectTick % 50 == 0)
                     player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
-            } else//reset the tick to 0 if thep layer doesnt have the effect to prevent the number ramping up throughout play time
+            } else//reset the tick to 0 if the player doesnt have the effect to prevent the number ramping up throughout play time
                 data.customEffectTick = 0;
         });
     }
@@ -163,15 +174,6 @@ public class PlayerTracker {
                 if (player instanceof ServerPlayer serverPlayer) {
                     serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/bear_chestplate")), "bear_chestplate");
                 }
-        }
-    }
-
-    @SubscribeEvent
-    public static void attackLivingEvent(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof Player player) {
-            if (player.getItemBySlot(EquipmentSlot.CHEST).is(AritsuItems.BEAR_CHESTPLATE.get())) {
-                event.setAmount(event.getAmount()+9); //6 being equivalent to a potion of strength level 2
-            }
         }
     }
 }

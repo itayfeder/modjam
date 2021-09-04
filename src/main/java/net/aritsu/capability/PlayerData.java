@@ -13,7 +13,7 @@ public class PlayerData {
     private final ItemStackHandler inventoryForbackPack = new ItemStackHandler(1);
     public boolean isHiker;
     public float prevSaturation = 0.0f;
-    public boolean loggedInForTheFirstTime = true;
+    public boolean hasLoggedInBefore = false;
     public int customEffectTick = 0;
     private Player player;
 
@@ -39,7 +39,7 @@ public class PlayerData {
     public Tag writeData() {
         CompoundTag tag = new CompoundTag();
         tag.put(BagTag.allItems, inventoryForbackPack.serializeNBT());
-        tag.putBoolean("loggedin", loggedInForTheFirstTime);
+        tag.putBoolean("loggedin", hasLoggedInBefore);
         return tag;
     }
 
@@ -47,7 +47,8 @@ public class PlayerData {
         if (tag instanceof CompoundTag saved) {
             if (saved.contains(BagTag.allItems) && saved.get(BagTag.allItems) instanceof CompoundTag items)
                 inventoryForbackPack.deserializeNBT(items);
-            loggedInForTheFirstTime = !saved.contains("loggedin") || saved.getBoolean("loggedin");
+            if (saved.contains("loggedin"))
+                hasLoggedInBefore = saved.getBoolean("loggedin");
         }
     }
 
