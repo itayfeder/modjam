@@ -53,7 +53,6 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
         if (stack.getItem() instanceof TravelerArmorItem armorItem) {
-            //TODO these could be events instead of potion effects
             if (player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.getAdvancements().award(player.getServer().getAdvancements().getAdvancement(new ResourceLocation(AritsuMod.MODID, "camping/traveler")), "traveler");
                 if (addClimber1)
@@ -80,23 +79,16 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
                     addHeadlight = true;
                     break;
                 case CHEST:
-                    //moved to Playertracker#attackLivingEvent
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 2, false, false, false));
                     break;
                 case LEGS:
-                    if (player.getEffect(MobEffects.DOLPHINS_GRACE) == null) {
-                        player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 300, 0));
-                    } else {
-                        if (player.getEffect(MobEffects.DOLPHINS_GRACE).getDuration() <= 200)
-                            player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 300, 0));
+                    if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(player.level.getFluidState(player.blockPosition()).getType())) {
+                        player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 20, 0, false, false, false));
+                        player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 20, 0, false, false, false));
                     }
-                    if (player.getEffect(MobEffects.CONDUIT_POWER) == null) {
-                        player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
-                    } else {
-                        if (player.getEffect(MobEffects.CONDUIT_POWER).getDuration() <= 200)
-                            player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 300, 0));
-                    }
-                    if (player.isSwimming())
+                    if (player.isSwimming()) {
                         addSwimmer = true;
+                    }
                     break;
                 case FEET:
                     if (world.isClientSide)
@@ -122,7 +114,8 @@ public class TravelerArmorItem extends ArmorItem implements IItemRenderPropertie
     }
 
     @Override
-    public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+    public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack
+            itemStack, EquipmentSlot armorSlot, A _default) {
         return (A) ClientReferences.getArmorModel(armorSlot);
     }
 
