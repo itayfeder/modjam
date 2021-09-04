@@ -53,12 +53,6 @@ public class BackPackBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
-            if (player.isCrouching()) {
-                player.swing(InteractionHand.MAIN_HAND);
-                level.playSound(player, player.getOnPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
-            }
-        }
         if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
             if (player.isCrouching()) {
                 PlayerData.get(player).ifPresent(data -> {
@@ -81,6 +75,18 @@ public class BackPackBlock extends BaseEntityBlock {
             }
 
         }
+        if (level.getBlockEntity(blockPos) instanceof BackPackBlockEntity backpack) {
+            PlayerData.get(player).ifPresent(data -> {
+                if (data.getBackPack().isEmpty()) {
+                    if (player.isCrouching()) {
+                        player.swing(InteractionHand.MAIN_HAND);
+                        level.playSound(player, player.getOnPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
+                    }
+                }
+            });
+        }
+
+
         //client reaches here.
         return InteractionResult.CONSUME;
     }

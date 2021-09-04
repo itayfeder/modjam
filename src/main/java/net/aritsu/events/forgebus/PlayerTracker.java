@@ -54,6 +54,15 @@ public class PlayerTracker {
     }
 
     @SubscribeEvent
+    public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
+            PlayerData.get(serverPlayer).ifPresent(data -> {
+                NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientPacketSetBackPack(data.getBackPack()));
+            });
+        }
+    }
+
+    @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         //isWasDeath is true if this is a clone because the player died
         //if isWasDeath is false, the player is cloned to another dimension and the contents need to be passed over too
@@ -61,23 +70,22 @@ public class PlayerTracker {
         Player newPlayer = event.getPlayer();
         Player original = event.getOriginal();
 
+        original.reviveCaps();
         PlayerData.get(original).ifPresent(originalData -> {
             boolean loggedIn = originalData.hasLoggedInBefore;
             ItemStack stack = originalData.getBackPack();
 
             PlayerData.get(newPlayer).ifPresent(newData -> {
                 newData.hasLoggedInBefore = loggedIn;
-                System.out.println(loggedIn);
                 if (newPlayer.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && event.isWasDeath() || !event.isWasDeath()) {
                     newData.addBackpack(stack);
-                    System.out.println("copied backpack");
                 } else {
                     ItemEntity drop = new ItemEntity(original.level, original.getX(), original.getY() + 1, original.getZ(), stack);
                     original.level.addFreshEntity(drop);
-                    System.out.println("dropped backpack");
                 }
             });
         });
+        original.invalidateCaps();
     }
 
     @SubscribeEvent

@@ -21,8 +21,8 @@ public class PressKeyEventHandler {
 
         if (KeyRegistry.keybackpack.consumeClick()) {
             PlayerData.get(ClientReferences.getClientPlayer()).ifPresent(data -> {
-                NetworkHandler.NETWORK.sendToServer(new ServerPacketSpawnBackPack());
                 if (!data.getBackPack().isEmpty()) {
+                    NetworkHandler.NETWORK.sendToServer(new ServerPacketSpawnBackPack());
                     ClientReferences.getClientPlayer().swing(InteractionHand.MAIN_HAND);
                     ClientReferences.getClientLevel().playSound(ClientReferences.getClientPlayer(), ClientReferences.getClientPlayer().getOnPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1, 1);
                 }

@@ -72,6 +72,7 @@ public class ServerPacketSpawnBackPack implements IPacketBase {
                     blockItem.place(new BlockPlaceContext(level, player, InteractionHand.MAIN_HAND, data.getBackPack(), result));
                     NetworkHandler.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketSetBackPack(ItemStack.EMPTY));
                     NetworkHandler.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), new ClientReceiveOtherBackPack(player.getUUID(), ItemStack.EMPTY));
+                    data.addBackpack(ItemStack.EMPTY);
                 }
             });
         }
